@@ -16,6 +16,7 @@ public class PuntoVentaV2 {
      */
     public static void main(String[] args) 
     {
+        frmPrincipal principal = new frmPrincipal();
         
         // TODO code application logic here
     }
