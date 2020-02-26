@@ -16,8 +16,7 @@ public class PuntoVentaV2 {
      */
     public static void main(String[] args) 
     {
-        conectar conexion = new conectar();
-        conexion.getConeConnection();
+        
         // TODO code application logic here
     }
     
