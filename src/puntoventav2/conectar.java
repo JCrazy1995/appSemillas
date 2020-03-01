@@ -5,6 +5,7 @@
  */
 package puntoventav2;
 
+import java.awt.EventQueue;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -17,24 +18,49 @@ import javax.swing.JOptionPane;
  */
 public class conectar {
        public static final String db="bdpuntoventa";
-       private static final String User="root";
-       private static final String pass="0547";
+       public static final String User="root";
+       public static final String pass="0547";
        static String url = "jdbc:mysql://localhost:3306/"+db+"?serverTimezone=UTC";
    
    private static Connection Conn=null;
    
-   public static Connection getConnection(){
+//   public static Connection getConnection(){
+//       
+//       return Conn;
+//   }
+//   public Connection getConeConnection(){
+//        try {
+//           Conn=DriverManager.getConnection(url,User,pass);
+//           JOptionPane.showMessageDialog(null,"Conexion exitosa");
+//          
+//       } catch (SQLException e) {
+//           JOptionPane.showMessageDialog(null, "Error de conexion "+e.getMessage());
+//       }
+//       return Conn;
+//   }
+    private String driver;
+   
+   public conectar(String driver,String url)
+   {
+       this.driver = driver;
        
-       return Conn;
    }
-   public Connection getConeConnection(){
-        try {
-           Conn=DriverManager.getConnection(url,User,pass);
-           JOptionPane.showMessageDialog(null,"Conexion exitosa");
-          
-       } catch (SQLException e) {
-           JOptionPane.showMessageDialog(null, "Error de conexion "+e.getMessage());
+   public void conectarbd()
+   {
+       try {
+           Class.forName(this.driver);
+           Conn=DriverManager.getConnection(this.url,"root","0547");
+           JOptionPane.showMessageDialog(null, pass);
        }
-       return Conn;
+       catch (ClassNotFoundException e) 
+       {
+           e.printStackTrace();
+       }
+       catch (SQLException e) 
+       {
+           e.printStackTrace();
+       }
+       
    }
+   
 }
