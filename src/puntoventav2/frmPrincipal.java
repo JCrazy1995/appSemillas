@@ -6,6 +6,8 @@ package puntoventav2;
  * and open the template in the editor.
  */
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import javax.swing.JFrame;
 
 /**
@@ -17,9 +19,12 @@ public class frmPrincipal extends javax.swing.JFrame {
     /**
      * Creates new form frmPrincipal
      */
+    
     public frmPrincipal()
     {
         initComponents();
+        
+         
          this.setResizable(false);
     }
 
@@ -70,6 +75,11 @@ public class frmPrincipal extends javax.swing.JFrame {
         jMenu5.setText("Notas");
 
         jMenuItem1.setText("Realizar");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         jMenu5.add(jMenuItem1);
 
         jMenuItem2.setText("Reimprimir");
@@ -95,6 +105,13 @@ public class frmPrincipal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        
+       frmnotas notas = new frmnotas();
+       notas.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments

@@ -23,41 +23,15 @@ public class PuntoVentaV2 {
     private static conectar con;
 
     public static void main(String[] args) {
-//        conectar conexion = new conectar();
-//        conexion.getConeConnection();
+        conectar conexion = new conectar();
+        conexion.getConeConnection();
 
-//        frmPrincipal principal = new frmPrincipal();
-//        principal.setVisible(true);
-//        principal.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        // TODO code application logic here
-        conectarbd();
+        frmPrincipal principal = new frmPrincipal();
+        principal.setVisible(true);
+        principal.setExtendedState(frmPrincipal.MAXIMIZED_BOTH);
+         
+     
     }
 
-    private static void conectarbd() {
-        String driver = "com.mysql.jdbc.Driver";
-        String User = "root";
-        String pass = "0547";
-        String url = "jdbc:mysql://localhost:3306/" + db + "?serverTimezone=UTC";
-        con = new conectar(driver, url);
-        con.conectarbd();
-    }
-    
-    private static void OpenReportFrame()
-    {
-        EventQueue.invokeLater(new Runnable() {
-          
-            public void run() 
-            {
-                try {
-                 //   ReportFrame frame = new ReportFrame(con );
-                 //   frame.setVisible(true);
-                } catch (Exception e) {
-                }
-               
-                
-            }
-        });
-    }
-    
     
 }
