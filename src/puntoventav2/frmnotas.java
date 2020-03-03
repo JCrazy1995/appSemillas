@@ -760,7 +760,7 @@ public class frmnotas extends javax.swing.JFrame {
              
           try
           {
-          con=conexion.getConeConnection();
+          con=conexion.getConnection();
           stmt=con.createStatement();
           rs=stmt.executeQuery("select * from tblarticulos where nombre like '"+txtproducto.getText()+"%'");
            while(rs.next())
@@ -792,10 +792,7 @@ public class frmnotas extends javax.swing.JFrame {
           catch(SQLException ex)
           {
               JOptionPane.showMessageDialog(null, ex);
-          }       catch (ClassNotFoundException ex) {
-                      Logger.getLogger(frmnotas.class.getName()).log(Level.SEVERE, null, ex);
-                  }
-          
+          }      
            
                  
            }
@@ -848,7 +845,7 @@ public class frmnotas extends javax.swing.JFrame {
              
           try
           {
-          con=conexion.getConeConnection();
+          con=conexion.getConnection();
           stmt=con.createStatement();
           rs=stmt.executeQuery("select * from tblclientes where nombre like '"+txtcliente.getText()+"%'");
            while(rs.next())
@@ -903,9 +900,7 @@ public class frmnotas extends javax.swing.JFrame {
               JOptionPane.showMessageDialog(null, ex);
           } catch (ParseException ex) {
                 Logger.getLogger(frmnotas.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(frmnotas.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            } 
           
            
                  
@@ -975,8 +970,8 @@ public class frmnotas extends javax.swing.JFrame {
         // TODO add your handling code here:
         int filas = modeloTabla.getRowCount();
         String cantidad,prodcuto,tipo,total,fechanota;
-       
-       fechanota= ano+"-"+mes+"-"+"dia";         
+         con=conexion.getConnection();
+       fechanota= ano+"-"+mes+"-"+dia;         
         for (int i = 0;i<filas;i++)
       {
         
@@ -987,7 +982,7 @@ public class frmnotas extends javax.swing.JFrame {
                     
                stmt = con.createStatement();
                PreparedStatement psInsert= con.prepareStatement("INSERT INTO tblnotasmovs"
-                       + "(nomoviento,nonota,nocliente,fechanota,fechapago,nomcliente,cantidad,"
+                       + "(nomovimiento,nonota,nocliente,fechanota,fechapago,nomcliente,cantidad,"
                        + "producto,tipo,total)"
                        + " VALUES (?,?,?,?,?,?,?,?,?,?)");
 
