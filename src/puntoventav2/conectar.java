@@ -24,14 +24,12 @@ public class conectar {
    
    private static Connection Conn=null;
    
-   public static Connection getConnection()
-   {
-       
-       return Conn;
-   }
-   public Connection getConeConnection(){
+  
+   public Connection getConeConnection() throws ClassNotFoundException{
         try {
-           Conn=DriverManager.getConnection(url,User,pass);
+          Class.forName("com.mysql.cj.jdbc.Driver");
+        Conn=(Connection)DriverManager.getConnection(url,User,pass);
+        JOptionPane.showMessageDialog(null,"si");
           
        } catch (SQLException e) {
            JOptionPane.showMessageDialog(null, "Error de conexion "+e.getMessage());

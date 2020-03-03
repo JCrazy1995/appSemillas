@@ -17,12 +17,8 @@ public class PuntoVentaV2 {
     /**
      * @param args the command line arguments
      */
-    public static final String db = "bdpuntoventa";
-    public static final String User = "root";
-    public static final String pass = "0547";
-    private static conectar con;
-
-    public static void main(String[] args) {
+  
+    public static void main(String[] args) throws ClassNotFoundException {
         conectar conexion = new conectar();
         conexion.getConeConnection();
 

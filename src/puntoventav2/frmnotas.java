@@ -42,10 +42,14 @@ public class frmnotas extends javax.swing.JFrame {
     DefaultTableModel modeloTabla= new DefaultTableModel();  //modelo de tabla que llevara los datos
     DefaultTableModel modeloTabla2= new DefaultTableModel(); // modelo vacio para la tabla de clientes
     Object filas[]= new Object[5];     
-      Connection con = null;
-      int b=0;
-        Double total=0.0 ;
-    /**
+    Connection con = null;
+    int b=0;
+    Double total=0.0 ;
+    Calendar calendario =Calendar.getInstance();
+    int dia =calendario.get(calendario.DATE);
+    int mes = calendario.get(calendario.MONTH)+1;
+    int ano = calendario.get(calendario.YEAR);
+        /**
      * Creates new form frmnotas
      */
     public frmnotas() 
@@ -159,6 +163,7 @@ public class frmnotas extends javax.swing.JFrame {
         lbldiascredito1 = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
         lbltotal = new javax.swing.JLabel();
+        btnimprimir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -661,6 +666,13 @@ public class frmnotas extends javax.swing.JFrame {
 
         lbltotal.setText("0.00");
 
+        btnimprimir.setText("Imprimir");
+        btnimprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnimprimirActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -679,7 +691,9 @@ public class frmnotas extends javax.swing.JFrame {
                         .addComponent(jLabel16))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnimprimir)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -698,8 +712,13 @@ public class frmnotas extends javax.swing.JFrame {
                     .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(btnimprimir)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel24)
@@ -773,7 +792,9 @@ public class frmnotas extends javax.swing.JFrame {
           catch(SQLException ex)
           {
               JOptionPane.showMessageDialog(null, ex);
-          }
+          }       catch (ClassNotFoundException ex) {
+                      Logger.getLogger(frmnotas.class.getName()).log(Level.SEVERE, null, ex);
+                  }
           
            
                  
@@ -860,12 +881,10 @@ public class frmnotas extends javax.swing.JFrame {
                 
                 txtdiascredito.setText(rs.getString(6));
                 txttelefono.setText(rs.getString(7));
-                Calendar calendario =Calendar.getInstance();
+                 calendario =Calendar.getInstance();
                 int dia =calendario.get(calendario.DATE);
-                int mes = calendario.get(calendario.MONTH)+1;
-                int ano = calendario.get(calendario.YEAR);
-                int dias =calendario.get(calendario.DATE);
-                String myDate = dias+"/"+mes+"/"+ano;
+                
+                String myDate = dia+"/"+mes+"/"+ano;
                 
                 SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yy");
                  Date date = formateador.parse(myDate); 
@@ -883,6 +902,8 @@ public class frmnotas extends javax.swing.JFrame {
           {
               JOptionPane.showMessageDialog(null, ex);
           } catch (ParseException ex) {
+                Logger.getLogger(frmnotas.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
                 Logger.getLogger(frmnotas.class.getName()).log(Level.SEVERE, null, ex);
             }
           
@@ -919,7 +940,8 @@ public class frmnotas extends javax.swing.JFrame {
        }
        
        else
-       {       lblcliente.setText(txtcliente.getText());
+       {       
+               lblcliente.setText(txtcliente.getText());
                lbldiascredito.setText(txtdiascredito.getText());
                lbldiascredito1.setText(txtdomicilio.getText()+" "+txtcolonia.getText());
                lblfecha.setText(txtfecha.getText());
@@ -929,17 +951,17 @@ public class frmnotas extends javax.swing.JFrame {
                Double total2 = Double.parseDouble(txttotal.getText());
                 
         
-                filas[0] = txtcantidad.getText();
-                filas[1] = txtproducto.getText();
-                filas[2] = txtprecio.getText();
-                filas[3]=  cmbtipo.getSelectedItem();
-                filas[4]=  df.format(total2)+"";
-                modeloTabla.addRow(filas);
-                tblnotas.setModel(modeloTabla);
+               filas[0] = txtcantidad.getText();
+               filas[1] = txtproducto.getText();
+               filas[2] = txtprecio.getText();
+               filas[3]=  cmbtipo.getSelectedItem();
+               filas[4]=  df.format(total2)+"";
+               modeloTabla.addRow(filas);
+               tblnotas.setModel(modeloTabla);
                
               
-                total = total+total2;
-                lbltotal.setText(df.format(total)+"");
+               total = total+total2;
+               lbltotal.setText(df.format(total)+"");
                 
           
            
@@ -948,6 +970,53 @@ public class frmnotas extends javax.swing.JFrame {
         
      
     }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnimprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnimprimirActionPerformed
+        // TODO add your handling code here:
+        int filas = modeloTabla.getRowCount();
+        String cantidad,prodcuto,tipo,total,fechanota;
+       
+       fechanota= ano+"-"+mes+"-"+"dia";         
+        for (int i = 0;i<filas;i++)
+      {
+        
+        
+              try 
+              {
+
+                    
+               stmt = con.createStatement();
+               PreparedStatement psInsert= con.prepareStatement("INSERT INTO tblnotasmovs"
+                       + "(nomoviento,nonota,nocliente,fechanota,fechapago,nomcliente,cantidad,"
+                       + "producto,tipo,total)"
+                       + " VALUES (?,?,?,?,?,?,?,?,?,?)");
+
+              psInsert.setInt( 1, 2);
+              psInsert.setInt( 2, 2);
+              psInsert.setInt( 3, 2);
+              psInsert.setString(4, fechanota);
+              psInsert.setString(5, fechanota);
+              psInsert.setString(6, fechanota);
+              psInsert.setDouble(7, 2.1);
+              psInsert.setString(8, fechanota);
+              psInsert.setString(9, fechanota);
+              psInsert.setDouble(10, 2.1);
+              
+              psInsert.executeUpdate();
+             
+
+              JOptionPane.showMessageDialog(null, "Se ingreso correctamente, gracias");
+               
+            } 
+            catch (SQLException e) 
+            {
+                JOptionPane.showMessageDialog(null, e);
+            }
+
+      }
+        
+        
+    }//GEN-LAST:event_btnimprimirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -987,6 +1056,7 @@ public class frmnotas extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnimprimir;
     private javax.swing.JButton btnnuevo;
     private javax.swing.JComboBox<String> cmbtipo;
     private javax.swing.JLabel jLabel1;
