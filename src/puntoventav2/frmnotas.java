@@ -9,6 +9,7 @@ package puntoventav2;
  *
  * @author Francisco Rafael
  */
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.sql.Connection;
 import java.sql.Statement;
@@ -17,6 +18,10 @@ import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Connection;
@@ -35,6 +40,16 @@ import javax.swing.table.DefaultTableModel;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.io.OutputStream;
+import java.util.HashMap;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.engine.*;
 public class frmnotas extends javax.swing.JFrame {
     static java.sql.ResultSet rs=null;
     private Statement stmt=null;
@@ -1080,9 +1095,48 @@ public class frmnotas extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, e);
             }
         
+        HashMap param = new HashMap();
+        try 
+        {   
+            Connection con = conexion.getConnection();
+            JasperDesign jd = JRXmlLoader.load(new File("C:\\Users\\coron\\JaspersoftWorkspace\\Prueba").getAbsolutePath()+"\\pruebai.jrxml");
+            JRDataSource vacio = new JREmptyDataSource(1);
+            param.put("valor", Integer.parseInt(txtnonota.getText()));
+//            param.put("nombre2", txtNombre.getText());
+            JasperReport jr = JasperCompileManager.compileReport(jd);
+            JasperPrint jp = JasperFillManager.fillReport(jr,param,con);
+            OutputStream output = new FileOutputStream(new File("C:\\\\Users\\\\coron\\\\Desktop\\\\prueba\\\\'o'.pdf")); 
+             JasperExportManager.exportReportToPdfStream(jp, output); 
+            output.flush();
+            output.close();
+            
+            
+        } catch (JRException ex) {
+            Logger.getLogger(frmnotas.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(frmnotas.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(frmnotas.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         
-        
+              try {
+             File path = new File ("C:\\\\Users\\\\coron\\\\Desktop\\\\prueba\\\\'o'.pdf");
+             Desktop.getDesktop().open(path);
+                   }
+              catch (IOException ex)
+              {
+             ex.printStackTrace();
+              }
+              
+              
+//            File fileToPrint = new File("C:\\\\Users\\\\coron\\\\Desktop\\\\prueba\\\\'o'.pdf");
+//        try {
+//            Desktop.getDesktop().print(fileToPrint);
+//        } catch (IOException ex) {
+//            Logger.getLogger(frmbuscaclientes.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//       
     }//GEN-LAST:event_btnimprimirActionPerformed
 
     /**
