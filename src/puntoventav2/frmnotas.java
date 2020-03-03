@@ -57,7 +57,7 @@ public class frmnotas extends javax.swing.JFrame {
         initComponents();
         txttotal.setEnabled(false);
         this.setResizable(false);
-        this.setSize(new Dimension(630,700));
+        this.setSize(new Dimension(660,750));
         configModelo();
         
        
@@ -503,7 +503,7 @@ public class frmnotas extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(33, 33, 33)
                         .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(324, Short.MAX_VALUE))
+                .addContainerGap(313, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Registrar Notas", jPanel1);
@@ -723,7 +723,7 @@ public class frmnotas extends javax.swing.JFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel24)
                     .addComponent(lbltotal))
-                .addContainerGap(121, Short.MAX_VALUE))
+                .addContainerGap(110, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Imprimir", jPanel6);
@@ -732,11 +732,15 @@ public class frmnotas extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 689, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTabbedPane1))
         );
 
         pack();
@@ -827,10 +831,26 @@ public class frmnotas extends javax.swing.JFrame {
 
     private void txtprecioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtprecioKeyPressed
         // TODO add your handling code here:
-          if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+         float precio,total,cantidad;
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
          {
+                 if("".equals(txtcantidad.getText()))
+           {
+               JOptionPane.showMessageDialog(null, "no dejar el campo de cantidad vacio");
+           }
+           else
+           {
+                precio =Float.parseFloat(txtprecio.getText());
+                cantidad= Float.parseFloat(txtcantidad.getText());
+                total = precio*cantidad;
+                txttotal.setText(total+"");
+           }
+            
+           
              cmbtipo.requestFocus();
+         
          }
+          
     }//GEN-LAST:event_txtprecioKeyPressed
 
     private void txtclienteKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtclienteKeyPressed
@@ -961,6 +981,12 @@ public class frmnotas extends javax.swing.JFrame {
           
            
        }
+       
+       txtcantidad.setText("");
+       txtproducto.setText("");
+       txtprecio.setText("");
+       cmbtipo.setSelectedIndex(0);
+       txttotal.setText("");
         
         
      
@@ -968,14 +994,27 @@ public class frmnotas extends javax.swing.JFrame {
 
     private void btnimprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnimprimirActionPerformed
         // TODO add your handling code here:
-        int filas = modeloTabla.getRowCount();
-        String cantidad,prodcuto,tipo,total,fechanota;
+         int filas = modeloTabla.getRowCount();
+         String tipo,fechanota,fechapago,nombre,producto;
+         double cantidad,precio,totalproducto,totalnota;
          con=conexion.getConnection();
-       fechanota= ano+"-"+mes+"-"+dia;         
+         int nonota = Integer.parseInt(txtnonota.getText());
+         int nocliente= Integer.parseInt(txtncliente.getText());
+         fechanota= ano+"-"+mes+"-"+dia;      
+         String aniopago = txtfechapago.getText().substring(6,8);
+         String mespago =txtfechapago.getText().substring(3,5);
+         String diapago = txtfechapago.getText().substring(0,2);
+         fechapago= aniopago+"-"+mespago+"-"+diapago;
+         nombre = txtcliente.getText();
+        totalnota= Double.parseDouble(lbltotal.getText());
         for (int i = 0;i<filas;i++)
-      {
-        
-        
+      { 
+           cantidad= Double.parseDouble(tblnotas.getValueAt(i,0 ).toString());
+           producto = tblnotas.getValueAt(i, 1).toString();
+           precio = Double.parseDouble(tblnotas.getValueAt(i,2 ).toString());
+           tipo =   tblnotas.getValueAt(i, 3).toString();
+           totalproducto = Double.parseDouble(tblnotas.getValueAt(i,4 ).toString());
+           
               try 
               {
 
@@ -986,21 +1025,21 @@ public class frmnotas extends javax.swing.JFrame {
                        + "producto,tipo,total)"
                        + " VALUES (?,?,?,?,?,?,?,?,?,?)");
 
-              psInsert.setInt( 1, 2);
-              psInsert.setInt( 2, 2);
-              psInsert.setInt( 3, 2);
+              psInsert.setInt( 1, i+1);
+              psInsert.setInt( 2, nonota);
+              psInsert.setInt( 3, nocliente);
               psInsert.setString(4, fechanota);
-              psInsert.setString(5, fechanota);
-              psInsert.setString(6, fechanota);
-              psInsert.setDouble(7, 2.1);
-              psInsert.setString(8, fechanota);
-              psInsert.setString(9, fechanota);
-              psInsert.setDouble(10, 2.1);
+              psInsert.setString(5, fechapago);
+              psInsert.setString(6, nombre);
+              psInsert.setDouble(7, cantidad);
+              psInsert.setString(8, producto);
+              psInsert.setString(9, tipo);
+              psInsert.setDouble(10, totalproducto);
               
               psInsert.executeUpdate();
              
 
-              JOptionPane.showMessageDialog(null, "Se ingreso correctamente, gracias");
+            
                
             } 
             catch (SQLException e) 
@@ -1009,6 +1048,39 @@ public class frmnotas extends javax.swing.JFrame {
             }
 
       }
+        
+         try 
+              {
+
+                    
+               stmt = con.createStatement();
+               PreparedStatement psInsert= con.prepareStatement("INSERT INTO tblnotas"
+                       + "(nonota,nocliente,nomcliente,fecha,fechapago,total,abono,saldo,pagado)"
+                       + " VALUES (?,?,?,?,?,?,?,?,?)");
+
+             
+              psInsert.setInt( 1, nonota);
+              psInsert.setInt( 2, nocliente);
+              psInsert.setString(3, nombre);
+              psInsert.setString(4, fechanota);
+              psInsert.setString(5, fechapago);
+              psInsert.setDouble(6, totalnota);
+              psInsert.setDouble(7, 0);
+              psInsert.setDouble(8, totalnota);
+              psInsert.setString(9,"no" );
+              
+              psInsert.executeUpdate();
+             
+
+            
+               
+            } 
+            catch (SQLException e) 
+            {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        
+        
         
         
     }//GEN-LAST:event_btnimprimirActionPerformed

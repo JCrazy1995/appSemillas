@@ -29,7 +29,7 @@ public class conectar {
         try {
         
         Conn=DriverManager.getConnection(url,User,pass);
-        JOptionPane.showMessageDialog(null,"si");
+  
           
        } catch (SQLException e) {
            JOptionPane.showMessageDialog(null, "Error de conexion "+e.getMessage());
