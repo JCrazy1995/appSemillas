@@ -6,6 +6,7 @@
 package puntoventav2;
 
 import java.awt.Point;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -16,7 +17,9 @@ import java.sql.Statement;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -240,65 +243,19 @@ public class frmbuscaproveedores extends javax.swing.JFrame {
     private void txtNombreKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyPressed
         // TODO add your handling code here:
 
-        if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE)
-        {
-            if ("".equals(txtNombre.getText()));
-            {
-                eliminar();
-            }
-        }
     }//GEN-LAST:event_txtNombreKeyPressed
-
+ TableRowSorter trs;
     private void txtNombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyReleased
         // TODO add your handling code here:
-        if (this.txtNombre.getText().isEmpty())
-        {
-            modelo.clear();
-        } else
-        {
-            try
-            {
-                con=conexion.getConnection();
-                stmt = con.createStatement();
-                String texto = txtNombre.getText();
-                if ("".equals(texto))
-                {
-
-                } else
-                {
-
-                    rs = stmt.executeQuery("SELECT * from tblproveedores where nombre like '" + texto + "%'");
-                    eliminar();
-                    while (rs.next())
-                    {
-
-                       filas[0] = (rs.getString(1));
-                        filas[1] = (rs.getString(2));
-
-                        String tipo = (rs.getString(3));
-                        if ("1".equals(tipo))
-                        {
-                            tipo = "Contado";
-                        } else 
-                        {
-                            tipo = "credito";
-                        }
-                        filas[2] = tipo;
-                        filas[3] = (rs.getString(4));
-                        filas[4] = (rs.getString(5));
-                        modeloTabla.addRow(filas);
-
-                        tblbuscaproveedores.setModel(modeloTabla);
-
-
-                    }
-
-                }
-                con.close();
-            } catch ( SQLException ex) {
-                JOptionPane.showMessageDialog(this, "Ocurrio el siguiente error:" + ex);
+         txtNombre.addKeyListener(new KeyAdapter() {
+            
+            @Override
+            public void keyReleased(KeyEvent ke){
+                trs.setRowFilter(RowFilter.regexFilter("(?i)"+txtNombre.getText(), 1));
             }
-        }
+        });
+        trs = new TableRowSorter(tblbuscaproveedores.getModel());
+        tblbuscaproveedores.setRowSorter(trs);
 
     }//GEN-LAST:event_txtNombreKeyReleased
 
