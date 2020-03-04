@@ -131,12 +131,16 @@ public class frmbuscaproveedores extends javax.swing.JFrame {
                     frmproveedores.txttelefono.setText(tblbuscaproveedores.getValueAt(tblbuscaproveedores.getSelectedRow(), 4).toString());
                     eliminar();
                     tblbuscaproveedores.setModel(modeloTabla2);
+                    cerrar();
                }
            }
        
        });
     }
-     
+     void cerrar() 
+    {
+        this.dispose();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
