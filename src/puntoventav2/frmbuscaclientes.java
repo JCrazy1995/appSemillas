@@ -24,6 +24,7 @@ import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.event.KeyAdapter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -41,6 +42,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.RowFilter;
+import javax.swing.table.TableRowSorter;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -79,6 +82,34 @@ public class frmbuscaclientes extends javax.swing.JFrame {
         txtNombre.requestFocus();
         this.setResizable(false);
 
+    }
+    void todosCliente(){
+        Connection con = conectar.getConnection();
+        try {
+            stmt = con.createStatement();
+            rs = stmt.executeQuery("SELECT * from tblclientes");
+            while(rs.next()){
+                filas[0] = (rs.getString(1));
+                filas[1] = (rs.getString(2));
+                filas[2] = (rs.getString(3));
+                filas[3] = (rs.getString(4));
+                String tipo = (rs.getString(5));
+                if ("1".equals(tipo))
+                {
+                    tipo = "Contado";
+                } else 
+                {
+                    tipo = "credito";
+                }
+                filas[4] = tipo;
+                filas[5] = (rs.getString(6));
+                filas[6] = (rs.getString(7));
+                modeloTabla.addRow(filas);
+
+                tblbuscaclientes.setModel(modeloTabla);
+            }
+        } catch (Exception e) {
+        }
     }
 
     void configModelo() {
@@ -237,6 +268,9 @@ public class frmbuscaclientes extends javax.swing.JFrame {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtNombreKeyReleased(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreKeyTyped(evt);
+            }
         });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -333,69 +367,82 @@ public class frmbuscaclientes extends javax.swing.JFrame {
  public static final String DEST = "C:\\Users\\coron\\Desktop\\prueba\\prueba.PDF";
     private void txtNombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyReleased
         // TODO add your handling code here:
-        if (this.txtNombre.getText().isEmpty()) 
-        {
-            modelo.clear();
-        } else
-        {
-            try 
-            {
-            con=conexion.getConnection();
-                stmt = con.createStatement();
-                String texto = txtNombre.getText();
-                if ("".equals(texto)) 
-                {
-
-                } else 
-                {
-
-                    rs = stmt.executeQuery("SELECT * from tblclientes where nombre like '" + texto + "%'");
-                    eliminar();
-                    while (rs.next())
-                    {
-
-                        filas[0] = (rs.getString(1));
-                        filas[1] = (rs.getString(2));
-                        filas[2] = (rs.getString(3));
-                        filas[3] = (rs.getString(4));
-                        String tipo = (rs.getString(5));
-                        if ("1".equals(tipo))
-                        {
-                            tipo = "Contado";
-                        } else
-                        {
-                            tipo = "credito";
-                        }
-                        filas[4] = tipo;
-                        filas[5] = (rs.getString(6));
-                        filas[6] = (rs.getString(7));
-                        modeloTabla.addRow(filas);
-
-                        tblbuscaclientes.setModel(modeloTabla);
-                        
-                    }
-                     
-                }
-                 con.close();
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, "Ocurrio el siguiente error:" + ex);
-            }
-        }
-      
+//        if (this.txtNombre.getText().isEmpty()) 
+//        {
+//            modelo.clear();
+//        } else
+//        {
+//            try 
+//            {
+//            con=conexion.getConnection();
+//                stmt = con.createStatement();
+//                String texto = txtNombre.getText();
+//                if ("".equals(texto)) 
+//                {
+//
+//                } else 
+//                {
+//
+//                    rs = stmt.executeQuery("SELECT * from tblclientes where nombre like '" + texto + "%'");
+//                    eliminar();
+//                    while (rs.next())
+//                    {
+//
+//                        filas[0] = (rs.getString(1));
+//                        filas[1] = (rs.getString(2));
+//                        filas[2] = (rs.getString(3));
+//                        filas[3] = (rs.getString(4));
+//                        String tipo = (rs.getString(5));
+//                        if ("1".equals(tipo))
+//                        {
+//                            tipo = "Contado";
+//                        } else
+//                        {
+//                            tipo = "credito";
+//                        }
+//                        filas[4] = tipo;
+//                        filas[5] = (rs.getString(6));
+//                        filas[6] = (rs.getString(7));
+//                        modeloTabla.addRow(filas);
+//
+//                        tblbuscaclientes.setModel(modeloTabla);
+//                        
+//                    }
+//                     
+//                }
+//                 con.close();
+//            } catch (SQLException ex) {
+//                JOptionPane.showMessageDialog(this, "Ocurrio el siguiente error:" + ex);
+//            }
+//        }
+//      
 
     }//GEN-LAST:event_txtNombreKeyReleased
 
     private void txtNombreKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyPressed
         // TODO add your handling code here:
 
-        if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE) 
-        {
-            if ("".equals(txtNombre.getText()));
-            {
-                eliminar();
-            }
-        }
+//        if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE) 
+//        {
+//            if ("".equals(txtNombre.getText()));
+//            {
+//                eliminar();
+//            }
+//        }
     }//GEN-LAST:event_txtNombreKeyPressed
+    TableRowSorter trs;
+    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
+        // TODO add your handling code here:
+         txtNombre.addKeyListener(new KeyAdapter() {
+            
+            @Override
+            public void keyReleased(KeyEvent ke){
+                trs.setRowFilter(RowFilter.regexFilter("(?i)"+txtNombre.getText(), 1));
+            }
+        });
+        trs = new TableRowSorter(tblbuscaclientes.getModel());
+        tblbuscaclientes.setRowSorter(trs);
+    }//GEN-LAST:event_txtNombreKeyTyped
 
     /**
      * @param args the command line arguments
