@@ -997,11 +997,11 @@ public class frmnotas extends javax.swing.JFrame {
            
        }
        
-       txtcantidad.setText("");
-       txtproducto.setText("");
-       txtprecio.setText("");
-       cmbtipo.setSelectedIndex(0);
-       txttotal.setText("");
+//       txtcantidad.setText("");
+//       txtproducto.setText("");
+//       txtprecio.setText("");
+//       cmbtipo.setSelectedIndex(0);
+//       txttotal.setText("");
         
         
      
@@ -1102,31 +1102,39 @@ public class frmnotas extends javax.swing.JFrame {
             JasperDesign jd = JRXmlLoader.load(new File("C:\\Users\\coron\\JaspersoftWorkspace\\Prueba").getAbsolutePath()+"\\pruebai.jrxml");
             JRDataSource vacio = new JREmptyDataSource(1);
             param.put("valor", Integer.parseInt(txtnonota.getText()));
-//            param.put("nombre2", txtNombre.getText());
+            param.put("total", Double.parseDouble(lbltotal.getText()));
             JasperReport jr = JasperCompileManager.compileReport(jd);
             JasperPrint jp = JasperFillManager.fillReport(jr,param,con);
             OutputStream output = new FileOutputStream(new File("C:\\\\Users\\\\coron\\\\Desktop\\\\prueba\\\\'o'.pdf")); 
-             JasperExportManager.exportReportToPdfStream(jp, output); 
+            JasperExportManager.exportReportToPdfStream(jp, output); 
             output.flush();
             output.close();
             
             
-        } catch (JRException ex) {
-            Logger.getLogger(frmnotas.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(frmnotas.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } 
+        catch (JRException ex) 
+        {
             Logger.getLogger(frmnotas.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-              try {
-             File path = new File ("C:\\\\Users\\\\coron\\\\Desktop\\\\prueba\\\\'o'.pdf");
-             Desktop.getDesktop().open(path);
-                   }
+        catch (FileNotFoundException ex)
+        {
+            Logger.getLogger(frmnotas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        catch (IOException ex) 
+        {
+            Logger.getLogger(frmnotas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+              try 
+              {
+                 File path = new File ("C:\\\\Users\\\\coron\\\\Desktop\\\\prueba\\\\'o'.pdf");
+                 Desktop.getDesktop().open(path);
+              }
+              
               catch (IOException ex)
               {
-             ex.printStackTrace();
+                ex.printStackTrace();
               }
               
               
