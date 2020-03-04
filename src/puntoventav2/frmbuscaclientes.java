@@ -83,36 +83,10 @@ public class frmbuscaclientes extends javax.swing.JFrame {
         this.setResizable(false);
 
     }
-    void todosCliente(){
-        Connection con = conectar.getConnection();
-        try {
-            stmt = con.createStatement();
-            rs = stmt.executeQuery("SELECT * from tblclientes");
-            while(rs.next()){
-                filas[0] = (rs.getString(1));
-                filas[1] = (rs.getString(2));
-                filas[2] = (rs.getString(3));
-                filas[3] = (rs.getString(4));
-                String tipo = (rs.getString(5));
-                if ("1".equals(tipo))
-                {
-                    tipo = "Contado";
-                } else 
-                {
-                    tipo = "credito";
-                }
-                filas[4] = tipo;
-                filas[5] = (rs.getString(6));
-                filas[6] = (rs.getString(7));
-                modeloTabla.addRow(filas);
+   
 
-                tblbuscaclientes.setModel(modeloTabla);
-            }
-        } catch (Exception e) {
-        }
-    }
-
-    void configModelo() {
+    void configModelo() 
+    {
         modeloTabla.addColumn("Numero ");
         modeloTabla.addColumn("nombre");
         modeloTabla.addColumn("Direccion");
@@ -160,9 +134,18 @@ public class frmbuscaclientes extends javax.swing.JFrame {
                    frmclientes.txtnombrecliente.setText(tblbuscaclientes.getValueAt(tblbuscaclientes.getSelectedRow(), 1).toString());
                    frmclientes.txtcolonia.setText(tblbuscaclientes.getValueAt(tblbuscaclientes.getSelectedRow(), 3).toString());
                    frmclientes.txtdireccion.setText(tblbuscaclientes.getValueAt(tblbuscaclientes.getSelectedRow(), 2).toString());
-                   frmclientes.txtdiascredito.setText(tblbuscaclientes.getValueAt(tblbuscaclientes.getSelectedRow(), 5).toString());
-                   frmclientes.txttelefono.setText(tblbuscaclientes.getValueAt(tblbuscaclientes.getSelectedRow(), 6).toString());
-                    eliminar();
+                   frmclientes.txtdiascredito.setText(tblbuscaclientes.getValueAt(tblbuscaclientes.getSelectedRow(), 4).toString());
+                   frmclientes.txttelefono.setText(tblbuscaclientes.getValueAt(tblbuscaclientes.getSelectedRow(), 5).toString());
+                   String dato=String.valueOf(modeloTabla.getValueAt(tblbuscaclientes.getSelectedRow(),6));
+                   if ("Contado".equals(dato))
+                   {
+                        frmclientes.cmbmetodopago.setSelectedIndex(0);
+                   }
+                   else
+                   {
+                        frmclientes.cmbmetodopago.setSelectedIndex(1);
+                   }
+                   eliminar();
                     tblbuscaclientes.setModel(modeloTabla2);
                     cerrar();
 
