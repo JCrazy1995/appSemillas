@@ -74,7 +74,6 @@ public class frmclientes extends javax.swing.JFrame {
        
        });
     }
-    
     void configModelo()
         {
             modeloTabla.addColumn("Numero ");
@@ -752,9 +751,10 @@ public class frmclientes extends javax.swing.JFrame {
           JOptionPane.showMessageDialog(null, "Se ingreso correctamente, gracias");
             
         } 
-        catch (SQLException e) 
+        catch (Exception e) 
         {
-            JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "No se guardo");
+            
         }
         
          txtnombrecliente.setText("");
