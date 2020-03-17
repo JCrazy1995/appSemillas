@@ -9,39 +9,38 @@ package puntoventav2;
  *
  * @author Francisco Rafael
  */
-import java.awt.Desktop;
-import java.awt.Dimension;
-import java.sql.Connection;
-import java.sql.Statement;
-import javax.swing.table.DefaultTableModel;
-import java.awt.Point;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+
+import java.awt.Desktop;
+import java.awt.Dimension;
+import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
-import java.sql.ResultSet;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.OutputStream;
 import java.util.HashMap;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -56,10 +55,11 @@ public class frmnotas extends javax.swing.JFrame {
     conectar conexion = new conectar();
     DefaultTableModel modeloTabla= new DefaultTableModel();  //modelo de tabla que llevara los datos
     DefaultTableModel modeloTabla2= new DefaultTableModel(); // modelo vacio para la tabla de clientes
-    Object filas[]= new Object[5];     
+    Object filas[]= new Object[5];   
+     private int fila; 
     Connection con = null;
     int b=0;
-    Double total=0.0 ;
+    Double totalenviar=0.0 ;
     Calendar calendario =Calendar.getInstance();
     int dia =calendario.get(calendario.DATE);
     int mes = calendario.get(calendario.MONTH)+1;
@@ -179,11 +179,11 @@ public class frmnotas extends javax.swing.JFrame {
         jLabel22 = new javax.swing.JLabel();
         lblnocliente = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
-        lbldiascredito1 = new javax.swing.JLabel();
+        lbldireccion = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
         lbltotal = new javax.swing.JLabel();
         btnimprimir = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btneliminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -627,6 +627,11 @@ public class frmnotas extends javax.swing.JFrame {
 
             }
         ));
+        tblnotas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblnotasMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblnotas);
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
@@ -651,7 +656,7 @@ public class frmnotas extends javax.swing.JFrame {
 
         jLabel23.setText("Dirección:");
 
-        lbldiascredito1.setText("1");
+        lbldireccion.setText("1");
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
@@ -664,7 +669,7 @@ public class frmnotas extends javax.swing.JFrame {
                     .addComponent(jLabel22))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbldiascredito1, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+                    .addComponent(lbldireccion, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
                     .addComponent(lblnocliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -678,7 +683,7 @@ public class frmnotas extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel23)
-                    .addComponent(lbldiascredito1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lbldireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -693,10 +698,10 @@ public class frmnotas extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Eliminar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btneliminar.setText("Eliminar");
+        btneliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btneliminarActionPerformed(evt);
             }
         });
 
@@ -728,7 +733,7 @@ public class frmnotas extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnimprimir)
-                            .addComponent(jButton1))))
+                            .addComponent(btneliminar))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
@@ -752,7 +757,7 @@ public class frmnotas extends javax.swing.JFrame {
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(btnimprimir)
                         .addGap(28, 28, 28)
-                        .addComponent(jButton1)))
+                        .addComponent(btneliminar)))
                 .addContainerGap(110, Short.MAX_VALUE))
         );
 
@@ -796,7 +801,7 @@ public class frmnotas extends javax.swing.JFrame {
           {
           con=conexion.getConnection();
           stmt=con.createStatement();
-          rs=stmt.executeQuery("select * from tblarticulos where nombre like '"+txtproducto.getText()+"%'");
+          rs=stmt.executeQuery("select * from tblarticulos where nombre like '%"+txtproducto.getText()+"%'");
            while(rs.next())
             {                        
                 c++;
@@ -808,7 +813,7 @@ public class frmnotas extends javax.swing.JFrame {
            }
            else
            {
-               rs=stmt.executeQuery("select * from tblarticulos where nombre like '"+txtproducto.getText()+"%'");
+               rs=stmt.executeQuery("select * from tblarticulos where nombre like '%"+txtproducto.getText()+"%'");
            while(rs.next())
             {                        
                 txtproducto.setText(rs.getString(2));
@@ -976,50 +981,69 @@ public class frmnotas extends javax.swing.JFrame {
     }//GEN-LAST:event_txtclienteActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        
+      
         // TODO add your handling code here:
+        DecimalFormat df = new DecimalFormat("#.00");
+        if("".equals(txtcliente.getText()) || "".equals(txtcantidad.getText()))
+        {
+            JOptionPane.showMessageDialog(null,"No dejar campos vacios");
+        }
         
-        DecimalFormat df = new DecimalFormat("#.00"); 
-       if("".equals(txtcliente.getText()) || "".equals(txtcantidad.getText()))
-       {
-               JOptionPane.showMessageDialog(null,"No dejar campos vacios");
-       }
-       
-       else
-       {       
-               lblcliente.setText(txtcliente.getText());
-               lbldiascredito.setText(txtdiascredito.getText());
-               lbldiascredito1.setText(txtdomicilio.getText()+" "+txtcolonia.getText());
-               lblfecha.setText(txtfecha.getText());
-               lblfechapago.setText(txtfechapago.getText());
-               lblnocliente.setText(txtncliente.getText());
-               lbltipopago.setText(txttipopago.getText());
-               Double total2 = Double.parseDouble(txttotal.getText());
-                
+        else
+        {
+            lblcliente.setText(txtcliente.getText());
+            lbldiascredito.setText(txtdiascredito.getText());
+            lbldireccion.setText(txtdomicilio.getText()+" "+txtcolonia.getText());
+            lblfecha.setText(txtfecha.getText());
+            lblfechapago.setText(txtfechapago.getText());
+            lblnocliente.setText(txtncliente.getText());
+            lbltipopago.setText(txttipopago.getText());
+            Double total2 = Double.parseDouble(txttotal.getText());
+            
+            
+            filas[0] = txtcantidad.getText();         
+            filas[1] = txtproducto.getText();
+            filas[2] = txtprecio.getText();
+            filas[3]=  cmbtipo.getSelectedItem();
+            filas[4]=  df.format(total2)+"";
+            modeloTabla.addRow(filas);
+            tblnotas.setModel(modeloTabla);
+            Double total = Double.parseDouble(lbltotal.getText());
+            
+            totalenviar = total+total2;
+            lbltotal.setText(df.format(totalenviar)+"");
+            
+            
+        }
         
-               filas[0] = txtcantidad.getText();
-               filas[1] = txtproducto.getText();
-               filas[2] = txtprecio.getText();
-               filas[3]=  cmbtipo.getSelectedItem();
-               filas[4]=  df.format(total2)+"";
-               modeloTabla.addRow(filas);
-               tblnotas.setModel(modeloTabla);
                
-              
-               total = total+total2;
-               lbltotal.setText(df.format(total)+"");
-                
           
+//         try {
+//            Document document = new Document();
+//            try {
+//                PdfWriter.getInstance(document, new FileOutputStream("C:\\Users\\coron\\Desktop\\prueba\\"
+//                        +txtcliente.getText()+""+"Nota N° "+""+txtnonota.getText()+".pdf"));
+//            } catch (FileNotFoundException fileNotFoundException) {
+//                System.out.println("No such file was found to generate the PDF "
+//                        + "(No se encontró el fichero para generar el pdf)" + fileNotFoundException);
+//            }
+//          
+//            document.close();
+//            System.out.println("Your PDF file has been generated!(¡Se ha generado tu hoja PDF!");
+//        } catch (DocumentException documentException) {
+//            System.out.println("The file not exists (Se ha producido un error al generar un documento): " + documentException);
+//        }
+//                
+                
            
-       }
-       
+            
 //       txtcantidad.setText("");
 //       txtproducto.setText("");
 //       txtprecio.setText("");
 //       cmbtipo.setSelectedIndex(0);
 //       txttotal.setText("");
-        
-        
-     
+
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnimprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnimprimirActionPerformed
@@ -1109,21 +1133,38 @@ public class frmnotas extends javax.swing.JFrame {
             {
                 JOptionPane.showMessageDialog(null, e);
             }
+         
+             HashMap param = new HashMap();
+       
         
-        HashMap param = new HashMap();
+        
+         
+         
         try 
         {   
+           
+            
             Connection con = conexion.getConnection();
             JasperDesign jd = JRXmlLoader.load(new File("C:\\Users\\coron\\JaspersoftWorkspace\\Prueba").getAbsolutePath()+"\\pruebai.jrxml");
             JRDataSource vacio = new JREmptyDataSource(1);
             param.put("valor", Integer.parseInt(txtnonota.getText()));
             param.put("total", Double.parseDouble(lbltotal.getText()));
+            param.put("codigocliente", lblnocliente.getText());
+            param.put("nombre", lblcliente.getText());
+            param.put("Direccion", lbldireccion.getText());
+            param.put("telefono", txttelefono.getText());
+            param.put("numeronota", txtnonota.getText());
+            param.put("fecha", lblfecha.getText());
+            param.put("metodopago","Efectivo");
+            param.put("letras","holi" );
             JasperReport jr = JasperCompileManager.compileReport(jd);
             JasperPrint jp = JasperFillManager.fillReport(jr,param,con);
-            OutputStream output = new FileOutputStream(new File("C:\\\\Users\\\\coron\\\\Desktop\\\\prueba\\\\'o'.pdf")); 
+            OutputStream output = new FileOutputStream(new File("C:\\Users\\coron\\Desktop\\prueba\\"
+                        +txtcliente.getText()+""+"Nota N° "+""+txtnonota.getText()+".pdf")); 
             JasperExportManager.exportReportToPdfStream(jp, output); 
             output.flush();
             output.close();
+            
             
             
         } 
@@ -1135,15 +1176,17 @@ public class frmnotas extends javax.swing.JFrame {
         {
             Logger.getLogger(frmnotas.class.getName()).log(Level.SEVERE, null, ex);
         }
+         
         catch (IOException ex) 
         {
             Logger.getLogger(frmnotas.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
 
 
               try 
               {
-                 File path = new File ("C:\\\\Users\\\\coron\\\\Desktop\\\\prueba\\\\'o'.pdf");
+                 File path = new  File("C:\\Users\\coron\\Desktop\\prueba\\"
+                        +txtcliente.getText()+""+"Nota N° "+""+txtnonota.getText()+".pdf");
                  Desktop.getDesktop().open(path);
               }
               
@@ -1162,11 +1205,30 @@ public class frmnotas extends javax.swing.JFrame {
 //       
     }//GEN-LAST:event_btnimprimirActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btneliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneliminarActionPerformed
         // TODO add your handling code here:
+        DecimalFormat df = new DecimalFormat("#.00");  
+        int filavalor;
+        double totaln,totallabel,totalfinal;
+        String valor;
+        filavalor = tblnotas.getSelectedRow();
+        valor=  modeloTabla.getValueAt(filavalor, 4).toString();
+        totaln = Double.parseDouble(valor);
+        totallabel= Double.parseDouble(lbltotal.getText());
+        totalfinal=totallabel-totaln;
+        lbltotal.setText(totalfinal+"");
+        modeloTabla.removeRow(fila);
+        
+        
+        System.out.print(totaln);
         
     
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btneliminarActionPerformed
+
+    private void tblnotasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblnotasMouseClicked
+        // TODO add your handling code here:
+        fila=tblnotas.rowAtPoint(evt.getPoint());
+    }//GEN-LAST:event_tblnotasMouseClicked
 
     /**
      * @param args the command line arguments
@@ -1206,10 +1268,10 @@ public class frmnotas extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btneliminar;
     private javax.swing.JButton btnimprimir;
     private javax.swing.JButton btnnuevo;
     private javax.swing.JComboBox<String> cmbtipo;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1249,7 +1311,7 @@ public class frmnotas extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblcliente;
     private javax.swing.JLabel lbldiascredito;
-    private javax.swing.JLabel lbldiascredito1;
+    private javax.swing.JLabel lbldireccion;
     private javax.swing.JLabel lblfecha;
     private javax.swing.JLabel lblfechapago;
     private javax.swing.JLabel lblnocliente;
