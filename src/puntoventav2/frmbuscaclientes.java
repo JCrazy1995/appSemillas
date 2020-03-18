@@ -20,42 +20,9 @@ import javax.swing.table.DefaultTableModel;
 //
 //import com.itextpdf.text.*;
 //import com.itextpdf.text.pdf.*;
-import java.awt.Color;
-import java.awt.Desktop;
-import java.awt.Graphics2D;
-import java.awt.Shape;
 import java.awt.event.KeyAdapter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import javax.swing.table.TableModel;
-//import com.lowagie.text.Font;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.text.StyleConstants.FontConstants;
-//import com.itextpdf.text.pdf.PdfPTable;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
-import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
-import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
-import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.view.JasperViewer;
 
 public class frmbuscaclientes extends javax.swing.JFrame {
 
@@ -159,10 +126,7 @@ public class frmbuscaclientes extends javax.swing.JFrame {
     {
         eliminar();
 
-        int b = 0;
-        String valor = "";
-        int valor1 = 0;
-
+        
         try 
         {
             con = conexion.getConnection();

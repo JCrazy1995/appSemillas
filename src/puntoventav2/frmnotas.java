@@ -56,7 +56,7 @@ public class frmnotas extends javax.swing.JFrame {
     DefaultTableModel modeloTabla= new DefaultTableModel();  //modelo de tabla que llevara los datos
     DefaultTableModel modeloTabla2= new DefaultTableModel(); // modelo vacio para la tabla de clientes
     Object filas[]= new Object[5];   
-     private int fila; 
+    private int fila; 
     Connection con = null;
     int b=0;
     Double totalenviar=0.0 ;
@@ -79,7 +79,7 @@ public class frmnotas extends javax.swing.JFrame {
     }
         
          void configModelo() 
-         {
+        {
         modeloTabla.addColumn("Cantidad");
         modeloTabla.addColumn("Producto");
         modeloTabla.addColumn("Precio");
@@ -1196,12 +1196,12 @@ public class frmnotas extends javax.swing.JFrame {
               }
               
               
-//            File fileToPrint = new File("C:\\\\Users\\\\coron\\\\Desktop\\\\prueba\\\\'o'.pdf");
-//        try {
-//            Desktop.getDesktop().print(fileToPrint);
-//        } catch (IOException ex) {
-//            Logger.getLogger(frmbuscaclientes.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+            File fileToPrint = new File("C:\\\\Users\\\\coron\\\\Desktop\\\\prueba\\\\'o'.pdf");
+        try {
+            Desktop.getDesktop().print(fileToPrint);
+        } catch (IOException ex) {
+            Logger.getLogger(frmbuscaclientes.class.getName()).log(Level.SEVERE, null, ex);
+        }
 //       
     }//GEN-LAST:event_btnimprimirActionPerformed
 

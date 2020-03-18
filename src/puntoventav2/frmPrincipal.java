@@ -105,6 +105,11 @@ public class frmPrincipal extends javax.swing.JFrame {
         jMenu5.add(jMenuItem1);
 
         jMenuItem2.setText("Reimprimir");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu5.add(jMenuItem2);
 
         jMenuItem3.setText("Buscar");
@@ -152,6 +157,14 @@ public class frmPrincipal extends javax.swing.JFrame {
         frmarticulos productos = new frmarticulos();
         productos.setVisible(true);
     }//GEN-LAST:event_jMenu6MouseClicked
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+    
+        frmreimprimirnotas reeimprimir = new frmreimprimirnotas();
+        reeimprimir.setVisible(true);
+       
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
  * @param args the command line arguments
