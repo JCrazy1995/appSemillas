@@ -9,8 +9,10 @@ import java.awt.event.KeyEvent;
 import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -28,9 +30,9 @@ public class frmentradas extends javax.swing.JFrame {
     private Statement stmt=null;
     conectar conexion = new conectar();
     DefaultTableModel modeloTabla= new DefaultTableModel();  //modelo de tabla que llevara los datos
-    DefaultTableModel modeloTabla2= new DefaultTableModel(); // modelo vacio para la tabla de clientes
     Object filas[]= new Object[5];     
     Connection con = null;
+    private int fila; 
     int b=0;
     Double total=0.0 ;
     Calendar calendario =Calendar.getInstance();
@@ -43,6 +45,8 @@ public class frmentradas extends javax.swing.JFrame {
     public frmentradas() 
     {
         initComponents();
+        configModelo();
+        txtproveedor.requestFocus();
     }
 
     
@@ -61,6 +65,18 @@ public class frmentradas extends javax.swing.JFrame {
 
     
         }
+    
+        void configModelo() 
+        {
+            modeloTabla.addColumn("Cantidad");
+            modeloTabla.addColumn("Producto");
+            modeloTabla.addColumn("Precio");
+            modeloTabla.addColumn("Tipo");
+            modeloTabla.addColumn("Total");
+            tblentradas.setModel(modeloTabla);
+        }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -100,23 +116,34 @@ public class frmentradas extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         txttipopago = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        txtnoproveedor = new javax.swing.JTextField();
+        jLabel14 = new javax.swing.JLabel();
+        cmbtipoentrada = new javax.swing.JComboBox<>();
+        jPanel7 = new javax.swing.JPanel();
+        btnagregar = new javax.swing.JButton();
+        btnnuevo = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         jLabel20 = new javax.swing.JLabel();
         lblproveedor = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
-        lblfecha1 = new javax.swing.JLabel();
-        lblfechapago1 = new javax.swing.JLabel();
+        lblfecha = new javax.swing.JLabel();
+        lblfechapago = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
         jLabel23 = new javax.swing.JLabel();
         lbltipopago = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
         lbldiascredito = new javax.swing.JLabel();
-        lblnocliente = new javax.swing.JLabel();
+        lblnoproveedor = new javax.swing.JLabel();
         jLabel25 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblentradas = new javax.swing.JTable();
+        jLabel10 = new javax.swing.JLabel();
+        lbltotal = new javax.swing.JLabel();
+        btneliminar = new javax.swing.JButton();
+        btnguardar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -133,7 +160,7 @@ public class frmentradas extends javax.swing.JFrame {
             }
         });
 
-        jLabel6.setText("Cliente:");
+        jLabel6.setText("Proveedor:");
 
         jLabel8.setText("Fecha:");
 
@@ -156,12 +183,12 @@ public class frmentradas extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel11)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(txtdiascredito, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
                         .addComponent(txtproveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -185,12 +212,10 @@ public class frmentradas extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtdiascredito, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11))
-                .addGap(0, 28, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jLabel7.setText("N° Entrada:");
-
-        txtnoentrada.setText("1");
 
         jLabel13.setText("Fecha pago:");
 
@@ -221,7 +246,7 @@ public class frmentradas extends javax.swing.JFrame {
                         .addComponent(jLabel13)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtfechapago, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -238,7 +263,7 @@ public class frmentradas extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txttelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel15))
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel3.setText("Cantidad");
@@ -332,15 +357,35 @@ public class frmentradas extends javax.swing.JFrame {
 
         txttipopago.setEditable(false);
 
+        jLabel9.setText("N° Proveedor");
+
+        txtnoproveedor.setEditable(false);
+
+        jLabel14.setText("Tipo de Entrada");
+
+        cmbtipoentrada.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Compra", "Prestamo", "Regalo" }));
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel12)
-                .addGap(18, 18, 18)
-                .addComponent(txttipopago, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel12)
+                        .addGap(18, 18, 18)
+                        .addComponent(txttipopago, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtnoproveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabel14)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cmbtipoentrada, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -350,7 +395,45 @@ public class frmentradas extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
                     .addComponent(txttipopago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(84, Short.MAX_VALUE))
+                .addGap(21, 21, 21)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(txtnoproveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel14)
+                    .addComponent(cmbtipoentrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        btnagregar.setText("Agregar");
+        btnagregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnagregarActionPerformed(evt);
+            }
+        });
+
+        btnnuevo.setText("Nuevo");
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnagregar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnnuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnagregar)
+                .addGap(33, 33, 33)
+                .addComponent(btnnuevo)
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -361,14 +444,16 @@ public class frmentradas extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(15, Short.MAX_VALUE))
+                        .addGap(65, 65, 65)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -376,12 +461,13 @@ public class frmentradas extends javax.swing.JFrame {
                 .addGap(23, 23, 23)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(18, 18, 18)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(25, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(26, 26, 26)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(103, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Ingresar Datos Entreda", jPanel1);
@@ -392,9 +478,9 @@ public class frmentradas extends javax.swing.JFrame {
 
         jLabel21.setText("Fecha:");
 
-        lblfecha1.setText("1");
+        lblfecha.setText("1");
 
-        lblfechapago1.setText("1");
+        lblfechapago.setText("1");
 
         jLabel22.setText("Pago:");
 
@@ -410,8 +496,8 @@ public class frmentradas extends javax.swing.JFrame {
                     .addComponent(jLabel22))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblfechapago1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblfecha1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblfechapago, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblfecha, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblproveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
@@ -425,10 +511,10 @@ public class frmentradas extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblfecha1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblfecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblfechapago1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblfechapago, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -441,9 +527,9 @@ public class frmentradas extends javax.swing.JFrame {
 
         lbldiascredito.setText("1");
 
-        lblnocliente.setText("1");
+        lblnoproveedor.setText("1");
 
-        jLabel25.setText("N°Cliente:");
+        jLabel25.setText("N° Proveedor");
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -463,7 +549,7 @@ public class frmentradas extends javax.swing.JFrame {
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addComponent(jLabel25)
                         .addGap(18, 18, 18)
-                        .addComponent(lblnocliente, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)))
+                        .addComponent(lblnoproveedor, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel9Layout.setVerticalGroup(
@@ -472,7 +558,7 @@ public class frmentradas extends javax.swing.JFrame {
                 .addContainerGap(21, Short.MAX_VALUE)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel25)
-                    .addComponent(lblnocliente, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblnoproveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel23)
@@ -497,6 +583,24 @@ public class frmentradas extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblentradas);
 
+        jLabel10.setText("Total:");
+
+        lbltotal.setText("0.0");
+
+        btneliminar.setText("Eliminar");
+        btneliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btneliminarActionPerformed(evt);
+            }
+        });
+
+        btnguardar.setText("Guardar");
+        btnguardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnguardarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -508,8 +612,19 @@ public class frmentradas extends javax.swing.JFrame {
                         .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(98, Short.MAX_VALUE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnguardar)
+                            .addComponent(btneliminar))))
+                .addContainerGap(36, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lbltotal, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(83, 83, 83))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -519,8 +634,18 @@ public class frmentradas extends javax.swing.JFrame {
                     .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel10)
+                            .addComponent(lbltotal)))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(btneliminar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnguardar)))
+                .addContainerGap(88, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Agregar Entrada", jPanel6);
@@ -586,7 +711,7 @@ public class frmentradas extends javax.swing.JFrame {
                 {
                     con=conexion.getConnection();
                     stmt=con.createStatement();
-                    rs=stmt.executeQuery("select * from tblarticulos where nombre like '"+txtproducto.getText()+"%'");
+                    rs=stmt.executeQuery("select * from tblarticulos where nombre like '%"+txtproducto.getText()+"%'");
                     while(rs.next())
                     {
                         c++;
@@ -598,7 +723,7 @@ public class frmentradas extends javax.swing.JFrame {
                     }
                     else
                     {
-                        rs=stmt.executeQuery("select * from tblarticulos where nombre like '"+txtproducto.getText()+"%'");
+                        rs=stmt.executeQuery("select * from tblarticulos where nombre like '%"+txtproducto.getText()+"%'");
                         while(rs.next())
                         {
                             txtproducto.setText(rs.getString(2));
@@ -668,7 +793,7 @@ public class frmentradas extends javax.swing.JFrame {
                     rs=stmt.executeQuery("select * from tblproveedores where nombre like '"+txtproveedor.getText()+"%'");
                     while(rs.next())
                     {
-                        txtnoentrada.setText(rs.getString(1));
+                        txtnoproveedor.setText(rs.getString(1));
                         txtproveedor.setText(rs.getString(2));
                         String tippago = rs.getString(3);
                         if("1".equals(tippago))
@@ -679,7 +804,7 @@ public class frmentradas extends javax.swing.JFrame {
                         {
                             txttipopago.setText("Credito");
                         }
-
+                        
                         txtdiascredito.setText(rs.getString(4));
                         txttelefono.setText(rs.getString(5));
                         calendario =Calendar.getInstance();
@@ -695,9 +820,19 @@ public class frmentradas extends javax.swing.JFrame {
 
                     }
                     txtcantidad.requestFocus();
+                    rs=stmt.executeQuery(" select * from tblentradas");
+                    System.out.print(rs);
+
+                     while(rs.next())
+                    {   int numero = Integer.parseInt(rs.getString(1));
+                        txtnoentrada.setText(numero+1+"");
+                    }
 
                 }
                 con.close();
+              
+                
+                
             }
             catch(SQLException ex)
             {
@@ -705,6 +840,10 @@ public class frmentradas extends javax.swing.JFrame {
             } catch (ParseException ex) {
                 java.util.logging.Logger.getLogger(frmentradas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             }
+            
+            
+            
+            
 
         }
     }//GEN-LAST:event_txtproveedorKeyPressed
@@ -712,6 +851,178 @@ public class frmentradas extends javax.swing.JFrame {
     private void txtproveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtproveedorActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtproveedorActionPerformed
+
+    private void btnagregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarActionPerformed
+        // TODO add your handling code here:
+         DecimalFormat df = new DecimalFormat("#.00");
+        if ("".equals(txtcantidad.getText())|| "".equals(txtprecio.getText())||"".equals(txtproveedor.getText()))
+        {
+            JOptionPane.showMessageDialog(null, "Favor de no dejar campos vacios");
+        }
+        
+        else
+        {
+            lblproveedor.setText(txtproveedor.getText());
+            lblnoproveedor.setText(txtnoproveedor.getText());
+            lblfecha.setText(txtfecha.getText());
+            lblfechapago.setText(txtfechapago.getText());
+            lbldiascredito.setText(txtdiascredito.getText());
+            lbltipopago.setText(txttipopago.getText());
+            
+            Double totaltabla = Double.parseDouble(txttotal.getText());
+            Double total = Double.parseDouble(lbltotal.getText());
+            total= totaltabla+total;
+            filas[0]=txtcantidad.getText();
+            filas[1]=txtproducto.getText();
+            filas[2]=txtprecio.getText();
+            filas[3]=cmbtipo.getSelectedItem();
+            filas[4]=df.format(totaltabla)+"";
+            modeloTabla.addRow(filas);
+            tblentradas.setModel(modeloTabla);
+            lbltotal.setText(df.format(total)+"");
+            
+        }
+        
+        
+    }//GEN-LAST:event_btnagregarActionPerformed
+
+    private void btneliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneliminarActionPerformed
+        // TODO add your handling code here:
+        
+        DecimalFormat df = new DecimalFormat("#.00");  
+        int filavalor;
+        double totaln,totallabel,totalfinal;
+        String valor;
+        filavalor = tblentradas.getSelectedRow();
+        valor=  modeloTabla.getValueAt(filavalor, 4).toString();
+        totaln = Double.parseDouble(valor);
+        totallabel= Double.parseDouble(lbltotal.getText());
+        totalfinal=totallabel-totaln;
+        lbltotal.setText(totalfinal+"");
+        modeloTabla.removeRow(fila);
+    }//GEN-LAST:event_btneliminarActionPerformed
+
+    private void btnguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardarActionPerformed
+        // TODO add your handling code here:
+        int filass = tblentradas.getRowCount();
+        int noentrada,noprovedor,c=0;
+        String fecha,fechapago,pagado,tipoentrada,dia,mes,anio,nombre,producto,tipo,provedor;
+        Double totalproducto,totalentrada,abono,saldo,cantidad,precio;
+        anio = txtfecha.getText().substring(6,8);
+        mes =txtfecha.getText().substring(3,5);
+        dia = txtfecha.getText().substring(0,2);
+        fecha = anio+"-"+mes+"-"+dia;
+        anio = txtfechapago.getText().substring(6,8);
+        mes =txtfechapago.getText().substring(3,5);
+        dia = txtfechapago.getText().substring(0,2);
+        fechapago=anio+"-"+mes+"-"+dia;
+        System.out.println(fecha +" " +fechapago);
+        
+        noentrada = Integer.parseInt(txtnoentrada.getText());
+        noprovedor = Integer.parseInt(lblnoproveedor.getText());
+        nombre= lblproveedor.getText();
+        totalentrada = Double.parseDouble(lbltotal.getText());
+        abono=0.0;
+        saldo = totalentrada;
+        tipoentrada=cmbtipoentrada.getSelectedItem().toString();
+        provedor = lblproveedor.getText();
+        
+        
+         try 
+              {
+
+                con=conexion.getConnection();
+                stmt=con.createStatement();     
+               stmt = con.createStatement();
+               PreparedStatement psInsert= con.prepareStatement("INSERT INTO tblentradas"
+                       + "(noentrada,noproveedor,nomproveedor,fechaentrada,fechapago,total,abono,saldo,pagado,tipoentrada)"
+                       + " VALUES (?,?,?,?,?,?,?,?,?,?)");
+
+             
+              psInsert.setInt( 1, noentrada);
+              psInsert.setInt( 2, noprovedor);
+              psInsert.setString(3, nombre);
+              psInsert.setString(4, fecha);
+              psInsert.setString(5, fechapago);
+              psInsert.setDouble(6, totalentrada);
+              psInsert.setDouble(7, abono);
+              psInsert.setDouble(8, saldo);
+              psInsert.setString(9,"no" );
+              psInsert.setString(10,tipoentrada );
+              psInsert.executeUpdate();
+             
+
+            con.close();
+               
+            } 
+            catch (SQLException e) 
+            {
+                
+            }
+        
+        for (int i = 0;i<filass;i++)
+        { 
+           cantidad= Double.parseDouble(tblentradas.getValueAt(i,0 ).toString());
+           producto = tblentradas.getValueAt(i, 1).toString();
+           precio = Double.parseDouble(tblentradas.getValueAt(i,2 ).toString());
+           tipo =   tblentradas.getValueAt(i, 3).toString();
+           totalproducto = Double.parseDouble(tblentradas.getValueAt(i,4 ).toString());
+           
+              try 
+              {
+
+               con=conexion.getConnection();
+               stmt=con.createStatement();     
+               stmt = con.createStatement();  
+               
+                rs=stmt.executeQuery("select * from tblentradasmovs where noentrada like '%"+txtnoentrada.getText()+"%'");
+           while(rs.next())
+            {                        
+                c++;
+            }
+           if (c>=1)
+           {
+               JOptionPane.showMessageDialog(null, "La nota ya ha sido registrada");
+              
+           }
+           else
+           {
+          
+           
+               PreparedStatement psInsert= con.prepareStatement("INSERT INTO tblentradasmovs"
+                       + "(noentrada,nomovimiento,noproveedor,nomproveedor,cantidad,"
+                       + "producto,tipo,total,tipoentrada)"
+                       + " VALUES (?,?,?,?,?,?,?,?,?)");
+               
+              psInsert.setInt( 1, noentrada);
+              psInsert.setInt( 2, i+1);
+              psInsert.setInt( 3, noprovedor);
+              psInsert.setString(4, provedor);
+              psInsert.setDouble(5, cantidad);
+              psInsert.setString(6, producto);
+              psInsert.setString(7, tipo);
+              psInsert.setDouble(8, total);
+              psInsert.setString(9, tipoentrada);
+             
+              
+              psInsert.executeUpdate();
+             
+
+            con.close();
+               
+            } 
+            
+             } catch (SQLException ex) {
+                java.util.logging.Logger.getLogger(frmentradas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            }
+
+        }
+
+        
+    
+
+        
+    }//GEN-LAST:event_btnguardarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -749,11 +1060,18 @@ public class frmentradas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnagregar;
+    private javax.swing.JButton btneliminar;
+    private javax.swing.JButton btnguardar;
+    private javax.swing.JButton btnnuevo;
     private javax.swing.JComboBox<String> cmbtipo;
+    private javax.swing.JComboBox<String> cmbtipoentrada;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
@@ -768,28 +1086,32 @@ public class frmentradas extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lbldiascredito;
-    private javax.swing.JLabel lblfecha1;
-    private javax.swing.JLabel lblfechapago1;
-    private javax.swing.JLabel lblnocliente;
+    private javax.swing.JLabel lblfecha;
+    private javax.swing.JLabel lblfechapago;
+    private javax.swing.JLabel lblnoproveedor;
     private javax.swing.JLabel lblproveedor;
     private javax.swing.JLabel lbltipopago;
+    private javax.swing.JLabel lbltotal;
     private javax.swing.JTable tblentradas;
     private javax.swing.JTextField txtcantidad;
     private javax.swing.JTextField txtdiascredito;
     private javax.swing.JTextField txtfecha;
     private javax.swing.JTextField txtfechapago;
     private javax.swing.JTextField txtnoentrada;
+    private javax.swing.JTextField txtnoproveedor;
     private javax.swing.JTextField txtprecio;
     private javax.swing.JTextField txtproducto;
     private javax.swing.JTextField txtproveedor;

@@ -10,12 +10,6 @@ package puntoventav2;
  * @author Francisco Rafael
  */
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -1062,7 +1056,7 @@ public class frmnotas extends javax.swing.JFrame {
          nombre = txtcliente.getText();
         totalnota= Double.parseDouble(lbltotal.getText());
         for (int i = 0;i<filas;i++)
-      { 
+        { 
            cantidad= Double.parseDouble(tblnotas.getValueAt(i,0 ).toString());
            producto = tblnotas.getValueAt(i, 1).toString();
            precio = Double.parseDouble(tblnotas.getValueAt(i,2 ).toString());
@@ -1078,7 +1072,7 @@ public class frmnotas extends javax.swing.JFrame {
                        + "(nomovimiento,nonota,nocliente,fechanota,fechapago,nomcliente,cantidad,"
                        + "producto,tipo,total)"
                        + " VALUES (?,?,?,?,?,?,?,?,?,?)");
-
+               
               psInsert.setInt( 1, i+1);
               psInsert.setInt( 2, nonota);
               psInsert.setInt( 3, nocliente);
@@ -1101,7 +1095,7 @@ public class frmnotas extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, e);
             }
 
-      }
+        }
         
          try 
               {

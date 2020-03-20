@@ -40,6 +40,7 @@ public class frmreimprimirnotas extends javax.swing.JFrame {
         initComponents();
         configModelo();
         iniciotabla();
+        setResizable(false);
     }
 
     void configModelo() 
@@ -115,10 +116,9 @@ public class frmreimprimirnotas extends javax.swing.JFrame {
         btnreimprimir = new javax.swing.JButton();
         txtnombre = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        btnrecientes = new javax.swing.JButton();
-        btnantiguos = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Reimprimir Notas");
 
         tblbuscanotas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -160,41 +160,23 @@ public class frmreimprimirnotas extends javax.swing.JFrame {
 
         jLabel1.setText("Nombre:");
 
-        btnrecientes.setText("Recientes");
-        btnrecientes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnrecientesActionPerformed(evt);
-            }
-        });
-
-        btnantiguos.setText("Antiguos");
-        btnantiguos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnantiguosActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
                         .addComponent(txtnombre, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(37, 37, 37)
+                        .addGap(18, 18, 18)
                         .addComponent(btnabrir)
-                        .addGap(41, 41, 41)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnreimprimir)))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnantiguos)
-                    .addComponent(btnrecientes))
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -205,32 +187,20 @@ public class frmreimprimirnotas extends javax.swing.JFrame {
                     .addComponent(btnreimprimir)
                     .addComponent(txtnombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 393, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(45, 45, 45)
-                        .addComponent(btnrecientes)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnantiguos)))
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 393, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -301,72 +271,6 @@ public class frmreimprimirnotas extends javax.swing.JFrame {
         tblbuscanotas.setRowSorter(trs);
     }//GEN-LAST:event_txtnombreKeyReleased
 
-    private void btnrecientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnrecientesActionPerformed
-        // TODO add your handling code here:
-        eliminar();
-         try 
-        {
-            con = conexion.getConnection();
-            stmt = con.createStatement();
-            rs = stmt.executeQuery("SELECT * from tblnotas order by fecha desc");
-            while (rs.next()) 
-            {
-
-                filas[0] = (rs.getString(1));
-                filas[1] = (rs.getString(3));
-                String fecha = (rs.getString(4));
-                String dia= fecha.substring(8,10);
-                String mes = fecha.substring(5,7);
-                String ano = fecha.substring(0,4);
-                modeloTabla.addRow(filas);
-                filas[2] = dia+"/"+mes+"/"+ano;
-                filas[3] = (rs.getString(9));
-
-                tblbuscanotas.setModel(modeloTabla);
-
-            }
-            con.close();
-        } catch (SQLException ex) 
-        {
-            JOptionPane.showMessageDialog(this, "Ocurrio el siguiente error:" + ex);
-        }
-        
-        
-    }//GEN-LAST:event_btnrecientesActionPerformed
-
-    private void btnantiguosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnantiguosActionPerformed
-        // TODO add your handling code here:
-        eliminar();
-         try 
-        {
-            con = conexion.getConnection();
-            stmt = con.createStatement();
-            rs = stmt.executeQuery("SELECT * from tblnotas order by fecha ");
-            while (rs.next()) 
-            {
-
-                filas[0] = (rs.getString(1));
-                filas[1] = (rs.getString(3));
-                String fecha = (rs.getString(4));
-                String dia= fecha.substring(8,10);
-                String mes = fecha.substring(5,7);
-                String ano = fecha.substring(0,4);
-                modeloTabla.addRow(filas);
-                filas[2] = dia+"/"+mes+"/"+ano;
-                filas[3] = (rs.getString(9));
-
-                tblbuscanotas.setModel(modeloTabla);
-
-            }
-            con.close();
-        } catch (SQLException ex) 
-        {
-            JOptionPane.showMessageDialog(this, "Ocurrio el siguiente error:" + ex);
-        }
-        
-        
-    }//GEN-LAST:event_btnantiguosActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -404,8 +308,6 @@ public class frmreimprimirnotas extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnabrir;
-    private javax.swing.JButton btnantiguos;
-    private javax.swing.JButton btnrecientes;
     private javax.swing.JButton btnreimprimir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

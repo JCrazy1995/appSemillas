@@ -270,9 +270,30 @@ public class frmarticulos extends javax.swing.JFrame {
          psInsert.setString(2, nombre);
          psInsert.setFloat(3,precio);
          psInsert.setString(4, tipo);
-          psInsert.executeUpdate();
-          psInsert.close();
-           
+         psInsert.execute();
+         psInsert.close();
+            
+            
+        } 
+        catch (SQLException e) 
+        {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    
+          try {
+            
+            
+         stmt = con.createStatement();
+     
+         PreparedStatement psInsert= con.prepareStatement("INSERT INTO tblinventario(noarticulo,nombre,cantidad)"
+                   + " VALUES (?,?,?)"); 
+         psInsert.setInt(1, numeroarticulo);
+         psInsert.setString(2, nombre);
+         psInsert.setDouble(3,0.0);
+         psInsert.execute();
+         psInsert.close(); 
+         
+           con.close();
           JOptionPane.showMessageDialog(null, "Se ingreso correctamente, gracias");
             
         } 
