@@ -97,13 +97,13 @@ public class frmbuscaclientes extends javax.swing.JFrame {
                 {
 //                    frmclientes clientes = new frmclientes();
 //                    clientes.setVisible(true);
-                   frmclientes.jLabel8.setText(tblbuscaclientes.getValueAt(tblbuscaclientes.getSelectedRow(), 0).toString());
+                   frmclientes.lblNoCliente.setText(tblbuscaclientes.getValueAt(tblbuscaclientes.getSelectedRow(), 0).toString());
                    frmclientes.txtnombrecliente.setText(tblbuscaclientes.getValueAt(tblbuscaclientes.getSelectedRow(), 1).toString());
                    frmclientes.txtcolonia.setText(tblbuscaclientes.getValueAt(tblbuscaclientes.getSelectedRow(), 3).toString());
                    frmclientes.txtdireccion.setText(tblbuscaclientes.getValueAt(tblbuscaclientes.getSelectedRow(), 2).toString());
-                   frmclientes.txtdiascredito.setText(tblbuscaclientes.getValueAt(tblbuscaclientes.getSelectedRow(), 4).toString());
-                   frmclientes.txttelefono.setText(tblbuscaclientes.getValueAt(tblbuscaclientes.getSelectedRow(), 5).toString());
-                   String dato=String.valueOf(modeloTabla.getValueAt(tblbuscaclientes.getSelectedRow(),6));
+                   frmclientes.txtdiascredito.setText(tblbuscaclientes.getValueAt(tblbuscaclientes.getSelectedRow(), 5).toString());
+                   frmclientes.txttelefono.setText(tblbuscaclientes.getValueAt(tblbuscaclientes.getSelectedRow(), 6).toString());
+                   String dato=String.valueOf(modeloTabla.getValueAt(tblbuscaclientes.getSelectedRow(),4));
                    if ("Contado".equals(dato))
                    {
                         frmclientes.cmbmetodopago.setSelectedIndex(0);

@@ -22,7 +22,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Francisco Rafael
  */
-public class frmclientes extends javax.swing.JFrame {
+public final class frmclientes extends javax.swing.JFrame {
   public static final String db="bdpuntoventa";
    private static final String User="root";
    private static final String pass="0547";
@@ -31,8 +31,6 @@ public class frmclientes extends javax.swing.JFrame {
      static ResultSet rs=null;
     private Statement stmt=null;
     conectar conexion = new conectar();
-    DefaultTableModel modeloTabla= new DefaultTableModel();  //modelo de tabla que llevara los datos
-    DefaultTableModel modeloTabla2= new DefaultTableModel(); // modelo vacio para la tabla de clientes
     Object filas[]= new Object[7];                          //objeto que utilizare para llenar la 
 //                Conn = conexion.getConeConnection();
                 
@@ -43,73 +41,9 @@ public class frmclientes extends javax.swing.JFrame {
                  int b=0; // variable para contar las columnas de la tabla y poder borrar
     public frmclientes() {
         initComponents();
-       
-      dobleclick();
+        ultimoRegistro();
       this.setResizable(false);
-      
-       
-       
     }
-    
-    
-    void  dobleclick()
-    {
-         tblbuscaclientes.addMouseListener(new MouseAdapter() {
-           public void mousePressed(MouseEvent Mouse_evt){
-               JTable tabla = (JTable) Mouse_evt.getSource();
-               Point point = Mouse_evt.getPoint();
-               int row = tabla.rowAtPoint(point);
-               if (Mouse_evt.getClickCount()==2) 
-               {
-                   jLabel8.setText(tblbuscaclientes.getValueAt(tblbuscaclientes.getSelectedRow(), 0).toString());
-                   txtnombrecliente.setText(tblbuscaclientes.getValueAt(tblbuscaclientes.getSelectedRow(), 1).toString());
-                   txtcolonia.setText(tblbuscaclientes.getValueAt(tblbuscaclientes.getSelectedRow(), 3).toString());
-                   txtdireccion.setText(tblbuscaclientes.getValueAt(tblbuscaclientes.getSelectedRow(), 2).toString());
-                   txtdiascredito.setText(tblbuscaclientes.getValueAt(tblbuscaclientes.getSelectedRow(), 5).toString());
-                   txttelefono.setText(tblbuscaclientes.getValueAt(tblbuscaclientes.getSelectedRow(), 6).toString());
-                    eliminar();
-                    tblbuscaclientes.setModel(modeloTabla2);
-               }
-           }
-       
-       });
-    }
-    void configModelo()
-        {
-            modeloTabla.addColumn("Numero ");
-            modeloTabla.addColumn("nombre");
-            modeloTabla.addColumn("Direccion");
-            modeloTabla.addColumn(" Colonia");
-            modeloTabla.addColumn("tipo pago");   
-            modeloTabla.addColumn("dias"); 
-            modeloTabla.addColumn("Telefono");
-            tblbuscaclientes.setModel(modeloTabla);
-             
-        }
-    
-    void eliminar(){
-        
-        DefaultTableModel tb = (DefaultTableModel) tblbuscaclientes.getModel();
-        int a = tblbuscaclientes.getRowCount()-1;
-        for (int i = a; i >= 0; i--) {          
-        tb.removeRow(tb.getRowCount()-1);
-        }
-        
-            
-        //cargaTicket();
-    }
-    void agregar()
-    {
-        filas[0]="1";
-        filas[1]="2";
-        filas[2]="3";
-        filas[3]="4";
-        filas[4]="5";
-        filas[5]="6";
-        modeloTabla.addRow(filas);
-    }
-
-    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -124,8 +58,6 @@ public class frmclientes extends javax.swing.JFrame {
         buttonGroup2 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblbuscaclientes = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         cmbmetodopago = new javax.swing.JComboBox<>();
@@ -138,7 +70,7 @@ public class frmclientes extends javax.swing.JFrame {
         txtnombrecliente = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        lblNoCliente = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         txttelefono = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
@@ -159,21 +91,8 @@ public class frmclientes extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(51, 51, 51));
         jLabel1.setText("Registro de Clientes");
 
-        tblbuscaclientes.setBackground(new java.awt.Color(214, 214, 251));
-        tblbuscaclientes.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {},
-                {},
-                {},
-                {}
-            },
-            new String [] {
-
-            }
-        ));
-        jScrollPane1.setViewportView(tblbuscaclientes);
-
         jPanel2.setBackground(new java.awt.Color(214, 214, 251));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel6.setText("Dias de Credito:");
@@ -189,6 +108,11 @@ public class frmclientes extends javax.swing.JFrame {
                 cmbmetodopagoFocusLost(evt);
             }
         });
+        cmbmetodopago.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbmetodopagoActionPerformed(evt);
+            }
+        });
         cmbmetodopago.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 cmbmetodopagoKeyPressed(evt);
@@ -199,6 +123,7 @@ public class frmclientes extends javax.swing.JFrame {
         jLabel7.setText("Metodo de Pago:");
 
         txtdiascredito.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtdiascredito.setEnabled(false);
         txtdiascredito.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtdiascreditoKeyPressed(evt);
@@ -244,9 +169,9 @@ public class frmclientes extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel2.setText("N° Cliente:");
 
-        jLabel8.setBackground(new java.awt.Color(255, 102, 102));
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel8.setText("1");
+        lblNoCliente.setBackground(new java.awt.Color(255, 102, 102));
+        lblNoCliente.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblNoCliente.setText("0");
 
         jLabel16.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel16.setText("Telefono");
@@ -277,7 +202,7 @@ public class frmclientes extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtnombrecliente, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtdireccion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(lblNoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addGap(47, 47, 47)
@@ -303,7 +228,7 @@ public class frmclientes extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8)
+                    .addComponent(lblNoCliente)
                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -395,7 +320,7 @@ public class frmclientes extends javax.swing.JFrame {
                 .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addComponent(btnmodificar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(80, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -430,7 +355,6 @@ public class frmclientes extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -443,13 +367,11 @@ public class frmclientes extends javax.swing.JFrame {
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)))
+                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -468,37 +390,62 @@ public class frmclientes extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 7, Short.MAX_VALUE))
+                .addGap(0, 16, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        // TODO add your handling code here:
     
+    public void ultimoRegistro()
+    {
+        int lasid=0;
+        try
+        {
+             con = conexion.getConnection();
+             stmt=con.createStatement();
+             rs =stmt.executeQuery("select max(id_Cliente) from tblClientes ");
+             if(rs.next())
+            {
+                lasid=rs.getInt(1)+1;
+            }
+            lblNoCliente.setText(lasid+"");
+            con.close();
+        }
+        catch(SQLException ex)
+        {
+         JOptionPane.showMessageDialog(this,"Ocurrio el siguiente error:"+ex);
+        }
+    }
+     
+    public void limpiarcampos()
+    {
+        txtnombrecliente.setText("");
+        txtdireccion.setText("");
+        txtcolonia.setText("");
+        txtdiascredito.setText("");
+        cmbmetodopago.setSelectedIndex(0);
+        txttelefono.setText("");
+    }
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+    //Validas valores
        if ("".equals(txtnombrecliente.getText()) || "".equals(txtdireccion.getText())||"".equals(txtcolonia.getText()))
           {
               JOptionPane.showMessageDialog(null, "Favor de Rellenar los Campos necesarios");
               txtnombrecliente.requestFocus();
-              
+              return;
           }
        else
        {
-           
-       
-        String resul[] ;
-        String sql="insert ";
-        int numerocliente=Integer.parseInt(jLabel8.getText());
+           //Tomar los valor parfa guardarlos
+        int numerocliente=Integer.parseInt(lblNoCliente.getText());
         String nombre =txtnombrecliente.getText();
         String direccion = txtdireccion.getText();
         String colonia = txtcolonia.getText();
         String pago= cmbmetodopago.getSelectedItem().toString();
         int tippago=0;
        String telefono = txttelefono.getText();
-    
-        int resultado = 0;
         
         if ("Contado".equals(pago)) 
         {
@@ -518,58 +465,31 @@ public class frmclientes extends javax.swing.JFrame {
         else
         {
             diascredito=Integer.parseInt(txtdiascredito.getText());
-        }
-               
-             
-             
-        try {
-                        
-            
-            con = conexion.getConnection();
+        }   
+        
+        //Consulta para guardar datos en la base de datos
+        try {           
+           con = conexion.getConnection();
            stmt = con.createStatement();
-           PreparedStatement psInsert= con.prepareStatement("INSERT INTO tblclientes(nocliente,nombre,direccion,colonia,tippago,dias,telefono)"
-                   + " VALUES (?,?,?,?,?,?,?)");
-           
-          psInsert.setInt( 1, numerocliente);
-          psInsert.setString(2, nombre);
-          psInsert.setString(3, direccion);
-          psInsert.setString(4, colonia);
-          psInsert.setInt(5, tippago);
-          psInsert.setInt(6, diascredito);
-          psInsert.setString(7, telefono);
+           PreparedStatement psInsert= con.prepareStatement("INSERT INTO tblclientes(cliNombre,cliDireccion,cliColonia,"
+                   + "cliTipoPago,cliDiasCredito,cliTelefono) VALUES (?,?,?,?,?,?)");
+          psInsert.setString(1, nombre);
+          psInsert.setString(2, direccion);
+          psInsert.setString(3, colonia);
+          psInsert.setInt(4, tippago);
+          psInsert.setInt(5, diascredito);
+          psInsert.setString(6, telefono);
           
           psInsert.executeUpdate();
           
-           
-          JOptionPane.showMessageDialog(null, "Se ingreso correctamente, gracias");
-            
+          JOptionPane.showMessageDialog(null, "Se ingreso correctamente, gracias");  
         } 
-        
         catch (SQLException e) 
         {
             JOptionPane.showMessageDialog(null, e);
         }
        }
-        
-//        try 
-//        {
-//        stmt = con.createStatement();
-//        ResultSet rs =stmt.executeQuery(sql);
-//        while (rs.next())
-//        {
-//            resul[0]=rs.getString(1);
-//            resul[1]=rs.getString(2);
-//            
-//        }
-//            
-//            
-//            
-//        } catch (SQLException e) 
-//        {
-//            
-//            
-//        }
-       
+       ultimoRegistro();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void cmbmetodopagoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cmbmetodopagoFocusLost
@@ -591,40 +511,9 @@ public class frmclientes extends javax.swing.JFrame {
 
     private void btnnuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnnuevoActionPerformed
         // TODO add your handling code here:
-        
-       
-        String valor="";
-        int valor1=0;
-        
-        txtnombrecliente.setText("");
-        txtdireccion.setText("");
-        txtcolonia.setText("");
-        txtdiascredito.setText("");
-        cmbmetodopago.setSelectedIndex(0);
-        txttelefono.setText("");
-        
-         try{
-         con = conexion.getConnection();
-         stmt=con.createStatement();
-         rs =stmt.executeQuery("SELECT * FROM tblclientes ");
-         
-    while(rs.next()){
-        
-     valor=(rs.getString(1).toString());
-     valor1=Integer.parseInt(valor);
-     valor1=valor1+1;
-  
-        System.out.println(valor1);
-         jLabel8.setText(valor1+"");
-     }
-    con.close();
-     }catch(SQLException ex){
-         JOptionPane.showMessageDialog(this,"Ocurrio el siguiente error:"+ex);
-     }
-    txtnombrecliente.requestFocus();
-        b=tblbuscaclientes.getColumnCount();
-   eliminar();
-    tblbuscaclientes.setModel(modeloTabla2);
+        limpiarcampos();
+        ultimoRegistro();
+        txtnombrecliente.requestFocus();
     }//GEN-LAST:event_btnnuevoActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -632,48 +521,7 @@ public class frmclientes extends javax.swing.JFrame {
 
          frmbuscaclientes buscar = new frmbuscaclientes();
          buscar.setVisible(true);
-//        this.dispose();
-//        eliminar();
-//        if(b==0)
-//        {
-//            configModelo();
-//            b=b+1;
-//        }
-//        
-//            try{
-//         con=conexion.getConeConnection();
-//         stmt=con.createStatement();
-//         rs=stmt.executeQuery("SELECT * from tblclientes");
-//    while(rs.next()){
-//    
-//        filas[0]=(rs.getString(1));
-//        filas[1]=(rs.getString(2));
-//        filas[2]=(rs.getString(3));
-//        filas[3]=(rs.getString(4));
-//        String tipo=(rs.getString(5));
-//        if("1".equals(tipo))
-//        {
-//            tipo="Contado";
-//        }
-//        else
-//        {
-//            tipo="credito";
-//        }
-//        filas[4]=tipo;
-//        filas[5]=(rs.getString(6));
-//        filas[6]=(rs.getString(7));
-//        modeloTabla.addRow(filas);
-//      
-//        tblbuscaclientes.setModel(modeloTabla);
-//        
-//      
-//     }
-//    con.close();
-//     }catch(SQLException ex){
-//         JOptionPane.showMessageDialog(this,"Ocurrio el siguiente error:"+ex);
-//     }
 //           
-//        
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void txttelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txttelefonoKeyTyped
@@ -686,84 +534,84 @@ public class frmclientes extends javax.swing.JFrame {
 
     private void btnmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmodificarActionPerformed
 
-
-
- if ("".equals(txtnombrecliente.getText()) || "".equals(txtdireccion.getText())||"".equals(txtcolonia.getText()))
-          {
-              JOptionPane.showMessageDialog(null, "Favor de Rellenar los Campos necesarios");
-               txtnombrecliente.requestFocus();
-          }
-       else
-       {        // TODO add your handling code here:
-         String resul[] ;
-        String sql="insert ";
-        int numerocliente=Integer.parseInt(jLabel8.getText());
-        String nombre =txtnombrecliente.getText();
-        String direccion = txtdireccion.getText();
-        String colonia = txtcolonia.getText();
-        String pago= cmbmetodopago.getSelectedItem().toString();
-        int tippago=0;
-       String telefono = txttelefono.getText();
+    int confirmacion = JOptionPane.showConfirmDialog(null, "Los datos son los correctos?","Confirmacion", JOptionPane.YES_NO_OPTION,1);
+    if(confirmacion==0)
+    {
+        
     
-        int resultado = 0;
         
-        if ("Contado".equals(pago)) 
-        {
-            tippago=1;
-        }
-        else
-        {
-            tippago=2;
-        }
-               
-        String dias =txtdiascredito.getText();
-        int diascredito=0;
-        if ("".equals(dias)) 
-        {
-            diascredito=0;
-        }
-        else
-        {
-            diascredito=Integer.parseInt(txtdiascredito.getText());
-        }
-               
-             con = conexion.getConnection();
-             
-        try {
-            
-            
-           stmt = con.createStatement();
-           PreparedStatement psInsert= con.prepareStatement("update tblclientes set nocliente=?,nombre=?,direccion=?,"
-                   + "colonia=?,tippago=?,dias=?,telefono=? where nocliente=?");
-           
-          psInsert.setInt( 1, numerocliente);
-          psInsert.setString(2, nombre);
-          psInsert.setString(3, direccion);
-          psInsert.setString(4, colonia);
-          psInsert.setInt(5, tippago);
-          psInsert.setInt(6, diascredito);
-          psInsert.setString(7, telefono);
-          psInsert.setInt(8, numerocliente);
-          
-          psInsert.executeUpdate();
-          psInsert.close();
-           
-          JOptionPane.showMessageDialog(null, "Se ingreso correctamente, gracias");
-            
-        } 
-        catch (Exception e) 
-        {
-            JOptionPane.showMessageDialog(null, "No se guardo");
-            
-        }
-        
-         txtnombrecliente.setText("");
-        txtdireccion.setText("");
-        txtcolonia.setText("");
-        txtdiascredito.setText("");
-        cmbmetodopago.setSelectedIndex(0);
-        txttelefono.setText("");
-       }
+     if ("".equals(txtnombrecliente.getText()) || "".equals(txtdireccion.getText())||"".equals(txtcolonia.getText()))
+              {
+                  JOptionPane.showMessageDialog(null, "Favor de Rellenar los Campos necesarios");
+                   txtnombrecliente.requestFocus();
+                   return;
+              }
+           else
+           {        // TODO add your handling code here:
+            String resul[] ;
+            String sql="insert ";
+            int numerocliente=Integer.parseInt(lblNoCliente.getText());
+            String nombre =txtnombrecliente.getText();
+            String direccion = txtdireccion.getText();
+            String colonia = txtcolonia.getText();
+            String pago= cmbmetodopago.getSelectedItem().toString();
+            int tippago=0;
+           String telefono = txttelefono.getText();
+
+            int resultado = 0;
+
+            if ("Contado".equals(pago)) 
+            {
+                tippago=1;
+            }
+            else
+            {
+                tippago=2;
+            }
+
+            String dias =txtdiascredito.getText();
+            int diascredito=0;
+            if ("".equals(dias)) 
+            {
+                diascredito=0;
+            }
+            else
+            {
+                diascredito=Integer.parseInt(txtdiascredito.getText());
+            }
+
+                 con = conexion.getConnection();
+
+            try {
+
+
+               stmt = con.createStatement();
+               PreparedStatement psInsert= con.prepareStatement("update tblclientes set cliNombre=?,cliDireccion=?,"
+                       + "cliColonia=?,cliTipopago=?,cliDiasCredito=?,cliTelefono=? where id_Cliente=?");
+
+
+              psInsert.setString(1, nombre);
+              psInsert.setString(2, direccion);
+              psInsert.setString(3, colonia);
+              psInsert.setInt(4, tippago);
+              psInsert.setInt(5, diascredito);
+              psInsert.setString(6, telefono);
+              psInsert.setInt(7, numerocliente);
+
+              psInsert.executeUpdate();
+              psInsert.close();
+
+              JOptionPane.showMessageDialog(null, "Se ingreso correctamente, gracias");
+
+            } 
+            catch (SQLException e) 
+            {
+                JOptionPane.showMessageDialog(null, e);
+
+            }    
+           }
+           limpiarcampos();
+    }
     }//GEN-LAST:event_btnmodificarActionPerformed
 
     private void txtdiascreditoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtdiascreditoKeyPressed
@@ -858,6 +706,17 @@ public class frmclientes extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void cmbmetodopagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbmetodopagoActionPerformed
+        // TODO add your handling code here:
+        String combo=cmbmetodopago.getSelectedItem().toString();
+        if(combo!="Contado"){
+            txtdiascredito.enable(true);
+        }
+        else{
+            txtdiascredito.enable(false);
+        }
+    }//GEN-LAST:event_cmbmetodopagoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -911,12 +770,10 @@ public class frmclientes extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    public static javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblbuscaclientes;
+    public static javax.swing.JLabel lblNoCliente;
     public static javax.swing.JTextField txtcolonia;
     public static javax.swing.JTextField txtdiascredito;
     public static javax.swing.JTextField txtdireccion;

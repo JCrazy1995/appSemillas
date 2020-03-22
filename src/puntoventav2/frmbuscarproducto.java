@@ -31,7 +31,6 @@ public class frmbuscarproducto extends javax.swing.JFrame {
     private Statement stmt = null;
     conectar conexion = new conectar();
     DefaultTableModel modeloTabla = new DefaultTableModel();  //modelo de tabla que llevara los datos
-    DefaultTableModel modeloTabla2 = new DefaultTableModel(); // modelo vacio para la tabla de clientes
     Object filas[] = new Object[4];
 
     DefaultListModel modelo = new DefaultListModel();
@@ -49,10 +48,10 @@ public class frmbuscarproducto extends javax.swing.JFrame {
     
     void configModelo() 
     {
-        modeloTabla.addColumn("Numero ");
-        modeloTabla.addColumn("Producto");
-        modeloTabla.addColumn("Precio");
-        modeloTabla.addColumn("Tipo");   
+        modeloTabla.addColumn("ID PRODUCTO");
+        modeloTabla.addColumn("PRODUCTO");
+        modeloTabla.addColumn("PRECIO");
+        modeloTabla.addColumn("TIPO");   
         tblbuscarproducto.setModel(modeloTabla);
     }
     
@@ -62,12 +61,6 @@ public class frmbuscarproducto extends javax.swing.JFrame {
     
     void inicio() 
     {
-      
-
-        int b = 0;
-        String valor = "";
-        int valor1 = 0;
-
         try 
         {
             con = conexion.getConnection();

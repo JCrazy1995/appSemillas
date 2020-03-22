@@ -1,8 +1,11 @@
 package puntoventav2;
 
 import java.awt.Desktop;
+import java.awt.Point;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -12,8 +15,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
+
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -23,10 +29,10 @@ import javax.swing.table.TableRowSorter;
  *
  * @author Francisco Rafael
  */
-public class frmreimprimirnotas extends javax.swing.JFrame {
+public class frmbuscarmodificarnotas extends javax.swing.JFrame {
 
     /**
-     * Creates new form frmreimprimirnotas
+     * Creates new form frmbuscarmodificarnotas
      */
     private static Connection con = null;
     static ResultSet rs = null;
@@ -36,11 +42,13 @@ public class frmreimprimirnotas extends javax.swing.JFrame {
     DefaultTableModel modeloTabla = new DefaultTableModel();
     Object filas[] = new Object[5];
     private int fila;
-    public frmreimprimirnotas() 
+    frmmodificarnotas modificar = new frmmodificarnotas();
+    public frmbuscarmodificarnotas() 
     {
         initComponents();
         configModelo();
         iniciotabla();
+        dobleclick();
         setResizable(false);
     }
 
@@ -108,6 +116,87 @@ public class frmreimprimirnotas extends javax.swing.JFrame {
 
         //cargaTicket();
     }
+        void cerrar()
+        {
+            this.dispose();
+        }
+        
+        
+        void enviardatos()
+        {   
+        try 
+            {   
+                int lasid=0;
+                con = conexion.getConnection();
+                stmt = con.createStatement();
+                String nombrecliente= tblbuscanotas.getValueAt(tblbuscanotas.getSelectedRow(),1).toString();
+                String idnota = tblbuscanotas.getValueAt(tblbuscanotas.getSelectedRow(), 0).toString();
+                rs = stmt.executeQuery("SELECT * from tblclientes where cliNombre='"+nombrecliente+"'");
+                
+                while(rs.next())
+                {
+                    frmmodificarnotas.txtncliente.setText(rs.getString(1));
+                    frmmodificarnotas.txtcliente.setText(rs.getString(2));
+                    frmmodificarnotas.txtdomicilio.setText(rs.getString(3));
+                    frmmodificarnotas.txtcolonia.setText(rs.getString(4));
+                    frmmodificarnotas.txttipopago.setText(rs.getString(5)); 
+                    frmmodificarnotas.txtdiascredito.setText(rs.getString(6));
+                    frmmodificarnotas.txttelefono.setText(rs.getString(7));
+                }
+                
+                ResultSet rss= stmt.executeQuery("select * from tblnotas where  id_Nota='"+idnota+"'");
+                while(rss.next())
+                {
+                     frmmodificarnotas.txtfecha.setText(rss.getString(3));
+                     frmmodificarnotas.txtnonota.setText(rss.getString(1));
+                     frmmodificarnotas.txtfechapago.setText(rss.getString(4));
+                }
+                
+            }
+              
+        catch (SQLException ex) 
+            {
+                JOptionPane.showMessageDialog(this, "Ocurrio el siguiente error:" + ex);
+            }
+            
+            
+            
+            
+            
+            
+            
+           
+           
+           
+        }
+        
+        
+          void dobleclick() 
+            {
+                tblbuscanotas.addMouseListener(new MouseAdapter() 
+                {
+                    @Override
+                    public void mousePressed(MouseEvent Mouse_evt) 
+                    {
+                        JTable tabla = (JTable) Mouse_evt.getSource();
+                        Point point = Mouse_evt.getPoint();
+                        int row = tabla.rowAtPoint(point);
+                        if (Mouse_evt.getClickCount() == 2)
+                        {
+                            
+                            modificar.setVisible(true);
+                            enviardatos();
+                            
+
+                            cerrar();
+
+                        }
+                    }
+
+                });
+            }
+        
+        
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -120,8 +209,6 @@ public class frmreimprimirnotas extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblbuscanotas = new javax.swing.JTable();
-        btnabrir = new javax.swing.JButton();
-        btnreimprimir = new javax.swing.JButton();
         txtnombre = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
 
@@ -146,20 +233,6 @@ public class frmreimprimirnotas extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblbuscanotas);
 
-        btnabrir.setText("Visualizar");
-        btnabrir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnabrirActionPerformed(evt);
-            }
-        });
-
-        btnreimprimir.setText("Reimprimir");
-        btnreimprimir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnreimprimirActionPerformed(evt);
-            }
-        });
-
         txtnombre.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtnombreKeyReleased(evt);
@@ -175,31 +248,25 @@ public class frmreimprimirnotas extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
+                        .addGap(48, 48, 48)
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
-                        .addComponent(txtnombre, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnabrir)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnreimprimir))
+                        .addComponent(txtnombre, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(27, Short.MAX_VALUE))
+                        .addGap(24, 24, 24)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnabrir)
-                    .addComponent(btnreimprimir)
                     .addComponent(txtnombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 482, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -212,7 +279,7 @@ public class frmreimprimirnotas extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         pack();
@@ -223,51 +290,6 @@ public class frmreimprimirnotas extends javax.swing.JFrame {
         // TODO add your handling code here:
         fila=tblbuscanotas.rowAtPoint(evt.getPoint());
     }//GEN-LAST:event_tblbuscanotasMouseClicked
-
-    private void btnabrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnabrirActionPerformed
-        // TODO add your handling code here:+
-         int filavalor;
-         String cliente,numero;
- 
-       try 
-              { 
-                 filavalor = tblbuscanotas.getSelectedRow();
-                 cliente = tblbuscanotas.getValueAt(filavalor, 1).toString();
-                 numero = tblbuscanotas.getValueAt(filavalor, 0).toString();
-                 File path = new  File("C:\\Users\\coron\\Desktop\\prueba\\"
-                        +cliente+""+"Nota N° "+""+numero+".pdf");
-                 Desktop.getDesktop().open(path);
-              }
-              
-              catch (IOException ex)
-              {
-                ex.printStackTrace();
-               
-              }
-        
-    }//GEN-LAST:event_btnabrirActionPerformed
-
-    private void btnreimprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnreimprimirActionPerformed
-        // TODO add your handling code here:
-          int filavalor;
-         String cliente,numero;
-         
-        try 
-        {
-            filavalor = tblbuscanotas.getSelectedRow();
-            cliente = tblbuscanotas.getValueAt(filavalor, 1).toString();
-            numero = tblbuscanotas.getValueAt(filavalor, 0).toString();
-            File fileToPrint = new File("C:\\Users\\coron\\Desktop\\prueba\\"
-                    +cliente+""+"Nota N° "+""+numero+".pdf");
-            Desktop.getDesktop().print(fileToPrint);
-        } 
-        catch (IOException ex) 
-        {
-            Logger.getLogger(frmbuscaclientes.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-    }//GEN-LAST:event_btnreimprimirActionPerformed
  TableRowSorter trs; 
     private void txtnombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnombreKeyReleased
         // TODO add your handling code here:
@@ -300,27 +322,28 @@ public class frmreimprimirnotas extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmreimprimirnotas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmbuscarmodificarnotas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmreimprimirnotas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmbuscarmodificarnotas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmreimprimirnotas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmbuscarmodificarnotas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmreimprimirnotas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmbuscarmodificarnotas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmreimprimirnotas().setVisible(true);
+                new frmbuscarmodificarnotas().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnabrir;
-    private javax.swing.JButton btnreimprimir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

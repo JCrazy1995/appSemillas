@@ -116,7 +116,7 @@ public class frmbuscaproveedores extends javax.swing.JFrame {
                int row = tabla.rowAtPoint(point);
                if (Mouse_evt.getClickCount()==2) 
                {
-                   frmproveedores.jLabel8.setText(tblbuscaproveedores.getValueAt(tblbuscaproveedores.getSelectedRow(), 0).toString());
+                   frmproveedores.lblnoprovedor.setText(tblbuscaproveedores.getValueAt(tblbuscaproveedores.getSelectedRow(), 0).toString());
                     frmproveedores.txtnombreproveedor.setText(tblbuscaproveedores.getValueAt(tblbuscaproveedores.getSelectedRow(), 1).toString());
                    String dato=String.valueOf(modeloTabla.getValueAt(tblbuscaproveedores.getSelectedRow(),2));
                    if ("Contado".equals(dato))

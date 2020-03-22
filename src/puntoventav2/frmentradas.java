@@ -10,6 +10,7 @@ import java.lang.System.Logger;
 import java.lang.System.Logger.Level;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
@@ -24,59 +25,105 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Francisco Rafael
  */
-
 public class frmentradas extends javax.swing.JFrame {
-    static java.sql.ResultSet rs=null;
-    private Statement stmt=null;
+
+    static java.sql.ResultSet rs = null;
+    private Statement stmt = null;
     conectar conexion = new conectar();
-    DefaultTableModel modeloTabla= new DefaultTableModel();  //modelo de tabla que llevara los datos
-    Object filas[]= new Object[5];     
+    DefaultTableModel modeloTabla = new DefaultTableModel();  //modelo de tabla que llevara los datos
+    Object filas[] = new Object[5];
     Connection con = null;
-    private int fila; 
-    int b=0;
-    Double total=0.0 ;
-    Calendar calendario =Calendar.getInstance();
-    int dia =calendario.get(calendario.DATE);
-    int mes = calendario.get(calendario.MONTH)+1;
+    private int fila;
+    int b = 0;
+    Double total = 0.0;
+    Calendar calendario = Calendar.getInstance();
+    int dia = calendario.get(calendario.DATE);
+    int mes = calendario.get(calendario.MONTH) + 1;
     int ano = calendario.get(calendario.YEAR);
+
     /**
      * Creates new form frmentradas
      */
-    public frmentradas() 
-    {
+    public frmentradas() {
         initComponents();
         configModelo();
         txtproveedor.requestFocus();
+        ultiArtiiculo();
     }
 
-    
-    
-    public static Date sumarRestarDiasFecha(Date fecha, int dias) 
-        {
+    public static Date sumarRestarDiasFecha(Date fecha, int dias) {
 
         Calendar calendar = Calendar.getInstance();
 
-
-	calendar.setTime(fecha); // Configuramos la fecha que se recibe
+        calendar.setTime(fecha); // Configuramos la fecha que se recibe
 
         calendar.add(Calendar.DAY_OF_YEAR, dias);  // numero de días a añadir, o restar en caso de días<0
 
         return calendar.getTime(); // Devuelve el objeto Date con los nuevos días añadidos
 
-    
+    }
+
+    void configModelo() {
+        modeloTabla.addColumn("Cantidad");
+        modeloTabla.addColumn("Producto");
+        modeloTabla.addColumn("Precio");
+        modeloTabla.addColumn("Tipo");
+        modeloTabla.addColumn("Total");
+        tblentradas.setModel(modeloTabla);
+    }
+
+    public void ultiArtiiculo() 
+    {
+        int lasid = 0;
+        try {
+            con = conexion.getConnection();
+            stmt = con.createStatement();
+            rs = stmt.executeQuery("select max(id_Entradas) from tblentradas ");
+            if (rs.next()) {
+                lasid = rs.getInt(1) + 1;
+            }
+            txtnoentrada.setText(lasid + "");
+            con.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Ocurrio el siguiente error:" + ex);
         }
+    }
+    void limpiar()
+    {
+        txtcantidad.setText("");
+        txtproducto.setText("");
+        txtprecio.setText("");
+        cmbtipo.setSelectedIndex(0);
+        txttotal.setText("");
+    }
     
-        void configModelo() 
-        {
-            modeloTabla.addColumn("Cantidad");
-            modeloTabla.addColumn("Producto");
-            modeloTabla.addColumn("Precio");
-            modeloTabla.addColumn("Tipo");
-            modeloTabla.addColumn("Total");
-            tblentradas.setModel(modeloTabla);
+    void eliminar()
+    {
+        DefaultTableModel tb = (DefaultTableModel) tblentradas.getModel();
+        int a = tblentradas.getRowCount()-1;
+        for (int i = a; i >= 0; i--) 
+        {          
+        tb.removeRow(tb.getRowCount()-1);
         }
-    
-    
+        txtproveedor.setText("");
+        txtfecha.setText("");
+        txtdiascredito.setText("");
+        ultiArtiiculo();
+        txtfechapago.setText("");
+        txttelefono.setText("");
+        txttipopago.setText("");
+        txtnoproveedor.setText("");
+        cmbtipoentrada.setSelectedIndex(0);
+        lbldiascredito.setText("");
+        lblfecha.setText("");
+        lblfechapago.setText("");
+        lblnoproveedor.setText("");
+        lblproveedor.setText("");
+        lbltipopago.setText("");
+        lbltotal.setText("0.0");
+        
+    }
+        
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -302,6 +349,8 @@ public class frmentradas extends javax.swing.JFrame {
 
         jLabel5.setText("Total:");
 
+        txttotal.setEditable(false);
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -414,6 +463,11 @@ public class frmentradas extends javax.swing.JFrame {
         });
 
         btnnuevo.setText("Nuevo");
+        btnnuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnnuevoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -668,24 +722,21 @@ public class frmentradas extends javax.swing.JFrame {
     private void txtprecioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtprecioKeyTyped
         // TODO add your handling code 1here:
         char car = evt.getKeyChar();
-        if((car<'0' || car>'9') && (car<=',' || car>'.')|| (car=='-'))  evt.consume();
+        if ((car < '0' || car > '9') && (car <= ',' || car > '.') || (car == '-'))
+            evt.consume();
     }//GEN-LAST:event_txtprecioKeyTyped
 
     private void txtprecioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtprecioKeyPressed
         // TODO add your handling code here:
-        float precio,total,cantidad;
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
-        {
-            if("".equals(txtcantidad.getText()))
-            {
+        float precio, total, cantidad;
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if ("".equals(txtcantidad.getText())) {
                 JOptionPane.showMessageDialog(null, "no dejar el campo de cantidad vacio");
-            }
-            else
-            {
-                precio =Float.parseFloat(txtprecio.getText());
-                cantidad= Float.parseFloat(txtcantidad.getText());
-                total = precio*cantidad;
-                txttotal.setText(total+"");
+            } else {
+                precio = Float.parseFloat(txtprecio.getText());
+                cantidad = Float.parseFloat(txtcantidad.getText());
+                total = precio * cantidad;
+                txttotal.setText(total + "");
             }
 
             cmbtipo.requestFocus();
@@ -695,51 +746,39 @@ public class frmentradas extends javax.swing.JFrame {
 
     private void txtproductoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtproductoKeyPressed
         // TODO add your handling code here:
-        int c=0;
-        float precio,total,cantidad;
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
-        {
+        int c = 0;
+        float precio, total, cantidad;
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
 
-            if("".equals(txtcantidad.getText()))
-            {
+            if ("".equals(txtcantidad.getText())) {
                 JOptionPane.showMessageDialog(null, "no dejar el campo de cantidad vacio");
-            }
-            else
-            {
+            } else {
 
-                try
-                {
-                    con=conexion.getConnection();
-                    stmt=con.createStatement();
-                    rs=stmt.executeQuery("select * from tblarticulos where nombre like '%"+txtproducto.getText()+"%'");
-                    while(rs.next())
-                    {
+                try {
+                    con = conexion.getConnection();
+                    stmt = con.createStatement();
+                    rs = stmt.executeQuery("select * from tblarticulos where artNombre like '%" + txtproducto.getText() + "%'");
+                    while (rs.next()) {
                         c++;
                     }
-                    if (c>1|| c==0)
-                    {
+                    if (c > 1 || c == 0) {
                         JOptionPane.showMessageDialog(null, "Favor de ingresar mas datos");
 
-                    }
-                    else
-                    {
-                        rs=stmt.executeQuery("select * from tblarticulos where nombre like '%"+txtproducto.getText()+"%'");
-                        while(rs.next())
-                        {
+                    } else {
+                        rs = stmt.executeQuery("select * from tblarticulos where artNombre like '%" + txtproducto.getText() + "%'");
+                        while (rs.next()) {
                             txtproducto.setText(rs.getString(2));
                             txtprecio.setText(rs.getString(3));
                         }
                         txtprecio.requestFocus();
-                        precio =Float.parseFloat(txtprecio.getText());
-                        cantidad= Float.parseFloat(txtcantidad.getText());
-                        total = precio*cantidad;
-                        txttotal.setText(total+"");
+                        precio = Float.parseFloat(txtprecio.getText());
+                        cantidad = Float.parseFloat(txtcantidad.getText());
+                        total = precio * cantidad;
+                        txttotal.setText(total + "");
 
                     }
                     con.close();
-                }
-                catch(SQLException ex)
-                {
+                } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, ex);
                 }
 
@@ -752,13 +791,13 @@ public class frmentradas extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         char car = evt.getKeyChar();
-        if((car<'0' || car>'9') && (car<=',' || car>'.')|| (car=='-'))  evt.consume();
+        if ((car < '0' || car > '9') && (car <= ',' || car > '.') || (car == '-'))
+            evt.consume();
     }//GEN-LAST:event_txtcantidadKeyTyped
 
     private void txtcantidadKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtcantidadKeyPressed
         // TODO add your handling code here:
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
-        {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             txtproducto.requestFocus();
         }
     }//GEN-LAST:event_txtcantidadKeyPressed
@@ -769,48 +808,38 @@ public class frmentradas extends javax.swing.JFrame {
 
     private void txtproveedorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtproveedorKeyPressed
         // TODO add your handling code here:
-        int c=0;
+        int c = 0;
 
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
-        {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
 
-            try
-            {
-                con=conexion.getConnection();
-                stmt=con.createStatement();
-                rs=stmt.executeQuery("select * from tblproveedores where nombre like '"+txtproveedor.getText()+"%'");
-                while(rs.next())
-                {
+            try {
+                con = conexion.getConnection();
+                stmt = con.createStatement();
+                rs = stmt.executeQuery("select * from tblproveedores where proNombre like '" + txtproveedor.getText() + "%'");
+                while (rs.next()) {
                     c++;
                 }
-                if (c>1|| c==0)
-                {
+                if (c > 1 || c == 0) {
                     JOptionPane.showMessageDialog(null, "Favor de ingresar mas datos");
 
-                }
-                else
-                {
-                    rs=stmt.executeQuery("select * from tblproveedores where nombre like '"+txtproveedor.getText()+"%'");
-                    while(rs.next())
-                    {
+                } else {
+                    rs = stmt.executeQuery("select * from tblproveedores where proNombre like '" + txtproveedor.getText() + "%'");
+                    while (rs.next()) {
                         txtnoproveedor.setText(rs.getString(1));
                         txtproveedor.setText(rs.getString(2));
                         String tippago = rs.getString(3);
-                        if("1".equals(tippago))
-                        {
+                        if ("1".equals(tippago)) {
                             txttipopago.setText("Contado");
-                        }
-                        else
-                        {
+                        } else {
                             txttipopago.setText("Credito");
                         }
-                        
+
                         txtdiascredito.setText(rs.getString(4));
                         txttelefono.setText(rs.getString(5));
-                        calendario =Calendar.getInstance();
-                        int dia =calendario.get(calendario.DATE);
+                        calendario = Calendar.getInstance();
+                        int dia = calendario.get(calendario.DATE);
 
-                        String myDate = dia+"/"+mes+"/"+ano;
+                        String myDate = dia + "/" + mes + "/" + ano;
 
                         SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yy");
                         Date date = formateador.parse(myDate);
@@ -820,30 +849,15 @@ public class frmentradas extends javax.swing.JFrame {
 
                     }
                     txtcantidad.requestFocus();
-                    rs=stmt.executeQuery(" select * from tblentradas");
-                    System.out.print(rs);
-
-                     while(rs.next())
-                    {   int numero = Integer.parseInt(rs.getString(1));
-                        txtnoentrada.setText(numero+1+"");
-                    }
-
+                    ultiArtiiculo();
                 }
                 con.close();
-              
-                
-                
-            }
-            catch(SQLException ex)
-            {
+
+            } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, ex);
             } catch (ParseException ex) {
                 java.util.logging.Logger.getLogger(frmentradas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             }
-            
-            
-            
-            
 
         }
     }//GEN-LAST:event_txtproveedorKeyPressed
@@ -854,175 +868,174 @@ public class frmentradas extends javax.swing.JFrame {
 
     private void btnagregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarActionPerformed
         // TODO add your handling code here:
-         DecimalFormat df = new DecimalFormat("#.00");
-        if ("".equals(txtcantidad.getText())|| "".equals(txtprecio.getText())||"".equals(txtproveedor.getText()))
-        {
-            JOptionPane.showMessageDialog(null, "Favor de no dejar campos vacios");
-        }
-        
-        else
-        {
-            lblproveedor.setText(txtproveedor.getText());
-            lblnoproveedor.setText(txtnoproveedor.getText());
-            lblfecha.setText(txtfecha.getText());
-            lblfechapago.setText(txtfechapago.getText());
-            lbldiascredito.setText(txtdiascredito.getText());
-            lbltipopago.setText(txttipopago.getText());
-            
-            Double totaltabla = Double.parseDouble(txttotal.getText());
-            Double total = Double.parseDouble(lbltotal.getText());
-            total= totaltabla+total;
-            filas[0]=txtcantidad.getText();
-            filas[1]=txtproducto.getText();
-            filas[2]=txtprecio.getText();
-            filas[3]=cmbtipo.getSelectedItem();
-            filas[4]=df.format(totaltabla)+"";
-            modeloTabla.addRow(filas);
-            tblentradas.setModel(modeloTabla);
-            lbltotal.setText(df.format(total)+"");
-            
-        }
-        
-        
+        DecimalFormat df = new DecimalFormat("#.00");
+        if ("".equals(txtcantidad.getText()) || "".equals(txtprecio.getText()) || "".equals(txtproveedor.getText()))
+            {
+                JOptionPane.showMessageDialog(null, "Favor de no dejar campos vacios");
+            } 
+        else 
+            {
+                lblproveedor.setText(txtproveedor.getText());
+                lblnoproveedor.setText(txtnoproveedor.getText());
+                lblfecha.setText(txtfecha.getText());
+                lblfechapago.setText(txtfechapago.getText());
+                lbldiascredito.setText(txtdiascredito.getText());
+                lbltipopago.setText(txttipopago.getText());
+
+                Double totaltabla = Double.parseDouble(txttotal.getText());
+                Double total = Double.parseDouble(lbltotal.getText());
+                total = totaltabla + total;
+                filas[0] = txtcantidad.getText();
+                filas[1] = txtproducto.getText();
+                filas[2] = txtprecio.getText();
+                filas[3] = cmbtipo.getSelectedItem();
+                filas[4] = df.format(totaltabla) + "";
+                modeloTabla.addRow(filas);
+                tblentradas.setModel(modeloTabla);
+                lbltotal.setText(df.format(total) + "");
+                limpiar();
+            }
+
+
     }//GEN-LAST:event_btnagregarActionPerformed
 
     private void btneliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneliminarActionPerformed
         // TODO add your handling code here:
-        
-        DecimalFormat df = new DecimalFormat("#.00");  
+
+        DecimalFormat df = new DecimalFormat("#.00");
         int filavalor;
-        double totaln,totallabel,totalfinal;
+        double totaln, totallabel, totalfinal;
         String valor;
         filavalor = tblentradas.getSelectedRow();
-        valor=  modeloTabla.getValueAt(filavalor, 4).toString();
+        valor = modeloTabla.getValueAt(filavalor, 4).toString();
         totaln = Double.parseDouble(valor);
-        totallabel= Double.parseDouble(lbltotal.getText());
-        totalfinal=totallabel-totaln;
-        lbltotal.setText(totalfinal+"");
+        totallabel = Double.parseDouble(lbltotal.getText());
+        totalfinal = totallabel - totaln;
+        lbltotal.setText(totalfinal + "");
         modeloTabla.removeRow(fila);
     }//GEN-LAST:event_btneliminarActionPerformed
 
     private void btnguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardarActionPerformed
         // TODO add your handling code here:
         int filass = tblentradas.getRowCount();
-        int noentrada,noprovedor,c=0;
-        String fecha,fechapago,pagado,tipoentrada,dia,mes,anio,nombre,producto,tipo,provedor;
-        Double totalproducto,totalentrada,abono,saldo,cantidad,precio;
-        anio = txtfecha.getText().substring(6,8);
-        mes =txtfecha.getText().substring(3,5);
-        dia = txtfecha.getText().substring(0,2);
-        fecha = anio+"-"+mes+"-"+dia;
-        anio = txtfechapago.getText().substring(6,8);
-        mes =txtfechapago.getText().substring(3,5);
-        dia = txtfechapago.getText().substring(0,2);
-        fechapago=anio+"-"+mes+"-"+dia;
-        System.out.println(fecha +" " +fechapago);
-        
+        int noentrada, noprovedor, c = 0;
+        String fecha, fechapago, pagado, tipoentrada, dia, mes, anio, nombre, producto, tipo, provedor;
+        Double totalproducto, totalentrada, abono, saldo, cantidad, precio;
+        anio = txtfecha.getText().substring(6, 8);
+        mes = txtfecha.getText().substring(3, 5);
+        dia = txtfecha.getText().substring(0, 2);
+        fecha = anio + "-" + mes + "-" + dia;
+        anio = txtfechapago.getText().substring(6, 8);
+        mes = txtfechapago.getText().substring(3, 5);
+        dia = txtfechapago.getText().substring(0, 2);
+        fechapago = anio + "-" + mes + "-" + dia;
+        System.out.println(fecha + " " + fechapago);
+
         noentrada = Integer.parseInt(txtnoentrada.getText());
         noprovedor = Integer.parseInt(lblnoproveedor.getText());
-        nombre= lblproveedor.getText();
+        nombre = lblproveedor.getText();
         totalentrada = Double.parseDouble(lbltotal.getText());
-        abono=0.0;
+        abono = 0.0;
         saldo = totalentrada;
-        tipoentrada=cmbtipoentrada.getSelectedItem().toString();
+        tipoentrada = cmbtipoentrada.getSelectedItem().toString();
         provedor = lblproveedor.getText();
-        
-        
-         try 
-              {
+        double totalexistencia = 0;
+        double totalinventario = 0;
+        int idarticulo = 0;
+        try {
 
-                con=conexion.getConnection();
-                stmt=con.createStatement();     
-               stmt = con.createStatement();
-               PreparedStatement psInsert= con.prepareStatement("INSERT INTO tblentradas"
-                       + "(noentrada,noproveedor,nomproveedor,fechaentrada,fechapago,total,abono,saldo,pagado,tipoentrada)"
-                       + " VALUES (?,?,?,?,?,?,?,?,?,?)");
+                con = conexion.getConnection();
+                stmt = con.createStatement();
+                stmt = con.createStatement();
+                PreparedStatement psInsert = con.prepareStatement("INSERT INTO tblentradas"
+                        + "(id_Proveedor,entFechaEntrada,entFechaPago,entTotal,entAbono,entSaldo,entpago,entTipoEntrada)"
+                        + " VALUES (?,?,?,?,?,?,?,?)");
 
-             
-              psInsert.setInt( 1, noentrada);
-              psInsert.setInt( 2, noprovedor);
-              psInsert.setString(3, nombre);
-              psInsert.setString(4, fecha);
-              psInsert.setString(5, fechapago);
-              psInsert.setDouble(6, totalentrada);
-              psInsert.setDouble(7, abono);
-              psInsert.setDouble(8, saldo);
-              psInsert.setString(9,"no" );
-              psInsert.setString(10,tipoentrada );
-              psInsert.executeUpdate();
-             
+                psInsert.setInt(1, noprovedor);
+                psInsert.setString(2, fecha);
+                psInsert.setString(3, fechapago);
+                psInsert.setDouble(4, totalentrada);
+                psInsert.setDouble(5, abono);
+                psInsert.setDouble(6, saldo);
+                psInsert.setString(7, "no");
+                psInsert.setString(8, tipoentrada);
+                psInsert.executeUpdate();
 
-            con.close();
-               
+              
+
             } 
-            catch (SQLException e) 
-            {
+        catch (SQLException e)
+        {
+            JOptionPane.showMessageDialog(null, e);
+        }
+
+        
+        for (int i = 0; i < filass; i++) {
+            cantidad = Double.parseDouble(tblentradas.getValueAt(i, 0).toString());
+            producto = tblentradas.getValueAt(i, 1).toString();
+            precio = Double.parseDouble(tblentradas.getValueAt(i, 2).toString());
+            tipo = tblentradas.getValueAt(i, 3).toString();
+            totalproducto = Double.parseDouble(tblentradas.getValueAt(i, 4).toString());
+
+            try {
                 
-            }
-        
-        for (int i = 0;i<filass;i++)
-        { 
-           cantidad= Double.parseDouble(tblentradas.getValueAt(i,0 ).toString());
-           producto = tblentradas.getValueAt(i, 1).toString();
-           precio = Double.parseDouble(tblentradas.getValueAt(i,2 ).toString());
-           tipo =   tblentradas.getValueAt(i, 3).toString();
-           totalproducto = Double.parseDouble(tblentradas.getValueAt(i,4 ).toString());
-           
-              try 
-              {
+                
+                    stmt = con.createStatement();
+                    
+                    ResultSet rs = stmt.executeQuery("select tblarticulos.id_Articulo from tblArticulos where artNombre"
+                            + "='" + producto + "'");
+                    if (rs.next()) {
+                        idarticulo = rs.getInt(1);
+                    }
+                    
+                    ResultSet rss = stmt.executeQuery("select tblinventario.invExistencia    from"
+                            + " tblinventario where id_Articulo  ='" + idarticulo + "'");
+                    if (rss.next()) 
+                    {
+                        totalexistencia = rss.getInt(1);
+                    }
+                    
+                    totalinventario = totalexistencia + cantidad;
+                    PreparedStatement psInsert1 = con.prepareStatement("update tblinventario set invExistencia=? where id_Articulo=? ");
+                    psInsert1.setDouble(1, totalinventario);
+                    psInsert1.setInt(2, idarticulo);
+                    psInsert1.execute();
+                    System.out.println(totalinventario);
 
-               con=conexion.getConnection();
-               stmt=con.createStatement();     
-               stmt = con.createStatement();  
-               
-                rs=stmt.executeQuery("select * from tblentradasmovs where noentrada like '%"+txtnoentrada.getText()+"%'");
-           while(rs.next())
-            {                        
-                c++;
-            }
-           if (c>=1)
-           {
-               JOptionPane.showMessageDialog(null, "La nota ya ha sido registrada");
-              
-           }
-           else
-           {
-          
-           
-               PreparedStatement psInsert= con.prepareStatement("INSERT INTO tblentradasmovs"
-                       + "(noentrada,nomovimiento,noproveedor,nomproveedor,cantidad,"
-                       + "producto,tipo,total,tipoentrada)"
-                       + " VALUES (?,?,?,?,?,?,?,?,?)");
-               
-              psInsert.setInt( 1, noentrada);
-              psInsert.setInt( 2, i+1);
-              psInsert.setInt( 3, noprovedor);
-              psInsert.setString(4, provedor);
-              psInsert.setDouble(5, cantidad);
-              psInsert.setString(6, producto);
-              psInsert.setString(7, tipo);
-              psInsert.setDouble(8, total);
-              psInsert.setString(9, tipoentrada);
-             
-              
-              psInsert.executeUpdate();
-             
+                    PreparedStatement psInsert = con.prepareStatement("INSERT INTO tblentradasmovimientos"
+                            + "( id_Entradas,id_Articulo,entCantidad,entPrecioEntrada,entTotalMovimientos)"
+                            + " VALUES (?,?,?,?,?)");
 
-            con.close();
-               
-            } 
+                    psInsert.setInt(1, noentrada);
+                    psInsert.setInt(2, idarticulo);
+                    psInsert.setDouble(3, cantidad);
+                    psInsert.setDouble(4, precio);
+                    psInsert.setDouble(5, totalproducto);
+                    psInsert.executeUpdate();
+
+                
+
+                }
+
             
-             } catch (SQLException ex) {
+            catch (SQLException ex)
+            {   
+                JOptionPane.showMessageDialog(null, ex);
                 java.util.logging.Logger.getLogger(frmentradas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             }
 
         }
 
-        
-    
 
-        
     }//GEN-LAST:event_btnguardarActionPerformed
+
+    private void btnnuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnnuevoActionPerformed
+        // TODO add your handling code here:
+       
+        limpiar();
+        eliminar();
+       
+    }//GEN-LAST:event_btnnuevoActionPerformed
 
     /**
      * @param args the command line arguments

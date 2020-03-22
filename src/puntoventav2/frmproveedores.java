@@ -43,79 +43,37 @@ private static Connection Conn=null;
     public frmproveedores() 
     {
         initComponents();
-        dobleclick();
-       
-        
+        ultimoRegistro();
+ 
     }
-    
-      void  dobleclick()
+    public void ultimoRegistro()
     {
-         tblbuscaproveedores.addMouseListener(new MouseAdapter() {
-           public void mousePressed(MouseEvent Mouse_evt){
-               JTable tabla = (JTable) Mouse_evt.getSource();
-               Point point = Mouse_evt.getPoint();
-               int row = tabla.rowAtPoint(point);
-               if (Mouse_evt.getClickCount()==2) 
-               {
-                   jLabel8.setText(tblbuscaproveedores.getValueAt(tblbuscaproveedores.getSelectedRow(), 0).toString());
-                   txtnombreproveedor.setText(tblbuscaproveedores.getValueAt(tblbuscaproveedores.getSelectedRow(), 1).toString());
-                   String dato=String.valueOf(modeloTabla.getValueAt(tblbuscaproveedores.getSelectedRow(),2));
-                   if ("Contado".equals(dato))
-                   {
-                       cmbmetodopago.setSelectedIndex(0);
-                   }
-                   else
-                   {
-                       cmbmetodopago.setSelectedIndex(1);
-                   }
-                   txtdiascredito.setText(tblbuscaproveedores.getValueAt(tblbuscaproveedores.getSelectedRow(), 3).toString());
-                   txttelefono.setText(tblbuscaproveedores.getValueAt(tblbuscaproveedores.getSelectedRow(), 4).toString());
-                    eliminar();
-                    tblbuscaproveedores.setModel(modeloTabla2);
-               }
-           }
-       
-       });
-    }
-    
-      
-        
-
-      
-    void configModelo()
+        int lasid=0;
+        try
         {
-            modeloTabla.addColumn("Numero ");
-            modeloTabla.addColumn("nombre");           
-            modeloTabla.addColumn("tipo pago");   
-            modeloTabla.addColumn("dias"); 
-            modeloTabla.addColumn("Telefono");
-            tblbuscaproveedores.setModel(modeloTabla);
-             
+             con = conexion.getConnection();
+             stmt=con.createStatement();
+             rs =stmt.executeQuery("select max(id_Proveedor) from tblProveedores ");
+             if(rs.next())
+            {
+                lasid=rs.getInt(1)+1;
+            }
+            lblnoprovedor.setText(lasid+"");
+            con.close();
         }
+        catch(SQLException ex)
+        {
+         JOptionPane.showMessageDialog(this,"Ocurrio el siguiente error:"+ex);
+        }
+    }
     
-    void eliminar(){
-        
-        DefaultTableModel tb = (DefaultTableModel) tblbuscaproveedores.getModel();
-        int a = tblbuscaproveedores.getRowCount()-1;
-        for (int i = a; i >= 0; i--) {          
-        tb.removeRow(tb.getRowCount()-1);
-        }
-        
-            
-        //cargaTicket();
-    }
-    void agregar()
+    public void limpiarcampos()
     {
-        filas[0]="1";
-        filas[1]="2";
-        filas[2]="3";
-        filas[3]="4";
-        filas[4]="5";
-        filas[5]="6";
-        modeloTabla.addRow(filas);
+        txtnombreproveedor.setText("");
+        txtdiascredito.setText("");
+        cmbmetodopago.setSelectedIndex(0);
+        txttelefono.setText("");
     }
-
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -127,8 +85,6 @@ private static Connection Conn=null;
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblbuscaproveedores = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         cmbmetodopago = new javax.swing.JComboBox<>();
@@ -137,7 +93,7 @@ private static Connection Conn=null;
         txtnombreproveedor = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        lblnoprovedor = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         txttelefono = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
@@ -155,20 +111,6 @@ private static Connection Conn=null;
         jLabel1.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(51, 51, 51));
         jLabel1.setText("Registro de Proveedores");
-
-        tblbuscaproveedores.setBackground(new java.awt.Color(214, 214, 251));
-        tblbuscaproveedores.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {},
-                {},
-                {},
-                {}
-            },
-            new String [] {
-
-            }
-        ));
-        jScrollPane1.setViewportView(tblbuscaproveedores);
 
         jPanel2.setBackground(new java.awt.Color(214, 214, 251));
 
@@ -218,9 +160,9 @@ private static Connection Conn=null;
         jLabel2.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel2.setText("N° Proveedor:");
 
-        jLabel8.setBackground(new java.awt.Color(255, 102, 102));
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel8.setText("1");
+        lblnoprovedor.setBackground(new java.awt.Color(255, 102, 102));
+        lblnoprovedor.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblnoprovedor.setText("1");
 
         jLabel16.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel16.setText("Telefono");
@@ -249,7 +191,7 @@ private static Connection Conn=null;
                         .addGap(47, 47, 47)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtnombreproveedor, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(lblnoprovedor, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(txtdiascredito, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -271,7 +213,7 @@ private static Connection Conn=null;
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8)
+                    .addComponent(lblnoprovedor)
                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -380,7 +322,6 @@ private static Connection Conn=null;
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -394,9 +335,7 @@ private static Connection Conn=null;
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(182, 182, 182))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -439,122 +378,72 @@ private static Connection Conn=null;
         // TODO add your handling code here:
 
         String resul[] ;
-      if ("".equals(txtnombreproveedor.getText()) || "".equals(txtnombreproveedor.getText()))
+          if ("".equals(txtnombreproveedor.getText()) || "".equals(txtnombreproveedor.getText()))
+              {
+                  JOptionPane.showMessageDialog(null, "Favor de Rellenar los Campos necesarios");
+                  txtnombreproveedor.requestFocus();
+                  return;
+
+              }
+          else
           {
-              JOptionPane.showMessageDialog(null, "Favor de Rellenar los Campos necesarios");
-              
+
+            int numerocliente=Integer.parseInt(lblnoprovedor.getText());
+            String nombre =txtnombreproveedor.getText();
+            String pago= cmbmetodopago.getSelectedItem().toString();
+            int tippago=0;
+            String telefono = txttelefono.getText();
+            int resultado = 0;
+            String dias =txtdiascredito.getText();
+            int diascredito=0;
+             con = conexion.getConnection();
+            if ("Contado".equals(pago))
+            {
+                tippago=1;
+            }
+            else
+            {
+                tippago=2;
+            }
+            if ("".equals(dias))
+            {
+                diascredito=0;
+            }
+            else
+            {
+                diascredito=Integer.parseInt(txtdiascredito.getText());
+            }
+
+
+
+            try {
+
+                stmt = con.createStatement();
+                PreparedStatement psInsert= con.prepareStatement("INSERT INTO tblproveedores(proNombre,proTipopago,proDias,proTelefono)"
+                    + " VALUES (?,?,?,?)");
+                psInsert.setString(1, nombre);
+                psInsert.setInt(2, tippago);
+                psInsert.setInt(3, diascredito);
+                psInsert.setString(4, telefono);
+                psInsert.executeUpdate();
+                psInsert.close();
+                JOptionPane.showMessageDialog(null, "Se ingreso correctamente, gracias");
+
+            }
+            catch (SQLException e)
+            {
+                JOptionPane.showMessageDialog(null, e);
+            }
           }
-      else
-      {
-      
-        int numerocliente=Integer.parseInt(jLabel8.getText());
-        String nombre =txtnombreproveedor.getText();
-  
-        String pago= cmbmetodopago.getSelectedItem().toString();
-        int tippago=0;
-        String telefono = txttelefono.getText();
-
-        int resultado = 0;
-
-        if ("Contado".equals(pago))
-        {
-            tippago=1;
-        }
-        else
-        {
-            tippago=2;
-        }
-
-        String dias =txtdiascredito.getText();
-        int diascredito=0;
-        if ("".equals(dias))
-        {
-            diascredito=0;
-        }
-        else
-        {
-            diascredito=Integer.parseInt(txtdiascredito.getText());
-        }
-
-        con = conexion.getConnection();
-
-        try {
-
-            stmt = con.createStatement();
-            PreparedStatement psInsert= con.prepareStatement("INSERT INTO tblproveedores(noprovedor,nombre,tippago,dias,telefono)"
-                + " VALUES (?,?,?,?,?)");
-
-            psInsert.setInt( 1, numerocliente);
-            psInsert.setString(2, nombre);
-            psInsert.setInt(3, tippago);
-            psInsert.setInt(4, diascredito);
-            psInsert.setString(5, telefono);
-
-            psInsert.executeUpdate();
-            psInsert.close();
-
-            JOptionPane.showMessageDialog(null, "Se ingreso correctamente, gracias");
-
-        }
-        catch (SQLException e)
-        {
-            JOptionPane.showMessageDialog(null, e);
-        }
-      }
-        //        try
-        //        {
-            //        stmt = con.createStatement();
-            //        ResultSet rs =stmt.executeQuery(sql);
-            //        while (rs.next())
-            //        {
-                //            resul[0]=rs.getString(1);
-                //            resul[1]=rs.getString(2);
-                //
-                //        }
-            //
-            //
-            //
-            //        } catch (SQLException e)
-        //        {
-            //
-            //
-            //        }
-
+          ultimoRegistro();
+          limpiarcampos();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnnuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnnuevoActionPerformed
         // TODO add your handling code here:
-        String valor="";
-        int valor1=0;
-
-        txtnombreproveedor.setText("");
-        
-        txtdiascredito.setText("");
-        cmbmetodopago.setSelectedIndex(0);
-        txttelefono.setText("");
-
-        try{
-            con = conexion.getConnection();
-            stmt=con.createStatement();
-            rs =stmt.executeQuery("SELECT * FROM tblproveedores ");
-
-            while(rs.next()){
-
-                valor=(rs.getString(1).toString());
-                valor1=Integer.parseInt(valor);
-                valor1=valor1+1;
-
-                System.out.println(valor1);
-                jLabel8.setText(valor1+"");
-            }
-            con.close();
-        }catch(SQLException ex){
-            JOptionPane.showMessageDialog(this,"Ocurrio el siguiente error:"+ex);
-        }
-        txtnombreproveedor.requestFocus();
-        b=tblbuscaproveedores.getColumnCount();
-        eliminar();
-        tblbuscaproveedores.setModel(modeloTabla2);
+        limpiarcampos();
+        ultimoRegistro();
+     
     }//GEN-LAST:event_btnnuevoActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -576,7 +465,7 @@ private static Connection Conn=null;
         {
             
         
-        int numerocliente=Integer.parseInt(jLabel8.getText());
+        int numerocliente=Integer.parseInt(lblnoprovedor.getText());
         String nombre =txtnombreproveedor.getText();
         
         String pago= cmbmetodopago.getSelectedItem().toString();
@@ -759,12 +648,10 @@ private static Connection Conn=null;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    public static javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblbuscaproveedores;
+    public static javax.swing.JLabel lblnoprovedor;
     public static javax.swing.JTextField txtdiascredito;
     public static javax.swing.JTextField txtnombreproveedor;
     public static javax.swing.JTextField txttelefono;

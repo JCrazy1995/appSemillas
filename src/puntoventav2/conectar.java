@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
  * @author Francisco Rafael
  */
 public class conectar {
-       public static final String db="bdpuntoventa";
+       public static final String db="bdSemillas";
        private static final String User="root";
        private static final String pass="0547";
        static String url = "jdbc:mysql://localhost:3306/"+db+"?serverTimezone=UTC";

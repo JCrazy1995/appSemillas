@@ -37,6 +37,7 @@ public class frmarticulos extends javax.swing.JFrame {
     Object filas[]= new Object[7];                          
     public frmarticulos() {
         initComponents();
+        ultiArtiiculo();
     }
 
     /**
@@ -247,63 +248,86 @@ public class frmarticulos extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+    public void ultiArtiiculo(){
+        int lasid=0;
+        try
+        {
+             con = conexion.getConnection();
+             stmt=con.createStatement();
+             rs =stmt.executeQuery("select max(id_Articulo) from tblArticulos ");
+             if(rs.next())
+            {
+                lasid=rs.getInt(1)+1;
+            }
+            lblarticulo.setText(lasid+"");
+            con.close();
+        }
+        catch(SQLException ex)
+        {
+         JOptionPane.showMessageDialog(this,"Ocurrio el siguiente error:"+ex);
+        }
+    }
+    public void limpiarCampo(){
+        ultiArtiiculo();
+       txtPrecio.setText("");
+       txtnombre.setText("");
+       cmbtipo.setSelectedIndex(0);
+    }
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // TODO add your handling code here:
-        conectar conexion = new conectar();
+         conectar conexion = new conectar();
          con = conexion.getConnection();
          String numero = lblarticulo.getText();
          int  numeroarticulo =Integer.parseInt(numero);
          String nombre= txtnombre.getText();
-        float precio = Float.parseFloat(txtPrecio.getText());
+         float precio = Float.parseFloat(txtPrecio.getText());
          String tipo = cmbtipo.getSelectedItem().toString();
-         
-         
-          try {
-            
-            
-           stmt = con.createStatement();
-           PreparedStatement psInsert= con.prepareStatement("INSERT INTO tblarticulos(noarticulo,nombre,precio,tipo)"
-                   + " VALUES (?,?,?,?)");
+         int lasid=0;
+        //Crear aticulos y ademas jalar el ultimo id
+        try {
+            stmt = con.createStatement();
+            PreparedStatement psInsert= con.prepareStatement("INSERT INTO tblArticulos(artNombre,artPrecio,artTipo)"
+                   + " VALUES (?,?,?)");
            
-         psInsert.setInt(1, numeroarticulo);
-         psInsert.setString(2, nombre);
-         psInsert.setFloat(3,precio);
-         psInsert.setString(4, tipo);
-         psInsert.execute();
-         psInsert.close();
+            psInsert.setString(1, nombre);
+            psInsert.setFloat(2, precio);
+            psInsert.setString(3,tipo);
+            psInsert.execute();
+            psInsert.close();
             
-            
-        } 
-        catch (SQLException e) 
-        {
-            JOptionPane.showMessageDialog(null, e);
-        }
-    
-          try {
-            
-            
-         stmt = con.createStatement();
-     
-         PreparedStatement psInsert= con.prepareStatement("INSERT INTO tblinventario(noarticulo,nombre,cantidad)"
-                   + " VALUES (?,?,?)"); 
-         psInsert.setInt(1, numeroarticulo);
-         psInsert.setString(2, nombre);
-         psInsert.setDouble(3,0.0);
-         psInsert.execute();
-         psInsert.close(); 
-         
-           con.close();
-          JOptionPane.showMessageDialog(null, "Se ingreso correctamente, gracias");
+            ResultSet rs= stmt.executeQuery("select max(id_Articulo) from tblArticulos");
+            if(rs.next())
+            {
+                lasid=rs.getInt(1);
+            }
             
         } 
         catch (SQLException e) 
         {
             JOptionPane.showMessageDialog(null, e);
         }
-       
-         
-        
+        //Agregar inventario el articulo con 0 
+        try 
+        {
+           stmt = con.createStatement();
+
+           PreparedStatement psInsert= con.prepareStatement("INSERT INTO tblinventario(Id_Articulo,invExistencia)"
+                     + " VALUES (?,?)"); 
+
+           psInsert.setInt(1, lasid);
+           psInsert.setFloat(2,0);
+           psInsert.execute();
+           psInsert.close(); 
+
+             con.close();
+            JOptionPane.showMessageDialog(null, "Se ingreso correctamente, gracias");
+            
+        } 
+        catch (SQLException e) 
+        {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        limpiarCampo();
         
     }//GEN-LAST:event_btnAgregarActionPerformed
 
@@ -315,28 +339,8 @@ public class frmarticulos extends javax.swing.JFrame {
 
     private void btnnuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnnuevoActionPerformed
         // TODO add your handling code here:
-        String valor="";
-        int valor1=0;
-        try{
-         con = conexion.getConnection();
-         stmt=con.createStatement();
-         rs =stmt.executeQuery("SELECT * FROM tblarticulos ");
-         
-    while(rs.next()){
-        
-     valor=(rs.getString(1).toString());
-     valor1=Integer.parseInt(valor);
-     valor1=valor1+1;
-  
-        System.out.println(valor1);
-         lblarticulo.setText(valor1+"");
-     }
-    con.close();
-     }catch(SQLException ex){
-         JOptionPane.showMessageDialog(this,"Ocurrio el siguiente error:"+ex);
-     }
-        
-        
+       ultiArtiiculo();
+       limpiarCampo();
     }//GEN-LAST:event_btnnuevoActionPerformed
 
     private void txtnombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtnombreActionPerformed
@@ -350,16 +354,16 @@ public class frmarticulos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnbuscarproductoActionPerformed
 
     private void btnmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmodificarActionPerformed
-        // TODO add your handling code here:
+        //Verifica que no esten vacios
         if ("".equals(txtnombre.getText()) || "".equals(txtPrecio.getText()))
         {
             JOptionPane.showMessageDialog(null,"No dejar Campos Vacios");
             txtnombre.requestFocus();
+            return;
         }
-        
+        //Se va actualizar
         else
         {
-            
             int noarticulos = Integer.parseInt(lblarticulo.getText());
             String nombre = txtnombre.getText();
             float precio = Float.parseFloat(txtPrecio.getText());
@@ -369,14 +373,13 @@ public class frmarticulos extends javax.swing.JFrame {
             
             con = conexion.getConnection();
            stmt = con.createStatement();
-           PreparedStatement psInsert= con.prepareStatement("update tblarticulos set noarticulo=?,nombre=?,precio=?,"
-                   + "tipo=? where noarticulo=?");
-           
-          psInsert.setInt( 1, noarticulos);
-          psInsert.setString(2, nombre);
-          psInsert.setFloat(3, precio);
-          psInsert.setString(4, tipo);
-          psInsert.setInt( 5, noarticulos);
+           PreparedStatement psInsert= con.prepareStatement("update tblarticulos set artNombre=?,artPrecio=?,"
+                   + "artTipo=? where id_Articulo=?");
+          
+          psInsert.setString(1, nombre);
+          psInsert.setFloat(2, precio);
+          psInsert.setString(3, tipo);
+          psInsert.setInt( 4, noarticulos);
           psInsert.executeUpdate();
           psInsert.close();
            
@@ -389,7 +392,7 @@ public class frmarticulos extends javax.swing.JFrame {
         }
             
         }
-        
+        limpiarCampo();
     }//GEN-LAST:event_btnmodificarActionPerformed
 
     /**
