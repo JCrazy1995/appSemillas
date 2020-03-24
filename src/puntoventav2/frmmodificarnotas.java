@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.sql.ResultSet;
+import java.lang.Exception;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -48,9 +49,10 @@ import net.sf.jasperreports.engine.*;
 public class frmmodificarnotas extends javax.swing.JFrame {
     static java.sql.ResultSet rs=null;
     private Statement stmt=null;
+    private Statement stmt1=null;
     conectar conexion = new conectar();
-    DefaultTableModel modeloTabla= new DefaultTableModel();  //modelo de tabla que llevara los datos
-    DefaultTableModel modeloTabla2= new DefaultTableModel(); // modelo vacio para la tabla de clientes
+    static DefaultTableModel modeloTabla= new DefaultTableModel();  //modelo de tabla que llevara los datos
+   DefaultTableModel modeloTabla2= new DefaultTableModel(); // modelo vacio para la tabla de clientes
     Object filas[]= new Object[5];   
     private int fila; 
     Connection con = null;
@@ -1002,7 +1004,7 @@ public class frmmodificarnotas extends javax.swing.JFrame {
                 
                 String myDate = dia+"/"+mes+"/"+ano;
                 
-                SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yy");
+                 SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yy");
                  Date date = formateador.parse(myDate); 
                  txtfecha.setText(formateador.format(sumarRestarDiasFecha(date, 0)));
                  int credito = Integer.parseInt(txtdiascredito.getText());
@@ -1258,8 +1260,7 @@ public class frmmodificarnotas extends javax.swing.JFrame {
          int filas = modeloTabla.getRowCount();
          String tipo,fechanota,fechapago,nombre,producto;
          double cantidad,precio,totalproducto,totalnota;
-         con=conexion.getConnection();
-         int nonota = Integer.parseInt(txtnonota.getText());
+         con=conexion.getConnection();    
          int nocliente= Integer.parseInt(txtncliente.getText());
          fechanota= ano+"-"+mes+"-"+dia;      
          String aniopago = txtfechapago.getText().substring(6,8);
@@ -1272,11 +1273,12 @@ public class frmmodificarnotas extends javax.swing.JFrame {
          int idarticulo=0;
          double totalexistencia=0;
          double totalinventario=0;
-        int c=0;
+         int c=0;
+         String idnotacancelar=txtnonota.getText(); //id de la nota  que se cancela
         
-        int confirmacion= JOptionPane.showConfirmDialog(null, "La nota ya se ha terminado", "Confirmación", JOptionPane.YES_NO_OPTION, 1 );
+        int confirmacion= JOptionPane.showConfirmDialog(null, "Todas la modificaciones son correctas", "Confirmación", JOptionPane.YES_NO_OPTION, 1 );
         if (confirmacion == 0)
-        {
+        {       
                 try 
                 {       
                 con=conexion.getConnection();
@@ -1295,25 +1297,67 @@ public class frmmodificarnotas extends javax.swing.JFrame {
                   psInsert.setDouble(6, totalnota);
                   psInsert.setString(7,"no" );
                   psInsert.setString(8,"Activa");
-
                   psInsert.executeUpdate();
+                  psInsert.close();
                   
                   ResultSet rs= stmt.executeQuery("select max(id_Nota) from tblnotas");
                   if(rs.next())
                   {
                       lasid=rs.getInt(1);
-                      numeronota=rs.getString(1);
+                      
                   }
+                  //pongo el status cancelado a la nota
                   
+                   PreparedStatement psInsert11= con.prepareStatement("update tblnotas set noStatus='Cancelada por Actu'"
+                           + "  where id_Nota=? ");
+                                psInsert11.setString(1, idnotacancelar);
+                                psInsert11.execute();
+                               
                 }
                 
                 catch (SQLException e) 
                 {
-
+                    JOptionPane.showMessageDialog(null, e);
                 }
+                //cancelar los movimientos de la nota
+                
+                try 
+                {       int articulo=0;
+                         double existencia=0,totalenviar=0,cantidadprodudcto=0;  
+                     ResultSet rs12= stmt.executeQuery("select tblnotasmovimientos.id_Articulo,tblnotasmovimientos.movcantidad"
+                             + " from tblnotasmovimientos where id_nota='"+idnotacancelar+"'");
+                     con=conexion.getConnection();
+                    stmt1=con.createStatement();
+                     while(rs12.next())
+                    {       System.out.println("oli");
+                         
+                       cantidadprodudcto= rs12.getDouble(2);
+                        articulo=rs12.getInt(1);
+                        System.out.println(cantidadprodudcto);
+                        
+                        ResultSet rs13= stmt1.executeQuery("select tblinventario.invexistencia from tblinventario where id_Articulo='"+articulo+"'");
+                         if(rs13.next())
+                         {
+                             existencia=Double.parseDouble(rs13.getString(1));
+                         }
+                         
+                         totalenviar=existencia+cantidadprodudcto;
+                         PreparedStatement psInsert2= con.prepareStatement("update tblinventario set invExistencia=? where id_Articulo=? ");
+                         psInsert2.setDouble(1, totalenviar);
+                         psInsert2.setInt(2,articulo);
+                         psInsert2.executeUpdate();
+                       
+                     }
+                } 
+                catch (SQLException e) 
+                {
+                    JOptionPane.showMessageDialog(null, e);
+                }
+                
+                
                 System.out.println(lasid);
                 try 
-                {
+                {  
                     for (int i = 0;i<filas;i++)
                     {   
                        cantidad= Double.parseDouble(tblnotas.getValueAt(i,0 ).toString());
@@ -1321,41 +1365,43 @@ public class frmmodificarnotas extends javax.swing.JFrame {
                        precio = Double.parseDouble(tblnotas.getValueAt(i,2 ).toString());
                        tipo =   tblnotas.getValueAt(i, 3).toString();
                        totalproducto = Double.parseDouble(tblnotas.getValueAt(i,4 ).toString()); 
-                       
-                       ResultSet rs= stmt.executeQuery("select tblarticulos.id_Articulo from tblArticulos where artNombre"
+                       //tomo el articulo del id para agregar 
+                       ResultSet rs20= stmt.executeQuery("select tblarticulos.id_Articulo from tblArticulos where artNombre"
                           + "='"+producto+"'");
-                        if(rs.next())
+                        if(rs20.next())
                          {
-                             idarticulo=rs.getInt(1);
+                             idarticulo=rs20.getInt(1);
                          }
-                        
-                         ResultSet rss= stmt.executeQuery("select tblinventario.invExistencia    from"
+                            
+                         ResultSet rs21= stmt.executeQuery("select tblinventario.invExistencia    from"
                                  + " tblinventario where id_Articulo  ='"+idarticulo+"'");
-                        if(rss.next())
+                        if(rs21.next())
                          {
-                             totalexistencia=rss.getInt(1);
+                             totalexistencia=rs21.getInt(1);
                          }
                             totalinventario=totalexistencia-cantidad;
-                            PreparedStatement psInsert1= con.prepareStatement("update tblinventario set invExistencia=? where id_Articulo=? ");
-                            psInsert1.setDouble(1,totalinventario);
-                            psInsert1.setInt(2, idarticulo);
-                            psInsert1.execute();
+                            PreparedStatement psInsert20= con.prepareStatement("update tblinventario set invExistencia=? where id_Articulo=? ");
+                            psInsert20.setDouble(1,totalinventario);
+                            psInsert20.setInt(2, idarticulo);
+                            psInsert20.executeUpdate();
+                            psInsert20.close();
                             System.out.println(totalinventario);
                        
-                       PreparedStatement psInsert= con.prepareStatement("INSERT INTO tblnotasmovimientos"
+                       PreparedStatement psInsert21= con.prepareStatement("INSERT INTO tblnotasmovimientos"
                        + "( id_Nota,id_Articulo, movCantidad, movNombre,movTipo,movPrecio,movTotal)"
                         + " VALUES (?,?,?,?,?,?,?)");
                         
                     
-                      psInsert.setInt( 1, lasid);  
-                      psInsert.setInt( 2, idarticulo);
-                      psInsert.setDouble(3, cantidad);
-                      psInsert.setString(4, producto);
-                      psInsert.setString(5, tipo);
-                      psInsert.setDouble(6, precio);
-                      psInsert.setDouble(7, totalproducto);
-                      psInsert.executeUpdate();
+                      psInsert21.setInt( 1, lasid);  
+                      psInsert21.setInt( 2, idarticulo);
+                      psInsert21.setDouble(3, cantidad);
+                      psInsert21.setString(4, producto);
+                      psInsert21.setString(5, tipo);
+                      psInsert21.setDouble(6, precio);
+                      psInsert21.setDouble(7, totalproducto);
+                      psInsert21.executeUpdate();
                     }
+                     
                 } 
                catch (SQLException e) 
                {
@@ -1363,6 +1409,7 @@ public class frmmodificarnotas extends javax.swing.JFrame {
                }
                 int filass = modeloTabla.getRowCount();  
                    btnguardar.setEnabled(false);
+                  
         }
        
         
@@ -1469,7 +1516,7 @@ public class frmmodificarnotas extends javax.swing.JFrame {
     public static javax.swing.JLabel lblnocliente;
     public static javax.swing.JLabel lblnumeronota;
     public static javax.swing.JLabel lbltipopago;
-    private javax.swing.JLabel lbltotal;
+    public static javax.swing.JLabel lbltotal;
     public static javax.swing.JTable tblnotas;
     private javax.swing.JTextField txtcantidad;
     public static javax.swing.JTextField txtcliente;

@@ -1150,7 +1150,7 @@ public class frmnotas extends javax.swing.JFrame {
             JasperReport jr = JasperCompileManager.compileReport(jd);
             JasperPrint jp = JasperFillManager.fillReport(jr,param,con);
             OutputStream output = new FileOutputStream(new File("C:\\Users\\coron\\Desktop\\prueba\\"
-                        +txtcliente.getText()+""+"Nota N° "+""+txtnonota.getText()+".pdf")); 
+                        +txtcliente.getText()+""+"Nota N° "+""+txtnonota.getText()+"original.pdf")); 
             JasperExportManager.exportReportToPdfStream(jp, output); 
             output.flush();
             output.close();
@@ -1195,7 +1195,7 @@ public class frmnotas extends javax.swing.JFrame {
               try 
               {
                  File path = new  File("C:\\Users\\coron\\Desktop\\prueba\\"
-                        +txtcliente.getText()+""+"Nota N° "+""+txtnonota.getText()+".pdf");
+                        +txtcliente.getText()+""+"Nota N° "+""+txtnonota.getText()+"original.pdf");
                  Desktop.getDesktop().open(path);
               }
               catch (IOException ex)
@@ -1215,15 +1215,30 @@ public class frmnotas extends javax.swing.JFrame {
                 ex.printStackTrace();
               } 
               File fileToPrint = new  File("C:\\Users\\coron\\Desktop\\prueba\\"
-                        +txtcliente.getText()+""+"Nota N° "+""+txtnonota.getText()+".pdf");
-//        try 
-//        {
-//            Desktop.getDesktop().print(fileToPrint);
-//        } 
-//        catch (IOException ex) 
-//        {
-//            Logger.getLogger(frmbuscaclientes.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+                        +txtcliente.getText()+""+"Nota N° "+""+txtnonota.getText()+"original.pdf");
+        try 
+        {
+            Desktop.getDesktop().print(fileToPrint);
+        } 
+        catch (IOException ex) 
+        {
+            Logger.getLogger(frmbuscaclientes.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+         File fileToPrint2 = new  File("C:\\Users\\coron\\Desktop\\prueba\\"
+                        +txtcliente.getText()+""+"Nota N° "+""+txtnonota.getText()+"copia.pdf");
+        try 
+        {
+            Desktop.getDesktop().print(fileToPrint2);
+        } 
+        catch (IOException ex) 
+        {
+            Logger.getLogger(frmbuscaclientes.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
+        
 //       
     }//GEN-LAST:event_btnimprimirActionPerformed
 

@@ -20,6 +20,7 @@ import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
 
 
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -29,10 +30,10 @@ import javax.swing.table.TableRowSorter;
  *
  * @author Francisco Rafael
  */
-public class frmbuscarmodificarnotas extends javax.swing.JFrame {
+public class frmbuscacancelarnotas extends javax.swing.JFrame {
 
     /**
-     * Creates new form frmbuscarmodificarnotas
+     * Creates new form frmbuscacancelarnotas
      */
     private static Connection con = null;
     static ResultSet rs = null;
@@ -44,8 +45,8 @@ public class frmbuscarmodificarnotas extends javax.swing.JFrame {
      DefaultTableModel modeloTabla2 = new DefaultTableModel();
     Object filas2[] = new Object[5];
     private int fila;
-    frmmodificarnotas modificar = new frmmodificarnotas();
-    public frmbuscarmodificarnotas() 
+    frmcancelarnotas cancelar = new frmcancelarnotas();
+    public frmbuscacancelarnotas() 
     {
         initComponents();
         configModelo();
@@ -72,7 +73,7 @@ public class frmbuscarmodificarnotas extends javax.swing.JFrame {
         modeloTabla2.addColumn("Precio");
         modeloTabla2.addColumn("Tipo");
         modeloTabla2.addColumn("Total");
-        frmmodificarnotas.tblnotas.setModel(modeloTabla);
+        frmcancelarnotas.tblnotas.setModel(modeloTabla);
 
         }
         void iniciotabla()
@@ -139,33 +140,37 @@ public class frmbuscarmodificarnotas extends javax.swing.JFrame {
                 int lasid=0;
                 con = conexion.getConnection();
                 stmt = con.createStatement();
+                stmtt = con.createStatement();
+                
                 int idarticulo=0;
                 String nompreproducto;
                 String nombrecliente= tblbuscanotas.getValueAt(tblbuscanotas.getSelectedRow(),1).toString();
                 String idnota = tblbuscanotas.getValueAt(tblbuscanotas.getSelectedRow(), 0).toString();
-                rs = stmt.executeQuery("SELECT * from tblclientes where cliNombre='"+nombrecliente+"'");
+                int c=0;
+                ResultSet rs11 = stmt.executeQuery("SELECT * from tblnotasmovimientos where id_nota='"+idnota+"'");              
+                if(rs11.next())
+                {
+                    cancelar.setVisible(true);
+                    rs = stmt.executeQuery("SELECT * from tblclientes where cliNombre='"+nombrecliente+"'");
                 configModelo2();
                 while(rs.next())
                 {
-                    frmmodificarnotas.txtncliente.setText(rs.getString(1));
-                    frmmodificarnotas.txtcliente.setText(rs.getString(2));
-                    frmmodificarnotas.txtdomicilio.setText(rs.getString(3));
-                    frmmodificarnotas.txtcolonia.setText(rs.getString(4));
+                    frmcancelarnotas.txtncliente.setText(rs.getString(1));
+                    frmcancelarnotas.txtcliente.setText(rs.getString(2));
+                    frmcancelarnotas.txtdomicilio.setText(rs.getString(3));
+                    frmcancelarnotas.txtcolonia.setText(rs.getString(4));
                    String tippago = rs.getString(5);
                 if("1".equals(tippago))
-                {    frmmodificarnotas.txttipopago.setText("Contado");
-                     frmmodificarnotas.lbltipopago.setText("Contado");
+                {    frmcancelarnotas.txttipopago.setText("Contado");
+                    
                 }
                 else
-                {    frmmodificarnotas.txttipopago.setText("Credito");
-                     frmmodificarnotas.lbltipopago.setText("Credito");
+                {    frmcancelarnotas.txttipopago.setText("Credito");
+                    ;
                 } 
-                    frmmodificarnotas.txtdiascredito.setText(rs.getString(6));
-                    frmmodificarnotas.txttelefono.setText(rs.getString(7));
-                    frmmodificarnotas.lblnocliente.setText(rs.getString(1));
-                    frmmodificarnotas.lblcliente.setText(rs.getString(2));
-                    frmmodificarnotas.lbldireccion.setText(rs.getString(3)+" "+rs.getString(4));                  
-                    frmmodificarnotas.lbldiascredito.setText(rs.getString(6));                 
+                    frmcancelarnotas.txtdiascredito.setText(rs.getString(6));
+                    frmcancelarnotas.txttelefono.setText(rs.getString(7));
+                   
                 }
                 ResultSet rss= stmt.executeQuery("select * from tblnotas where  id_Nota='"+idnota+"'");
                 while(rss.next())
@@ -175,17 +180,15 @@ public class frmbuscarmodificarnotas extends javax.swing.JFrame {
                      mes =rss.getString(3).substring(5,7);
                      dias = rss.getString(3).substring(8,10);
                      fecha=dias+"/"+mes+"/"+anio;
-                     frmmodificarnotas.txtfecha.setText(fecha);
-                     frmmodificarnotas.txtnonota.setText(rss.getString(1));                   
-                     frmmodificarnotas.lbltotal.setText(rss.getString(5));  
+                     frmcancelarnotas.txtfecha.setText(fecha);
+                     frmcancelarnotas.txtnonota.setText(rss.getString(1));                   
+                       
                      aniopago =rss.getString(4).substring(0,4);
                      mespago =rss.getString(4).substring(5,7);
                      diaspago = rss.getString(4).substring(8,10);
                      fechapago=diaspago+"/"+mespago+"/"+aniopago;   
-                     frmmodificarnotas.txtfechapago.setText(fechapago);
-                     frmmodificarnotas.lblnumeronota.setText(rss.getString(1));
-                     frmmodificarnotas.lblfecha.setText(fecha);
-                     frmmodificarnotas.lblfechapago.setText(fechapago);
+                     frmcancelarnotas.txtfechapago.setText(fechapago);
+                    
                 }
                  ResultSet rs1= stmt.executeQuery("select   tblnotasmovimientos.id_Articulo from "
                          + "tblnotasmovimientos where  id_Nota='"+idnota+"'");
@@ -208,14 +211,22 @@ public class frmbuscarmodificarnotas extends javax.swing.JFrame {
                     filas2[2] =   rs3.getString(7);
                     filas2[3]=    rs3.getString(6);
                     filas2[4]=    rs3.getString(8);
-                    frmmodificarnotas.modeloTabla.addRow(filas2);
-                    frmmodificarnotas.tblnotas.setModel(frmmodificarnotas.modeloTabla);
+                    frmcancelarnotas.modeloTabla.addRow(filas2);
+                    frmcancelarnotas.tblnotas.setModel(frmcancelarnotas.modeloTabla);
                 }
                 con.close();
+                 cerrar();   
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "La nota no Tiene Movimientos", "Error", 2);
+                }
+                
+                
             }
             
               
-        catch (SQLException ex) 
+        catch (Exception ex) 
             {
                 JOptionPane.showMessageDialog(this, "Ocurrio el siguiente error:" + ex);
             }         
@@ -233,9 +244,9 @@ public class frmbuscarmodificarnotas extends javax.swing.JFrame {
                         int row = tabla.rowAtPoint(point);
                         if (Mouse_evt.getClickCount() == 2)
                         { 
-                            modificar.setVisible(true);
+                            
                             enviardatos();
-                            cerrar();
+                            
 
                         }
                     }
@@ -366,14 +377,26 @@ public class frmbuscarmodificarnotas extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmbuscarmodificarnotas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmbuscacancelarnotas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmbuscarmodificarnotas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmbuscacancelarnotas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmbuscarmodificarnotas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmbuscacancelarnotas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmbuscarmodificarnotas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmbuscacancelarnotas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -382,7 +405,7 @@ public class frmbuscarmodificarnotas extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmbuscarmodificarnotas().setVisible(true);
+                new frmbuscacancelarnotas().setVisible(true);
             }
         });
     }
