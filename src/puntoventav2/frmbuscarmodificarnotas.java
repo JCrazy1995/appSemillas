@@ -41,7 +41,7 @@ public class frmbuscarmodificarnotas extends javax.swing.JFrame {
     conectar conexion = new conectar();
     DefaultTableModel modeloTabla = new DefaultTableModel();
     Object filas[] = new Object[5];
-     DefaultTableModel modeloTabla2 = new DefaultTableModel();
+    DefaultTableModel modeloTabla2 = new DefaultTableModel();
     Object filas2[] = new Object[5];
     private int fila;
     frmmodificarnotas modificar = new frmmodificarnotas();

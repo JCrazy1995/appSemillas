@@ -559,9 +559,9 @@ public class frmnotas extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -1000,12 +1000,11 @@ public class frmnotas extends javax.swing.JFrame {
                 int dia =calendario.get(calendario.DATE);
                 
                 String myDate = dia+"/"+mes+"/"+ano;
-                
                 SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yy");
                  Date date = formateador.parse(myDate); 
                  txtfecha.setText(formateador.format(sumarRestarDiasFecha(date, 0)));
                  int credito = Integer.parseInt(txtdiascredito.getText());
-                 txtfechapago.setText(formateador.format(sumarRestarDiasFecha(date, credito)).toString());
+                 txtfechapago.setText(formateador.format(sumarRestarDiasFecha(date, credito)));
 
             }
                 txtcantidad.requestFocus();
@@ -1194,8 +1193,7 @@ public class frmnotas extends javax.swing.JFrame {
             //Original
               try 
               {
-                 File path = new  File("C:\\Users\\coron\\Desktop\\prueba\\"
-                        +txtcliente.getText()+""+"Nota N° "+""+txtnonota.getText()+"original.pdf");
+                 File path = new  File("C:\\Users\\coron\\Desktop\\prueba\\original.pdf");
                  Desktop.getDesktop().open(path);
               }
               catch (IOException ex)
