@@ -59,6 +59,8 @@ public class frmarticulos extends javax.swing.JFrame {
         txtnombre = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         cmbtipo = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
+        txtpreciocompra = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         btnAgregar = new javax.swing.JButton();
@@ -103,6 +105,15 @@ public class frmarticulos extends javax.swing.JFrame {
         cmbtipo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         cmbtipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Kgs", "Pte" }));
 
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel7.setText("Precio Compra:");
+
+        txtpreciocompra.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtpreciocompraKeyTyped(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -113,13 +124,15 @@ public class frmarticulos extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(jLabel4)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel6))
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel7))
                 .addGap(36, 36, 36)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblarticulo, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtnombre)
-                    .addComponent(txtPrecio)
-                    .addComponent(cmbtipo, 0, 150, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(txtpreciocompra)
+                    .addComponent(lblarticulo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtnombre, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtPrecio, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cmbtipo, javax.swing.GroupLayout.Alignment.LEADING, 0, 150, Short.MAX_VALUE))
                 .addGap(0, 40, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -137,11 +150,15 @@ public class frmarticulos extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(26, 26, 26)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(txtpreciocompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(cmbtipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
@@ -215,9 +232,10 @@ public class frmarticulos extends javax.swing.JFrame {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(54, 54, 54)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(42, 42, 42)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(85, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -225,11 +243,11 @@ public class frmarticulos extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(1, 1, 1)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(70, Short.MAX_VALUE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -242,7 +260,7 @@ public class frmarticulos extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 3, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -267,12 +285,15 @@ public class frmarticulos extends javax.swing.JFrame {
          JOptionPane.showMessageDialog(this,"Ocurrio el siguiente error:"+ex);
         }
     }
-    public void limpiarCampo(){
-        ultiArtiiculo();
-       txtPrecio.setText("");
-       txtnombre.setText("");
-       cmbtipo.setSelectedIndex(0);
-    }
+        
+    public void limpiarCampo()
+        {
+           ultiArtiiculo();
+           txtPrecio.setText("");
+           txtnombre.setText("");
+           txtpreciocompra.setText("");
+           cmbtipo.setSelectedIndex(0);
+        }
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // TODO add your handling code here:
          conectar conexion = new conectar();
@@ -281,17 +302,19 @@ public class frmarticulos extends javax.swing.JFrame {
          int  numeroarticulo =Integer.parseInt(numero);
          String nombre= txtnombre.getText();
          float precio = Float.parseFloat(txtPrecio.getText());
+         float preciocompra=Float.parseFloat(txtpreciocompra.getText());
          String tipo = cmbtipo.getSelectedItem().toString();
          int lasid=0;
         //Crear aticulos y ademas jalar el ultimo id
         try {
             stmt = con.createStatement();
-            PreparedStatement psInsert= con.prepareStatement("INSERT INTO tblArticulos(artNombre,artPrecio,artTipo)"
-                   + " VALUES (?,?,?)");
+            PreparedStatement psInsert= con.prepareStatement("INSERT INTO tblArticulos(artNombre,artPrecio,artTipo,artPrecioCompra)"
+                   + " VALUES (?,?,?,?)");
            
             psInsert.setString(1, nombre);
             psInsert.setFloat(2, precio);
             psInsert.setString(3,tipo);
+            psInsert.setFloat(4, preciocompra);
             psInsert.execute();
             psInsert.close();
             
@@ -368,18 +391,19 @@ public class frmarticulos extends javax.swing.JFrame {
             String nombre = txtnombre.getText();
             float precio = Float.parseFloat(txtPrecio.getText());
             String tipo = cmbtipo.getSelectedItem().toString();
-            
+            float preciocompra= Float.parseFloat(txtpreciocompra.getText());
             try {
             
             con = conexion.getConnection();
            stmt = con.createStatement();
            PreparedStatement psInsert= con.prepareStatement("update tblarticulos set artNombre=?,artPrecio=?,"
-                   + "artTipo=? where id_Articulo=?");
+                   + "artTipo=?,artPrecioCompra=? where id_Articulo=?");
           
           psInsert.setString(1, nombre);
           psInsert.setFloat(2, precio);
           psInsert.setString(3, tipo);
-          psInsert.setInt( 4, noarticulos);
+          psInsert.setFloat(4, preciocompra);
+          psInsert.setInt( 5, noarticulos);
           psInsert.executeUpdate();
           psInsert.close();
            
@@ -394,6 +418,10 @@ public class frmarticulos extends javax.swing.JFrame {
         }
         limpiarCampo();
     }//GEN-LAST:event_btnmodificarActionPerformed
+
+    private void txtpreciocompraKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtpreciocompraKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtpreciocompraKeyTyped
 
     /**
      * @param args the command line arguments
@@ -442,11 +470,13 @@ public class frmarticulos extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     public static javax.swing.JLabel lblarticulo;
     public static javax.swing.JTextField txtPrecio;
     public static javax.swing.JTextField txtnombre;
+    public static javax.swing.JTextField txtpreciocompra;
     // End of variables declaration//GEN-END:variables
 }

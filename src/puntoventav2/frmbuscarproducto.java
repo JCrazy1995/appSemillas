@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 
 /**
@@ -31,7 +32,7 @@ public class frmbuscarproducto extends javax.swing.JFrame {
     private Statement stmt = null;
     conectar conexion = new conectar();
     DefaultTableModel modeloTabla = new DefaultTableModel();  //modelo de tabla que llevara los datos
-    Object filas[] = new Object[4];
+    Object filas[] = new Object[5];
 
     DefaultListModel modelo = new DefaultListModel();
     /**
@@ -48,11 +49,21 @@ public class frmbuscarproducto extends javax.swing.JFrame {
     
     void configModelo() 
     {
-        modeloTabla.addColumn("ID PRODUCTO");
+        modeloTabla.addColumn("ID");
         modeloTabla.addColumn("PRODUCTO");
         modeloTabla.addColumn("PRECIO");
+        modeloTabla.addColumn("PRECIO COMPRA");
         modeloTabla.addColumn("TIPO");   
         tblbuscarproducto.setModel(modeloTabla);
+        TableColumnModel columnModel = tblbuscarproducto.getColumnModel();
+
+        columnModel.getColumn(0).setPreferredWidth(40);
+        columnModel.getColumn(1).setPreferredWidth(150);
+        columnModel.getColumn(2).setPreferredWidth(70);
+        columnModel.getColumn(3).setPreferredWidth(110);
+        columnModel.getColumn(4).setPreferredWidth(50);
+      
+        
     }
     
     
@@ -72,7 +83,8 @@ public class frmbuscarproducto extends javax.swing.JFrame {
                 filas[0] = (rs.getString(1));
                 filas[1] = (rs.getString(2));
                 filas[2] = (rs.getString(3));
-                filas[3] = (rs.getString(4));
+                filas[3]=   rs.getString(5);
+                filas[4] = (rs.getString(4));
                
                 modeloTabla.addRow(filas);
 
@@ -104,7 +116,8 @@ public class frmbuscarproducto extends javax.swing.JFrame {
                    frmarticulos.lblarticulo.setText(tblbuscarproducto.getValueAt(tblbuscarproducto.getSelectedRow(), 0).toString());
                    frmarticulos.txtnombre.setText(tblbuscarproducto.getValueAt(tblbuscarproducto.getSelectedRow(), 1).toString());
                    frmarticulos.txtPrecio.setText(tblbuscarproducto.getValueAt(tblbuscarproducto.getSelectedRow(), 2).toString());                               
-                   String dato=String.valueOf(modeloTabla.getValueAt(tblbuscarproducto.getSelectedRow(),3));
+                   frmarticulos.txtpreciocompra.setText(tblbuscarproducto.getValueAt(tblbuscarproducto.getSelectedRow(), 3).toString());
+                   String dato=String.valueOf(modeloTabla.getValueAt(tblbuscarproducto.getSelectedRow(),4));
                    if ("Kgs".equals(dato))
                    {
                         frmarticulos.cmbtipo.setSelectedIndex(0);
@@ -201,23 +214,20 @@ public class frmbuscarproducto extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(22, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(67, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -226,11 +236,13 @@ public class frmbuscarproducto extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 8, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();

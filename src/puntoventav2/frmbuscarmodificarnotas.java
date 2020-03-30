@@ -17,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 
 
@@ -42,7 +43,7 @@ public class frmbuscarmodificarnotas extends javax.swing.JFrame {
     DefaultTableModel modeloTabla = new DefaultTableModel();
     Object filas[] = new Object[5];
     DefaultTableModel modeloTabla2 = new DefaultTableModel();
-    Object filas2[] = new Object[5];
+    Object filas2[] = new Object[8];
     private int fila;
     frmmodificarnotas modificar = new frmmodificarnotas();
     public frmbuscarmodificarnotas() 
@@ -52,29 +53,20 @@ public class frmbuscarmodificarnotas extends javax.swing.JFrame {
         iniciotabla();
         dobleclick();
         setResizable(false);
+        
     }
 
     void configModelo() 
     {
-        modeloTabla.addColumn("Numero Nota");
-        modeloTabla.addColumn("Nombre");
-        modeloTabla.addColumn("Fecha");
-        modeloTabla.addColumn("Total");
-        modeloTabla.addColumn("Pagada");
-        tblbuscanotas.setModel(modeloTabla);
-
+         modeloTabla.addColumn("Cantidad");
+         modeloTabla.addColumn("Producto");
+         modeloTabla.addColumn("Precio");
+         modeloTabla.addColumn("Tipo");
+         modeloTabla.addColumn("Total");
+         tblbuscanotas.setModel(modeloTabla);
     }
     
-     void configModelo2() 
-        {
-        modeloTabla2.addColumn("Cantidad");
-        modeloTabla2.addColumn("Producto");
-        modeloTabla2.addColumn("Precio");
-        modeloTabla2.addColumn("Tipo");
-        modeloTabla2.addColumn("Total");
-        frmmodificarnotas.tblnotas.setModel(modeloTabla);
-
-        }
+    
         void iniciotabla()
         {
             String nombre="1";
@@ -82,6 +74,7 @@ public class frmbuscarmodificarnotas extends javax.swing.JFrame {
         {
             con = conexion.getConnection();
             stmt = con.createStatement();
+             
             rs = stmt.executeQuery(" select * from tblnotas where nostatus!='cancelada' and nostatus!='cancelada por actu';");
             while (rs.next()) 
             {     stmt = con.createStatement();
@@ -90,7 +83,7 @@ public class frmbuscarmodificarnotas extends javax.swing.JFrame {
                   {
                       nombre = rss.getString(1);                      
                   }
-                System.out.println(nombre);
+              
                 filas[0] = (rs.getString(1));
                 filas[1] = nombre;
                 String fecha = (rs.getString(3));
@@ -101,9 +94,7 @@ public class frmbuscarmodificarnotas extends javax.swing.JFrame {
                 filas[2] = dia+"/"+mes+"/"+ano;
                 filas[3] = (rs.getString(5));
                 filas[4] = (rs.getString(8));
-                modeloTabla.addRow(filas);
-                tblbuscanotas.setModel(modeloTabla);
-
+                modeloTabla.addRow(filas);     
             }
             con.close();
         } catch (SQLException ex) 
@@ -134,23 +125,34 @@ public class frmbuscarmodificarnotas extends javax.swing.JFrame {
         
         void enviardatos()
         {   
-        try 
+            try 
             {   
+                double totalcompra=0;
                 int lasid=0;
                 con = conexion.getConnection();
                 stmt = con.createStatement();
+                stmtt = con.createStatement();
+                
                 int idarticulo=0;
                 String nompreproducto;
                 String nombrecliente= tblbuscanotas.getValueAt(tblbuscanotas.getSelectedRow(),1).toString();
                 String idnota = tblbuscanotas.getValueAt(tblbuscanotas.getSelectedRow(), 0).toString();
-                rs = stmt.executeQuery("SELECT * from tblclientes where cliNombre='"+nombrecliente+"'");
-                configModelo2();
+                int c=0;
+                ResultSet rs11 = stmt.executeQuery("SELECT * from tblnotasmovimientos where id_nota='"+idnota+"'");              
+                if(rs11.next())
+                {   
+                    modificar.setVisible(true);
+                    rs = stmt.executeQuery("SELECT * from tblclientes where cliNombre='"+nombrecliente+"'");
+          
                 while(rs.next())
                 {
                     frmmodificarnotas.txtncliente.setText(rs.getString(1));
+                    frmmodificarnotas.lblnocliente.setText(rs.getString(1));
                     frmmodificarnotas.txtcliente.setText(rs.getString(2));
+                    frmmodificarnotas.lblcliente.setText(rs.getString(2));
                     frmmodificarnotas.txtdomicilio.setText(rs.getString(3));
                     frmmodificarnotas.txtcolonia.setText(rs.getString(4));
+                    frmmodificarnotas.lbldireccion.setText(rs.getString(3)+" "+rs.getString(4));
                    String tippago = rs.getString(5);
                 if("1".equals(tippago))
                 {    frmmodificarnotas.txttipopago.setText("Contado");
@@ -158,14 +160,11 @@ public class frmbuscarmodificarnotas extends javax.swing.JFrame {
                 }
                 else
                 {    frmmodificarnotas.txttipopago.setText("Credito");
-                     frmmodificarnotas.lbltipopago.setText("Credito");
+                     frmmodificarnotas.lbltipopago.setText("Credito");                    
                 } 
                     frmmodificarnotas.txtdiascredito.setText(rs.getString(6));
+                    frmmodificarnotas.lbldiascredito.setText(rs.getString(6)); 
                     frmmodificarnotas.txttelefono.setText(rs.getString(7));
-                    frmmodificarnotas.lblnocliente.setText(rs.getString(1));
-                    frmmodificarnotas.lblcliente.setText(rs.getString(2));
-                    frmmodificarnotas.lbldireccion.setText(rs.getString(3)+" "+rs.getString(4));                  
-                    frmmodificarnotas.lbldiascredito.setText(rs.getString(6));                 
                 }
                 ResultSet rss= stmt.executeQuery("select * from tblnotas where  id_Nota='"+idnota+"'");
                 while(rss.next())
@@ -176,16 +175,104 @@ public class frmbuscarmodificarnotas extends javax.swing.JFrame {
                      dias = rss.getString(3).substring(8,10);
                      fecha=dias+"/"+mes+"/"+anio;
                      frmmodificarnotas.txtfecha.setText(fecha);
-                     frmmodificarnotas.txtnonota.setText(rss.getString(1));                   
-                     frmmodificarnotas.lbltotal.setText(rss.getString(5));  
+                     frmmodificarnotas.lblfecha.setText(fecha);
+                     frmmodificarnotas.txtnonota.setText(rss.getString(1));  
+                     frmmodificarnotas.lblnumeronota.setText(rss.getString(1));   
                      aniopago =rss.getString(4).substring(0,4);
                      mespago =rss.getString(4).substring(5,7);
                      diaspago = rss.getString(4).substring(8,10);
                      fechapago=diaspago+"/"+mespago+"/"+aniopago;   
                      frmmodificarnotas.txtfechapago.setText(fechapago);
-                     frmmodificarnotas.lblnumeronota.setText(rss.getString(1));
-                     frmmodificarnotas.lblfecha.setText(fecha);
                      frmmodificarnotas.lblfechapago.setText(fechapago);
+                     frmmodificarnotas.lbltotal.setText(rss.getString(5));
+                    
+                    
+                }
+                 ResultSet rs1= stmt.executeQuery("select   tblnotasmovimientos.id_Articulo from "
+                         + "tblnotasmovimientos where  id_Nota='"+idnota+"'");
+                if(rs1.next())
+                {    
+                    idarticulo=rs1.getInt(1);
+                }
+                
+                ResultSet rs2= stmt.executeQuery("select tblarticulos.artNombre from "
+                        + "tblarticulos where  id_Articulo='"+idarticulo+"'");
+                if(rs2.next())
+                {
+                    nompreproducto=rs2.getString(1);
+                }
+                Double totalcompras =0.0,utilidad=0.0;
+                ResultSet rs3= stmt.executeQuery("select * from tblnotasmovimientos where  id_Nota='"+idnota+"'");
+                while(rs3.next())
+                {   
+                    totalcompra=rs3.getDouble(4)* rs3.getDouble(9);
+                    filas2[0] =   rs3.getString(4);
+                    filas2[1] =   rs3.getString(5);
+                    filas2[2] =   rs3.getString(7);
+                    filas2[3]=    rs3.getString(9);
+                    filas2[4]=    rs3.getString(6);
+                    filas2[5]=    rs3.getString(8);
+                    filas2[6]=    totalcompra;
+                    filas2[7]=    rs3.getString(10); 
+                    frmmodificarnotas.modeloTabla.addRow(filas2);  
+                    totalcompras= totalcompras+totalcompra;
+                    utilidad= utilidad+rs3.getDouble(10);
+                }
+                
+                
+                 frmmodificarnotas.lbltotalcompra.setText(totalcompras+"");
+                 frmmodificarnotas.lblutilidad.setText(utilidad+"");
+                con.close();
+                 cerrar();
+                }
+                else
+                {   
+                    
+                    modificar.setVisible(true);
+                    rs = stmt.executeQuery("SELECT * from tblclientes where cliNombre='"+nombrecliente+"'");
+          
+                while(rs.next())
+                {
+                    frmmodificarnotas.txtncliente.setText(rs.getString(1));
+                    frmmodificarnotas.lblnocliente.setText(rs.getString(1));
+                    frmmodificarnotas.txtcliente.setText(rs.getString(2));
+                    frmmodificarnotas.lblcliente.setText(rs.getString(2));
+                    frmmodificarnotas.txtdomicilio.setText(rs.getString(3));
+                    frmmodificarnotas.txtcolonia.setText(rs.getString(4));
+                    frmmodificarnotas.lbldireccion.setText(rs.getString(3)+" "+rs.getString(4));
+                   String tippago = rs.getString(5);
+                if("1".equals(tippago))
+                {    frmmodificarnotas.txttipopago.setText("Contado");
+                     frmmodificarnotas.lbltipopago.setText("Contado");
+                }
+                else
+                {    frmmodificarnotas.txttipopago.setText("Credito");
+                     frmmodificarnotas.lbltipopago.setText("Credito");                    
+                } 
+                    frmmodificarnotas.txtdiascredito.setText(rs.getString(6));
+                    frmmodificarnotas.lbldiascredito.setText(rs.getString(6)); 
+                    frmmodificarnotas.txttelefono.setText(rs.getString(7));
+                }
+                ResultSet rss= stmt.executeQuery("select * from tblnotas where  id_Nota='"+idnota+"'");
+                while(rss.next())
+                {    String fecha, fechapago,anio,aniopago,mes,mespago,dias,diaspago;   
+                    
+                     anio =rss.getString(3).substring(0,4);
+                     mes =rss.getString(3).substring(5,7);
+                     dias = rss.getString(3).substring(8,10);
+                     fecha=dias+"/"+mes+"/"+anio;
+                     frmmodificarnotas.txtfecha.setText(fecha);
+                     frmmodificarnotas.lblfecha.setText(fecha);
+                     frmmodificarnotas.txtnonota.setText(rss.getString(1));  
+                     frmmodificarnotas.lblnumeronota.setText(rss.getString(1));   
+                     aniopago =rss.getString(4).substring(0,4);
+                     mespago =rss.getString(4).substring(5,7);
+                     diaspago = rss.getString(4).substring(8,10);
+                     fechapago=diaspago+"/"+mespago+"/"+aniopago;   
+                     frmmodificarnotas.txtfechapago.setText(fechapago);
+                     frmmodificarnotas.lblfechapago.setText(fechapago);
+                     frmmodificarnotas.lbltotal.setText("0.0");
+                    
                 }
                  ResultSet rs1= stmt.executeQuery("select   tblnotasmovimientos.id_Articulo from "
                          + "tblnotasmovimientos where  id_Nota='"+idnota+"'");
@@ -203,23 +290,37 @@ public class frmbuscarmodificarnotas extends javax.swing.JFrame {
                 
                 ResultSet rs3= stmt.executeQuery("select * from tblnotasmovimientos where  id_Nota='"+idnota+"'");
                 while(rs3.next())
-                {   filas2[0] =   rs3.getString(4);
+                {   
+                    totalcompra=rs3.getDouble(4)* rs3.getDouble(9);
+                    filas2[0] =   rs3.getString(4);
                     filas2[1] =   rs3.getString(5);
                     filas2[2] =   rs3.getString(7);
-                    filas2[3]=    rs3.getString(6);
-                    filas2[4]=    rs3.getString(8);
-                    frmmodificarnotas.modeloTabla.addRow(filas2);
-                    frmmodificarnotas.tblnotas.setModel(frmmodificarnotas.modeloTabla);
+                    filas2[3]=    rs3.getString(9);
+                    filas2[4]=    rs3.getString(6);
+                    filas2[5]=    rs3.getString(8);
+                    filas2[6]=    totalcompra;
+                    filas2[7]=    rs3.getString(10); 
+                    frmmodificarnotas.modeloTabla.addRow(filas2);            
                 }
                 con.close();
+                 cerrar();
+
+                }
+                
+                
             }
             
               
-        catch (SQLException ex) 
+        catch (Exception ex) 
             {
                 JOptionPane.showMessageDialog(this, "Ocurrio el siguiente error:" + ex);
             }         
         }
+                     
+            
+            
+              
+        
         
         
           void dobleclick() 
@@ -233,9 +334,9 @@ public class frmbuscarmodificarnotas extends javax.swing.JFrame {
                         int row = tabla.rowAtPoint(point);
                         if (Mouse_evt.getClickCount() == 2)
                         { 
-                            modificar.setVisible(true);
+                       
                             enviardatos();
-                            cerrar();
+                            
 
                         }
                     }
@@ -257,7 +358,7 @@ public class frmbuscarmodificarnotas extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Reimprimir Notas");
+        setTitle("Modificar Notas");
 
         tblbuscanotas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -299,29 +400,31 @@ public class frmbuscarmodificarnotas extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(24, 24, 24)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
+                .addContainerGap(30, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtnombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 482, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 482, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 14, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(27, Short.MAX_VALUE))
         );

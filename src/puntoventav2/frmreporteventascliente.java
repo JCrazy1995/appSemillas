@@ -5,12 +5,15 @@
  */
 package puntoventav2;
 
+import com.itextpdf.text.log.Logger;
 import java.awt.Desktop;
 import java.awt.HeadlessException;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.System.Logger.Level;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,8 +23,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRDataSource;
@@ -40,13 +41,12 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
  *
  * @author Francisco Rafael
  */
-
-public class frmreporteventasgeneral extends javax.swing.JFrame {
+public class frmreporteventascliente extends javax.swing.JFrame {
 
     /**
-     * Creates new form frmreporteventas
+     * Creates new form frmreporteventasclientr
      */
-    DefaultTableModel modeloTabla = new DefaultTableModel();
+     DefaultTableModel modeloTabla = new DefaultTableModel();
     Object filas[] = new Object[5];
      private static Connection con = null;
     static ResultSet rs = null;
@@ -56,13 +56,14 @@ public class frmreporteventasgeneral extends javax.swing.JFrame {
       static String fecha2;
       Date  fecha;
         Date fechados;
-    public frmreporteventasgeneral()
+    public frmreporteventascliente() 
     {
         initComponents();
-        configModelo();
+        setResizable(false);
     }
-    public static void fecha()
-     {
+
+     public static void fecha()
+      {
  
     try {
         //jDateChooser el nombre la variable  del componente jdatecgooser
@@ -116,8 +117,6 @@ public class frmreporteventasgeneral extends javax.swing.JFrame {
         calendar.add(Calendar.DAY_OF_YEAR, dias);  // numero de días a añadir, o restar en caso de días<0
         return calendar.getTime(); // Devuelve el objeto Date con los nuevos días añadidos
         }
-        
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -133,20 +132,26 @@ public class frmreporteventasgeneral extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         date2 = new com.toedter.calendar.JDateChooser();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        txtcliente = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblprueba = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Reporte de Ventas por Cliente");
 
         jLabel1.setText("De la Fecha ");
 
         jLabel2.setText("a la Fecha");
 
-        jButton1.setText("Ver");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        txtcliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                txtclienteActionPerformed(evt);
+            }
+        });
+        txtcliente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtclienteKeyPressed(evt);
             }
         });
 
@@ -154,22 +159,22 @@ public class frmreporteventasgeneral extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(131, 131, 131)
+                        .addComponent(jLabel1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(119, 119, 119)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(99, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(date1, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
-                    .addComponent(date2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(62, 62, 62))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(131, 131, 131)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(119, 119, 119)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addContainerGap())
+                    .addComponent(date2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtcliente))
+                .addGap(99, 99, 99))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -178,17 +183,13 @@ public class frmreporteventasgeneral extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(date1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel2)
-                        .addGap(8, 8, 8)
-                        .addComponent(date2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
-                        .addComponent(jButton1)
-                        .addGap(46, 46, 46))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2)
+                .addGap(9, 9, 9)
+                .addComponent(date2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(txtcliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         tblprueba.setModel(new javax.swing.table.DefaultTableModel(
@@ -204,6 +205,13 @@ public class frmreporteventasgeneral extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblprueba);
 
+        jButton1.setText("Ver");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -211,32 +219,39 @@ public class frmreporteventasgeneral extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(49, 49, 49)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(30, Short.MAX_VALUE))
+                        .addGap(59, 59, 59)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(149, 149, 149)
+                        .addComponent(jButton1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(62, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -248,22 +263,29 @@ public class frmreporteventasgeneral extends javax.swing.JFrame {
         eliminar();
         String f = date1.getDateFormatString();
         System.out.println(f);
-        double total=0,abonos=0;
+        double total=0,abonos=0,utilidad=0;
         fecha();
-         Calendar calendario =Calendar.getInstance();
-         int dia1 =calendario.get(calendario.DATE);
-         int mes1 = calendario.get(calendario.MONTH)+1;
-         int ano1 = calendario.get(calendario.YEAR);
-          String myDate = dia1+"/"+mes1+"/"+ano1;
-          double utilidad=0;
-              System.out.println(myDate);      
-         try 
+        Calendar calendario =Calendar.getInstance();
+        int dia1 =calendario.get(calendario.DATE);
+        int mes1 = calendario.get(calendario.MONTH)+1;
+        int ano1 = calendario.get(calendario.YEAR);
+        String cliente=txtcliente.getText();
+        String myDate = dia1+"/"+mes1+"/"+ano1;
+        System.out.println(myDate);
+        System.out.println(date1.getDate());
+        if("".equals(txtcliente.getText())||"".equals(date1.getDate())||"".equals(date2.getDate()))
+        {
+            JOptionPane.showMessageDialog(null, "No dejar Campos Vacios");
+        }
+        else
+        {
+              try
         {
             con = conexion.getConnection();
             stmt = con.createStatement();
             rs = stmt.executeQuery(" select * from tblnotas where no_fechaCreada>='"+fecha1+"' and no_fechacreada<='"+fecha2+"' and nostatus!='cancelada' and nostatus!='cancelada por actu';");
-           while(rs.next())
-           {
+            while(rs.next())
+            {
                 System.out.println();
                 filas[0] = (rs.getString(1));
                 filas[1] = 2;
@@ -278,60 +300,106 @@ public class frmreporteventasgeneral extends javax.swing.JFrame {
                 tblprueba.setModel(modeloTabla);
                 abonos=abonos+rs.getDouble(6);
                 total=total+rs.getDouble(5);
-                utilidad=utilidad+rs.getDouble(10);
+                utilidad =utilidad+rs.getDouble(10);
             }
             con.close();
-        } 
-         catch (SQLException ex) 
+        }
+        catch (SQLException ex)
         {
             JOptionPane.showMessageDialog(this, "Ocurrio el siguiente error:" + ex);
-        }        
-          try 
-        {     
-             SimpleDateFormat formateador1 = new SimpleDateFormat("dd/MM/yy");
-             Date date = formateador1.parse(myDate);  
-             SimpleDateFormat formateador = new SimpleDateFormat("yyyy-mm-dd");
-             Date f1 = formateador.parse(fecha1);
-             Date f2 = formateador.parse(fecha2);
-           
-                HashMap param = new HashMap();
-                Connection con = conexion.getConnection();
-                JasperDesign jd = JRXmlLoader.load(new File("C:\\Users\\coron\\JaspersoftWorkspace\\Prueba").getAbsolutePath()+"\\Reporteventas2.jrxml");
-                JRDataSource vacio = new JREmptyDataSource(1); 
-                param.put("fecha1", formateador.format(sumarRestarDiasFecha(f1, 0)));          
-                param.put("fecha2", formateador.format(sumarRestarDiasFecha(f2, 0)));
-                param.put("total",total);
-                param.put("Fecha", formateador1.format(sumarRestarDiasFecha(date, 0)));
-                param.put("del", formateador1.format(sumarRestarDiasFecha(f1, 0)));          
-                param.put("al", formateador1.format(sumarRestarDiasFecha(f2, 0)));
-                param.put("abonos", abonos+"");
-                param.put("utilidad", utilidad+"");
-                JasperReport jr = JasperCompileManager.compileReport(jd);
-                JasperPrint jp = JasperFillManager.fillReport(jr,param,con);
-                OutputStream output = new FileOutputStream(new File("C:\\Users\\coron\\Desktop\\prueba\\original.pdf")); 
-                JasperExportManager.exportReportToPdfStream(jp, output); 
-                output.flush();
-                output.close();
-        } 
-        catch (JRException | IOException ex) 
-        {
-            Logger.getLogger(frmnotas.class.getName()).log(Level.SEVERE, null, ex);
         }
-          catch (ParseException ex) 
-          {
-            Logger.getLogger(frmreporteventasgeneral.class.getName()).log(Level.SEVERE, null, ex);
-          } 
-          try 
-              {
-                 File path = new  File("C:\\Users\\coron\\Desktop\\prueba\\original.pdf");
-                 Desktop.getDesktop().open(path);
-              }
-              catch (IOException ex)
-              {
-                ex.printStackTrace();
-              }
-          
+        try
+        {
+            SimpleDateFormat formateador1 = new SimpleDateFormat("dd/MM/yy");
+            Date date = formateador1.parse(myDate);
+            SimpleDateFormat formateador = new SimpleDateFormat("yyyy-mm-dd");
+            Date f1 = formateador.parse(fecha1);
+            Date f2 = formateador.parse(fecha2);
+
+            HashMap param = new HashMap();
+            Connection con = conexion.getConnection();
+            JasperDesign jd = JRXmlLoader.load(new File("C:\\Users\\coron\\JaspersoftWorkspace\\Prueba").getAbsolutePath()+"\\Reporventascliente2.jrxml");
+            JRDataSource vacio = new JREmptyDataSource(1);
+            param.put("fecha1", formateador.format(sumarRestarDiasFecha(f1, 0)));
+            param.put("fecha2", formateador.format(sumarRestarDiasFecha(f2, 0)));
+            param.put("total",total);
+            param.put("Fecha", formateador1.format(sumarRestarDiasFecha(date, 0)));
+            param.put("del", formateador1.format(sumarRestarDiasFecha(f1, 0)));
+            param.put("al", formateador1.format(sumarRestarDiasFecha(f2, 0)));
+            param.put("abonos", abonos+"");
+            param.put("cliente", cliente);
+            param.put("utilidad", utilidad+"");
+            JasperReport jr = JasperCompileManager.compileReport(jd);
+            JasperPrint jp = JasperFillManager.fillReport(jr,param,con);
+            OutputStream output = new FileOutputStream(new File("C:\\Users\\coron\\Desktop\\prueba\\original1.pdf"));
+            JasperExportManager.exportReportToPdfStream(jp, output);
+            output.flush();
+            output.close();
+        }
+        catch (JRException | IOException | ParseException ex)
+        {
+           JOptionPane.showMessageDialog(null, ex);
+        }
+        try
+        {
+            File path = new  File("C:\\Users\\coron\\Desktop\\prueba\\original1.pdf");
+            Desktop.getDesktop().open(path);
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+        }
+        
+      
+
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtclienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtclienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtclienteActionPerformed
+
+    private void txtclienteKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtclienteKeyPressed
+        // TODO add your handling code here:
+          int c=0;
+        
+         if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+         {
+          try
+          {
+          con=conexion.getConnection();
+          stmt=con.createStatement();
+          rs=stmt.executeQuery("select * from tblclientes where cliNombre like '"+txtcliente.getText()+"%'");
+           while(rs.next())
+            {                        
+                c++;
+            }
+           if (c>1|| c==0)
+           {
+               JOptionPane.showMessageDialog(null, "Favor de ingresar mas datos");
+              
+           }
+           else
+           {
+               rs=stmt.executeQuery("select * from tblclientes where  cliNombre  like '"+txtcliente.getText()+"%'");
+           while(rs.next())
+            {                        
+                txtcliente.setText(rs.getString(2));
+               
+
+            }
+               
+                
+           }
+            con.close();
+          }
+          catch(SQLException ex)
+          {
+              JOptionPane.showMessageDialog(null, ex);
+          } 
+                                 
+    }
+    }//GEN-LAST:event_txtclienteKeyPressed
 
     /**
      * @param args the command line arguments
@@ -350,13 +418,13 @@ public class frmreporteventasgeneral extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmreporteventasgeneral.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmreporteventascliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmreporteventasgeneral.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmreporteventascliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmreporteventasgeneral.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmreporteventascliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmreporteventasgeneral.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmreporteventascliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -364,7 +432,7 @@ public class frmreporteventasgeneral extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmreporteventasgeneral().setVisible(true);
+                new frmreporteventascliente().setVisible(true);
             }
         });
     }
@@ -379,5 +447,6 @@ public class frmreporteventasgeneral extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblprueba;
+    private javax.swing.JTextField txtcliente;
     // End of variables declaration//GEN-END:variables
 }
