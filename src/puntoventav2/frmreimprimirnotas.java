@@ -124,6 +124,7 @@ public class frmreimprimirnotas extends javax.swing.JFrame {
         btnreimprimir = new javax.swing.JButton();
         txtnombre = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        chbCopia = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Reimprimir Notas");
@@ -168,6 +169,8 @@ public class frmreimprimirnotas extends javax.swing.JFrame {
 
         jLabel1.setText("Nombre:");
 
+        chbCopia.setText("Copia");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -175,18 +178,20 @@ public class frmreimprimirnotas extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(37, 37, 37)
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
                         .addComponent(txtnombre, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(chbCopia)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnabrir)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnreimprimir))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(27, Short.MAX_VALUE))
+                        .addComponent(btnreimprimir)))
+                .addContainerGap(61, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -196,7 +201,8 @@ public class frmreimprimirnotas extends javax.swing.JFrame {
                     .addComponent(btnabrir)
                     .addComponent(btnreimprimir)
                     .addComponent(txtnombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                    .addComponent(jLabel1)
+                    .addComponent(chbCopia))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(28, Short.MAX_VALUE))
@@ -226,24 +232,26 @@ public class frmreimprimirnotas extends javax.swing.JFrame {
 
     private void btnabrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnabrirActionPerformed
         // TODO add your handling code here:+
-         int filavalor;
-         String cliente,numero;
- 
-       try 
-              { 
-                 filavalor = tblbuscanotas.getSelectedRow();
-                 cliente = tblbuscanotas.getValueAt(filavalor, 1).toString();
-                 numero = tblbuscanotas.getValueAt(filavalor, 0).toString();
-                 File path = new  File("C:\\Users\\coron\\Desktop\\prueba\\"
-                        +cliente+""+"Nota N° "+""+numero+".pdf");
-                 Desktop.getDesktop().open(path);
-              }
-              
-              catch (IOException ex)
-              {
-                ex.printStackTrace();
-               
-              }
+        int filavalor;
+        String cliente,numero;
+        try {
+            filavalor = tblbuscanotas.getSelectedRow();
+            cliente = tblbuscanotas.getValueAt(filavalor, 1).toString();
+            numero = tblbuscanotas.getValueAt(filavalor, 0).toString();
+                if(chbCopia.isSelected()){
+                    
+                    File path = new  File("C:\\Users\\coron\\Desktop\\prueba\\"
+                            +cliente+""+"Nota N° "+""+numero+"copia.pdf");
+                     Desktop.getDesktop().open(path);
+                }
+                else{
+                    File path = new  File("C:\\Users\\coron\\Desktop\\prueba\\"
+                        +cliente+""+"Nota N° "+""+numero+"original.pdf");
+                    Desktop.getDesktop().open(path);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "No existe la nota");
+        }
         
     }//GEN-LAST:event_btnabrirActionPerformed
 
@@ -251,21 +259,24 @@ public class frmreimprimirnotas extends javax.swing.JFrame {
         // TODO add your handling code here:
           int filavalor;
          String cliente,numero;
-         
-        try 
-        {
-            filavalor = tblbuscanotas.getSelectedRow();
+         try {
+             filavalor = tblbuscanotas.getSelectedRow();
             cliente = tblbuscanotas.getValueAt(filavalor, 1).toString();
             numero = tblbuscanotas.getValueAt(filavalor, 0).toString();
-            File fileToPrint = new File("C:\\Users\\coron\\Desktop\\prueba\\"
-                    +cliente+""+"Nota N° "+""+numero+".pdf");
+             if (chbCopia.isSelected()) {
+                 File fileToPrint = new File("C:\\Users\\coron\\Desktop\\prueba\\"
+                    +cliente+""+"Nota N° "+""+numero+"copia.pdf");
             Desktop.getDesktop().print(fileToPrint);
-        } 
-        catch (IOException ex) 
-        {
-            Logger.getLogger(frmbuscaclientes.class.getName()).log(Level.SEVERE, null, ex);
+             } else {
+                    File fileToPrint = new File("C:\\Users\\coron\\Desktop\\prueba\\"
+                        +cliente+""+"Nota N° "+""+numero+"original.pdf");
+                    Desktop.getDesktop().print(fileToPrint);
+             }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "No existe la nota");
         }
-        
+         
+       
         
     }//GEN-LAST:event_btnreimprimirActionPerformed
  TableRowSorter trs; 
@@ -321,6 +332,7 @@ public class frmreimprimirnotas extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnabrir;
     private javax.swing.JButton btnreimprimir;
+    private javax.swing.JCheckBox chbCopia;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

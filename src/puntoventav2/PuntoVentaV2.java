@@ -5,7 +5,6 @@
  */
 package puntoventav2;
 
-import java.awt.EventQueue;
 
 
 /**
@@ -18,10 +17,7 @@ public class PuntoVentaV2 {
      * @param args the command line arguments
      */
   
-    public static void main(String[] args) throws ClassNotFoundException {
-        conectar conexion = new conectar();
-        conexion.getConeConnection();
-
+    public static void main(String[] args) {
         frmPrincipal principal = new frmPrincipal();
         principal.setVisible(true);
         principal.setExtendedState(frmPrincipal.MAXIMIZED_BOTH);

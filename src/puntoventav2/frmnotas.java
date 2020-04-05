@@ -11,8 +11,8 @@ package puntoventav2;
  */
 
 import traducir.Traducir;
-import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.Desktop;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
@@ -66,16 +66,10 @@ public class frmnotas extends javax.swing.JFrame {
     public frmnotas() 
     {
         initComponents();
-        txttotal.setEnabled(false);
-        txttotalcompra.setEnabled(false);
         this.setResizable(false);
         this.setSize(new Dimension(760,700));
         txtcliente.requestFocus();
         configModelo();
-        
-       
-       
-        
     }
         
          void configModelo() 
@@ -249,6 +243,7 @@ public class frmnotas extends javax.swing.JFrame {
         lbltotalcompra = new javax.swing.JLabel();
         lblutilidad = new javax.swing.JLabel();
         jLabel29 = new javax.swing.JLabel();
+        lblProductosTotal = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -290,6 +285,8 @@ public class frmnotas extends javax.swing.JFrame {
 
         jLabel5.setText("Total:");
 
+        txttotal.setEditable(false);
+
         jLabel26.setText("Precio Compra:");
 
         txtpreciocompra.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -302,6 +299,8 @@ public class frmnotas extends javax.swing.JFrame {
         });
 
         jLabel27.setText("Total Compra:");
+
+        txttotalcompra.setEditable(false);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -498,6 +497,7 @@ public class frmnotas extends javax.swing.JFrame {
 
         jLabel7.setText("N° Nota");
 
+        txtnonota.setEditable(false);
         txtnonota.setText("1");
 
         txtdomicilio.setEditable(false);
@@ -737,6 +737,7 @@ public class frmnotas extends javax.swing.JFrame {
         });
 
         btnimprimir.setText("Imprimir");
+        btnimprimir.setEnabled(false);
         btnimprimir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnimprimirActionPerformed(evt);
@@ -871,7 +872,11 @@ public class frmnotas extends javax.swing.JFrame {
                                         .addGap(40, 40, 40)
                                         .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(18, 18, 18)
-                                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel6Layout.createSequentialGroup()
+                                        .addGap(132, 132, 132)
+                                        .addComponent(lblProductosTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addGap(283, 283, 283))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
@@ -893,8 +898,13 @@ public class frmnotas extends javax.swing.JFrame {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel16)
-                .addGap(29, 29, 29)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel16)
+                        .addGap(29, 29, 29))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                        .addComponent(lblProductosTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)))
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1148,9 +1158,11 @@ public class frmnotas extends javax.swing.JFrame {
     }//GEN-LAST:event_txtclienteActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        
-      
-        // TODO add your handling code here:
+        int row;
+        if(tblnotas.getRowCount()==36){
+            JOptionPane.showMessageDialog(null, "Máximo de productos por nota","Advertencia",2);
+            return;
+        }
         DecimalFormat df = new DecimalFormat("#.00");
         if("".equals(txtcliente.getText()) || "".equals(txtcantidad.getText()))
         {
@@ -1169,7 +1181,7 @@ public class frmnotas extends javax.swing.JFrame {
             lblnumeronota.setText(txtnonota.getText());
             Double total2 = Double.parseDouble(txttotal.getText());
             Double totalcompra=Double.parseDouble(txttotalcompra.getText()),totalenviar2 =0.0;
-            Double utilidad=0.0;
+            Double utilidad;
             
             
             filas[0] = txtcantidad.getText();         
@@ -1189,37 +1201,11 @@ public class frmnotas extends javax.swing.JFrame {
             lbltotal.setText(df.format(totalenviar)+"");
             lbltotalcompra.setText(df.format(totalenviar2));
             utilidad =totalenviar-totalenviar2;
-            lblutilidad.setText(utilidad+"");
+            lblutilidad.setText(df.format(utilidad));
             limpiar();
-            
+            row=tblnotas.getRowCount();
+            lblProductosTotal.setText(row+"");
         }
-        
-               
-          
-//         try {
-//            Document document = new Document();
-//            try {
-//                PdfWriter.getInstance(document, new FileOutputStream("C:\\Users\\coron\\Desktop\\prueba\\"
-//                        +txtcliente.getText()+""+"Nota N° "+""+txtnonota.getText()+".pdf"));
-//            } catch (FileNotFoundException fileNotFoundException) {
-//                System.out.println("No such file was found to generate the PDF "
-//                        + "(No se encontró el fichero para generar el pdf)" + fileNotFoundException);
-//            }
-//          
-//            document.close();
-//            System.out.println("Your PDF file has been generated!(¡Se ha generado tu hoja PDF!");
-//        } catch (DocumentException documentException) {
-//            System.out.println("The file not exists (Se ha producido un error al generar un documento): " + documentException);
-//        }
-//                
-                
-           
-            
-//       txtcantidad.setText("");
-//       txtproducto.setText("");
-//       txtprecio.setText("");
-//       cmbtipo.setSelectedIndex(0);
-//       txttotal.setText("");
 
     }//GEN-LAST:event_btnAgregarActionPerformed
 
@@ -1231,8 +1217,7 @@ public class frmnotas extends javax.swing.JFrame {
         try 
         {   HashMap param = new HashMap();
             Connection con = conexion.getConnection();
-            JasperDesign jd = JRXmlLoader.load(new File("C:\\Users\\coron\\JaspersoftWorkspace\\Prueba").getAbsolutePath()+"\\pruebaimpresion.jrxml");
-            JRDataSource vacio = new JREmptyDataSource(1); 
+            JasperDesign jd = JRXmlLoader.load(new File("C:\\Users\\coron\\JaspersoftWorkspace\\Prueba").getAbsolutePath()+"\\pruebaimpresion.jrxml"); 
             param.put("nonota", txtnonota.getText());
             param.put("total",lbltotal.getText());
             param.put("codigocliente", lblnocliente.getText());
@@ -1262,7 +1247,6 @@ public class frmnotas extends javax.swing.JFrame {
         {   HashMap param = new HashMap();
             Connection con = conexion.getConnection();
             JasperDesign jd = JRXmlLoader.load(new File("C:\\Users\\coron\\JaspersoftWorkspace\\Prueba").getAbsolutePath()+"\\pruebaimpresioncopia.jrxml");
-            JRDataSource vacio = new JREmptyDataSource(1); 
             param.put("nonota", txtnonota.getText());
             param.put("total",lbltotal.getText());
             param.put("codigocliente", lblnocliente.getText());
@@ -1285,56 +1269,20 @@ public class frmnotas extends javax.swing.JFrame {
         {
             Logger.getLogger(frmnotas.class.getName()).log(Level.SEVERE, null, ex);
         }
-      
-            //Original
-              try 
-              {
-                 File path = new  File("C:\\Users\\coron\\Desktop\\prueba\\"
-                        +txtcliente.getText()+""+"Nota N° "+""+txtnonota.getText()+"original.pdf");
-                 Desktop.getDesktop().open(path);
-              }
-              catch (IOException ex)
-              {
-                ex.printStackTrace();
-              }
-              
-              //Copia
-               try 
-              {
-                 File path = new  File("C:\\Users\\coron\\Desktop\\prueba\\"
-                        +txtcliente.getText()+""+"Nota N° "+""+txtnonota.getText()+"copia.pdf");
-                 Desktop.getDesktop().open(path);
-              }
-              catch (IOException ex)
-              {
-                ex.printStackTrace();
-              } 
-//              File fileToPrint = new  File("C:\\Users\\coron\\Desktop\\prueba\\"
-//                        +txtcliente.getText()+""+"Nota N° "+""+txtnonota.getText()+"original.pdf");
-//        try 
-//        {
-//            Desktop.getDesktop().print(fileToPrint);
-//        } 
-//        catch (IOException ex) 
-//        {
-//            Logger.getLogger(frmbuscaclientes.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        
-//         File fileToPrint2 = new  File("C:\\Users\\coron\\Desktop\\prueba\\"
-//                        +txtcliente.getText()+""+"Nota N° "+""+txtnonota.getText()+"copia.pdf");
-//        try 
-//        {
-//            Desktop.getDesktop().print(fileToPrint2);
-//        } 
-//        catch (IOException ex) 
-//        {
-//            Logger.getLogger(frmbuscaclientes.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        
-//        
         
-        
-//       
+        File fileToPrint = new  File("C:\\Users\\coron\\Desktop\\prueba\\"
+                +txtcliente.getText()+""+"Nota N° "+""+txtnonota.getText()+"original.pdf");
+        File fileToPrint2 = new  File("C:\\Users\\coron\\Desktop\\prueba\\"
+                +txtcliente.getText()+""+"Nota N° "+""+txtnonota.getText()+"copia.pdf");
+        try 
+        {
+            Desktop.getDesktop().print(fileToPrint);
+            Desktop.getDesktop().print(fileToPrint2);
+        } 
+        catch (IOException ex) 
+        {
+            JOptionPane.showMessageDialog(null, ex,"Error",JOptionPane.ERROR_MESSAGE);
+        }  
     }//GEN-LAST:event_btnimprimirActionPerformed
 
     private void btneliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneliminarActionPerformed
@@ -1351,10 +1299,6 @@ public class frmnotas extends javax.swing.JFrame {
         lbltotal.setText(totalfinal+"");
         modeloTabla.removeRow(fila);
         
-        
-        System.out.print(totaln);
-        
-    
     }//GEN-LAST:event_btneliminarActionPerformed
 
     private void tblnotasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblnotasMouseClicked
@@ -1365,6 +1309,10 @@ public class frmnotas extends javax.swing.JFrame {
     private void btnguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardarActionPerformed
         // TODO add your handling code here:
          int filas = modeloTabla.getRowCount();
+         if (filas==0) {
+            JOptionPane.showMessageDialog(null, "No hay articulos en la nota","Error",JOptionPane.ERROR_MESSAGE);
+            return;
+        }
          String tipo,fechanota,fechapago,nombre,producto;
          double cantidad,precio,totalproducto,totalnota,preciocompra,totalcompra,utilidad;
          con=conexion.getConnection();
@@ -1422,7 +1370,6 @@ public class frmnotas extends javax.swing.JFrame {
                 {
 
                 }
-                System.out.println(lasid);
                 try 
                 {
                     for (int i = 0;i<filas;i++)
@@ -1454,7 +1401,6 @@ public class frmnotas extends javax.swing.JFrame {
                             psInsert1.setDouble(1,totalinventario);
                             psInsert1.setInt(2, idarticulo);
                             psInsert1.execute();
-                            System.out.println(totalinventario);
                        
                        PreparedStatement psInsert= con.prepareStatement("INSERT INTO tblnotasmovimientos"
                        + "( id_Nota,id_Articulo, movCantidad, movNombre,movTipo,movPrecio,movTotal,movPrecioCompra,movUtilidad)"
@@ -1476,9 +1422,9 @@ public class frmnotas extends javax.swing.JFrame {
                catch (SQLException e) 
                {
                    JOptionPane.showMessageDialog(null, e);
-               }
-                int filass = modeloTabla.getRowCount();  
-                   btnguardar.setEnabled(false);
+               }  
+                btnguardar.setEnabled(false);
+                btnimprimir.setEnabled(true);
         }
        
         
@@ -1488,6 +1434,7 @@ public class frmnotas extends javax.swing.JFrame {
         // TODO add your handling code here:
         btnguardar.setEnabled(true);
         eliminar();
+        btnimprimir.setEnabled(false);
     }//GEN-LAST:event_btnnuevoActionPerformed
 
     private void txtpreciocompraKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtpreciocompraKeyPressed
@@ -1605,6 +1552,7 @@ public class frmnotas extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel lblProductosTotal;
     private javax.swing.JLabel lblcliente;
     private javax.swing.JLabel lbldiascredito;
     private javax.swing.JLabel lbldireccion;

@@ -5,18 +5,12 @@
  */
 package puntoventav2;
 
-import java.awt.Point;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel; 
 
 /**
@@ -296,10 +290,8 @@ public class frmarticulos extends javax.swing.JFrame {
         }
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // TODO add your handling code here:
-         conectar conexion = new conectar();
+         
          con = conexion.getConnection();
-         String numero = lblarticulo.getText();
-         int  numeroarticulo =Integer.parseInt(numero);
          String nombre= txtnombre.getText();
          float precio = Float.parseFloat(txtPrecio.getText());
          float preciocompra=Float.parseFloat(txtpreciocompra.getText());
@@ -387,33 +379,34 @@ public class frmarticulos extends javax.swing.JFrame {
         //Se va actualizar
         else
         {
-            int noarticulos = Integer.parseInt(lblarticulo.getText());
-            String nombre = txtnombre.getText();
-            float precio = Float.parseFloat(txtPrecio.getText());
-            String tipo = cmbtipo.getSelectedItem().toString();
-            float preciocompra= Float.parseFloat(txtpreciocompra.getText());
-            try {
+          int noarticulos = Integer.parseInt(lblarticulo.getText());
+          String nombre = txtnombre.getText();
+          float precio = Float.parseFloat(txtPrecio.getText());
+          String tipo = cmbtipo.getSelectedItem().toString();
+          float preciocompra= Float.parseFloat(txtpreciocompra.getText());
+            try 
+            {
             
-            con = conexion.getConnection();
-           stmt = con.createStatement();
-           PreparedStatement psInsert= con.prepareStatement("update tblarticulos set artNombre=?,artPrecio=?,"
-                   + "artTipo=?,artPrecioCompra=? where id_Articulo=?");
-          
-          psInsert.setString(1, nombre);
-          psInsert.setFloat(2, precio);
-          psInsert.setString(3, tipo);
-          psInsert.setFloat(4, preciocompra);
-          psInsert.setInt( 5, noarticulos);
-          psInsert.executeUpdate();
-          psInsert.close();
-           
-          JOptionPane.showMessageDialog(null, "Se ingreso correctamente, gracias");
+             con = conexion.getConnection();
+             stmt = con.createStatement();
+             PreparedStatement psInsert= con.prepareStatement("update tblarticulos set artNombre=?,artPrecio=?,"
+                       + "artTipo=?,artPrecioCompra=? where id_Articulo=?");
+
+              psInsert.setString(1, nombre);
+              psInsert.setFloat(2, precio);
+              psInsert.setString(3, tipo);
+              psInsert.setFloat(4, preciocompra);
+              psInsert.setInt( 5, noarticulos);
+              psInsert.executeUpdate();
+              psInsert.close();
+
+              JOptionPane.showMessageDialog(null, "Se ingreso correctamente, gracias");
             
-        } 
-        catch (SQLException e) 
-        {
-            JOptionPane.showMessageDialog(null, e);
-        }
+            } 
+            catch (SQLException e) 
+            {
+                JOptionPane.showMessageDialog(null, e);
+            }
             
         }
         limpiarCampo();

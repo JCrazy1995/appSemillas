@@ -1,21 +1,14 @@
 package puntoventav2;
 
-import java.awt.Desktop;
-import java.awt.Point;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
 
@@ -57,6 +50,7 @@ public class frmbuscacancelarnotas extends javax.swing.JFrame {
 
     void configModelo() 
     {
+        modeloTabla.setColumnCount(0);
         modeloTabla.addColumn("Numero Nota");
         modeloTabla.addColumn("Nombre");
         modeloTabla.addColumn("Fecha");
@@ -66,16 +60,7 @@ public class frmbuscacancelarnotas extends javax.swing.JFrame {
 
     }
     
-     void configModelo2() 
-        {
-        modeloTabla2.addColumn("Cantidad");
-        modeloTabla2.addColumn("Producto");
-        modeloTabla2.addColumn("Precio");
-        modeloTabla2.addColumn("Tipo");
-        modeloTabla2.addColumn("Total");
-        frmcancelarnotas.tblnotas.setModel(modeloTabla);
-
-        }
+    
         void iniciotabla()
         {
             String nombre="1";
@@ -137,22 +122,21 @@ public class frmbuscacancelarnotas extends javax.swing.JFrame {
         {   
         try 
             {   
-                int lasid=0;
-                con = conexion.getConnection();
-                stmt = con.createStatement();
-                stmtt = con.createStatement();
-                
-                int idarticulo=0;
-                String nompreproducto;
-                String nombrecliente= tblbuscanotas.getValueAt(tblbuscanotas.getSelectedRow(),1).toString();
-                String idnota = tblbuscanotas.getValueAt(tblbuscanotas.getSelectedRow(), 0).toString();
-                int c=0;
-                ResultSet rs11 = stmt.executeQuery("SELECT * from tblnotasmovimientos where id_nota='"+idnota+"'");              
-                if(rs11.next())
+            int lasid=0;
+            con = conexion.getConnection();
+            stmt = con.createStatement();
+            stmtt = con.createStatement();
+
+            int idarticulo = 0;
+            String nompreproducto;
+            String nombrecliente= tblbuscanotas.getValueAt(tblbuscanotas.getSelectedRow(),1).toString();
+            String idnota = tblbuscanotas.getValueAt(tblbuscanotas.getSelectedRow(), 0).toString();
+            ResultSet rs11 = stmt.executeQuery("SELECT * from tblnotasmovimientos where id_nota='"+idnota+"'");              
+            if(rs11.next())
                 {
-                    cancelar.setVisible(true);
-                    rs = stmt.executeQuery("SELECT * from tblclientes where cliNombre='"+nombrecliente+"'");
-                configModelo2();
+                cancelar.setVisible(true);
+                rs = stmt.executeQuery("SELECT * from tblclientes where cliNombre='"+nombrecliente+"'");
+              
                 while(rs.next())
                 {
                     frmcancelarnotas.txtncliente.setText(rs.getString(1));
@@ -160,50 +144,50 @@ public class frmbuscacancelarnotas extends javax.swing.JFrame {
                     frmcancelarnotas.txtdomicilio.setText(rs.getString(3));
                     frmcancelarnotas.txtcolonia.setText(rs.getString(4));
                    String tippago = rs.getString(5);
-                if("1".equals(tippago))
-                {    frmcancelarnotas.txttipopago.setText("Contado");
-                    
-                }
-                else
-                {    frmcancelarnotas.txttipopago.setText("Credito");
-                    ;
-                } 
+                   if("1".equals(tippago))
+                        {    
+                         frmcancelarnotas.txttipopago.setText("Contado");
+                        }
+                    else
+                        {    
+                         frmcancelarnotas.txttipopago.setText("Credito");
+                        } 
                     frmcancelarnotas.txtdiascredito.setText(rs.getString(6));
                     frmcancelarnotas.txttelefono.setText(rs.getString(7));
-                   
+
                 }
                 ResultSet rss= stmt.executeQuery("select * from tblnotas where  id_Nota='"+idnota+"'");
                 while(rss.next())
                 {    String fecha, fechapago,anio,aniopago,mes,mespago,dias,diaspago;   
-                    
+
                      anio =rss.getString(3).substring(0,4);
                      mes =rss.getString(3).substring(5,7);
                      dias = rss.getString(3).substring(8,10);
                      fecha=dias+"/"+mes+"/"+anio;
                      frmcancelarnotas.txtfecha.setText(fecha);
                      frmcancelarnotas.txtnonota.setText(rss.getString(1));                   
-                       
+
                      aniopago =rss.getString(4).substring(0,4);
                      mespago =rss.getString(4).substring(5,7);
                      diaspago = rss.getString(4).substring(8,10);
                      fechapago=diaspago+"/"+mespago+"/"+aniopago;   
                      frmcancelarnotas.txtfechapago.setText(fechapago);
-                    
+
                 }
-                 ResultSet rs1= stmt.executeQuery("select   tblnotasmovimientos.id_Articulo from "
+                ResultSet rs1= stmt.executeQuery("select   tblnotasmovimientos.id_Articulo from "
                          + "tblnotasmovimientos where  id_Nota='"+idnota+"'");
                 if(rs1.next())
-                {    
+                    {    
                     idarticulo=rs1.getInt(1);
-                }
-                
+                    }
+
                 ResultSet rs2= stmt.executeQuery("select tblarticulos.artNombre from "
                         + "tblarticulos where  id_Articulo='"+idarticulo+"'");
                 if(rs2.next())
-                {
+                    {
                     nompreproducto=rs2.getString(1);
-                }
-                
+                    }
+
                 ResultSet rs3= stmt.executeQuery("select * from tblnotasmovimientos where  id_Nota='"+idnota+"'");
                 while(rs3.next())
                 {   filas2[0] =   rs3.getString(4);
@@ -216,75 +200,11 @@ public class frmbuscacancelarnotas extends javax.swing.JFrame {
                 }
                 con.close();
                  cerrar();   
-                }
-                else
-                {
-                    
-                    
-                      cancelar.setVisible(true);
-                    rs = stmt.executeQuery("SELECT * from tblclientes where cliNombre='"+nombrecliente+"'");
-                configModelo2();
-                while(rs.next())
-                {
-                    frmcancelarnotas.txtncliente.setText(rs.getString(1));
-                    frmcancelarnotas.txtcliente.setText(rs.getString(2));
-                    frmcancelarnotas.txtdomicilio.setText(rs.getString(3));
-                    frmcancelarnotas.txtcolonia.setText(rs.getString(4));
-                   String tippago = rs.getString(5);
-                if("1".equals(tippago))
-                {    frmcancelarnotas.txttipopago.setText("Contado");
-                    
-                }
-                else
-                {    frmcancelarnotas.txttipopago.setText("Credito");
-                    ;
-                } 
-                    frmcancelarnotas.txtdiascredito.setText(rs.getString(6));
-                    frmcancelarnotas.txttelefono.setText(rs.getString(7));
-                   
-                }
-                ResultSet rss= stmt.executeQuery("select * from tblnotas where  id_Nota='"+idnota+"'");
-                while(rss.next())
-                {    String fecha, fechapago,anio,aniopago,mes,mespago,dias,diaspago;   
-                    
-                     anio =rss.getString(3).substring(0,4);
-                     mes =rss.getString(3).substring(5,7);
-                     dias = rss.getString(3).substring(8,10);
-                     fecha=dias+"/"+mes+"/"+anio;
-                     frmcancelarnotas.txtfecha.setText(fecha);
-                     frmcancelarnotas.txtnonota.setText(rss.getString(1));                   
-                       
-                     aniopago =rss.getString(4).substring(0,4);
-                     mespago =rss.getString(4).substring(5,7);
-                     diaspago = rss.getString(4).substring(8,10);
-                     fechapago=diaspago+"/"+mespago+"/"+aniopago;   
-                     frmcancelarnotas.txtfechapago.setText(fechapago);
-                    
-                }
-                 ResultSet rs1= stmt.executeQuery("select   tblnotasmovimientos.id_Articulo from "
-                         + "tblnotasmovimientos where  id_Nota='"+idnota+"'");
-                if(rs1.next())
-                {    
-                    idarticulo=rs1.getInt(1);
-                }
-                
-                ResultSet rs2= stmt.executeQuery("select tblarticulos.artNombre from "
-                        + "tblarticulos where  id_Articulo='"+idarticulo+"'");
-                if(rs2.next())
-                {
-                    nompreproducto=rs2.getString(1);
-                }
-                
-                    frmcancelarnotas.tblnotas.setModel(frmcancelarnotas.modeloTabla);
-                    
-                  //  JOptionPane.showMessageDialog(null, "La nota no Tiene Movimientos", "Error", 2);
-                }
-                
-                
             }
+    }
             
               
-        catch (Exception ex) 
+        catch (SQLException ex) 
             {
                 JOptionPane.showMessageDialog(this, "Ocurrio el siguiente error:" + ex);
             }         
@@ -297,9 +217,7 @@ public class frmbuscacancelarnotas extends javax.swing.JFrame {
                 {
                     @Override
                     public void mousePressed(MouseEvent Mouse_evt) 
-                    {  JTable tabla = (JTable) Mouse_evt.getSource();
-                        Point point = Mouse_evt.getPoint();
-                        int row = tabla.rowAtPoint(point);
+                    {  
                         if (Mouse_evt.getClickCount() == 2)
                         { 
                             

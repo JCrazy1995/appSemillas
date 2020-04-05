@@ -25,7 +25,7 @@ import javax.swing.table.TableRowSorter;
  *
  * @author Francisco Rafael
  */
-public class frmbuscaproveedores extends javax.swing.JFrame {
+public final class frmbuscaproveedores extends javax.swing.JFrame {
 
     /**
      * Creates new form frmbuscaproveedores
@@ -110,10 +110,9 @@ public class frmbuscaproveedores extends javax.swing.JFrame {
       void  dobleclick()
     {
          tblbuscaproveedores.addMouseListener(new MouseAdapter() {
+           @Override
            public void mousePressed(MouseEvent Mouse_evt){
-               JTable tabla = (JTable) Mouse_evt.getSource();
-               Point point = Mouse_evt.getPoint();
-               int row = tabla.rowAtPoint(point);
+               
                if (Mouse_evt.getClickCount()==2) 
                {
                    frmproveedores.lblnoprovedor.setText(tblbuscaproveedores.getValueAt(tblbuscaproveedores.getSelectedRow(), 0).toString());

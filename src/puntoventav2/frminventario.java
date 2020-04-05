@@ -54,7 +54,9 @@ public class frminventario extends javax.swing.JFrame {
             {
             con = conexion.getConnection();
             stmt = con.createStatement();
-            rs = stmt.executeQuery("SELECT * from tblinventario");
+            rs = stmt.executeQuery("select tblinventario.id_Articulo,tblarticulos.artnombre"
+                    + ",tblinventario.invexistencia from tblarticulos,tblinventario "
+                    + "where tblarticulos.id_Articulo=tblinventario.id_Articulo");
             while (rs.next()) 
             {
 

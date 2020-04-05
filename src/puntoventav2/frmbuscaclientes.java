@@ -5,7 +5,6 @@
  */
 package puntoventav2;
 
-import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -15,16 +14,12 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import javax.swing.DefaultListModel;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-//
-//import com.itextpdf.text.*;
-//import com.itextpdf.text.pdf.*;
 import java.awt.event.KeyAdapter;
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
 
-public class frmbuscaclientes extends javax.swing.JFrame {
+public final class frmbuscaclientes extends javax.swing.JFrame {
 
     /**
      * Creates new form frmbuscaclientes
@@ -90,13 +85,8 @@ public class frmbuscaclientes extends javax.swing.JFrame {
             @Override
             public void mousePressed(MouseEvent Mouse_evt) 
             {
-                JTable tabla = (JTable) Mouse_evt.getSource();
-                Point point = Mouse_evt.getPoint();
-                int row = tabla.rowAtPoint(point);
                 if (Mouse_evt.getClickCount() == 2)
                 {
-//                    frmclientes clientes = new frmclientes();
-//                    clientes.setVisible(true);
                    frmclientes.lblNoCliente.setText(tblbuscaclientes.getValueAt(tblbuscaclientes.getSelectedRow(), 0).toString());
                    frmclientes.txtnombrecliente.setText(tblbuscaclientes.getValueAt(tblbuscaclientes.getSelectedRow(), 1).toString());
                    frmclientes.txtcolonia.setText(tblbuscaclientes.getValueAt(tblbuscaclientes.getSelectedRow(), 3).toString());
@@ -125,8 +115,6 @@ public class frmbuscaclientes extends javax.swing.JFrame {
     void inicio() 
     {
         eliminar();
-
-        
         try 
         {
             con = conexion.getConnection();
@@ -162,9 +150,6 @@ public class frmbuscaclientes extends javax.swing.JFrame {
 
     }
         
-    
-    
-    
     
     /**
      * This method is called from within the constructor to initialize the form.

@@ -961,58 +961,58 @@ public class frmmodificarnotas extends javax.swing.JFrame {
          {
           try
           {
-          con=conexion.getConnection();
-          stmt=con.createStatement();
-          rs=stmt.executeQuery("select * from tblclientes where cliNombre like '"+txtcliente.getText()+"%'");
-           while(rs.next())
-            {                        
-                c++;
-            }
-           if (c>1|| c==0)
-           {
-               JOptionPane.showMessageDialog(null, "Favor de ingresar mas datos");    
-           }
-           else
-           {
-               rs=stmt.executeQuery("select * from tblclientes where  cliNombre  like '"+txtcliente.getText()+"%'");
-           while(rs.next())
-            {                        
-                txtncliente.setText(rs.getString(1));
-                txtcliente.setText(rs.getString(2));
-                txtdomicilio.setText(rs.getString(3));
-                txtcolonia.setText(rs.getString(4));
-                String tippago = rs.getString(5);
-                if("1".equals(tippago))
-                {
-                    txttipopago.setText("Contado");
+              con=conexion.getConnection();
+              stmt=con.createStatement();
+              rs=stmt.executeQuery("select * from tblclientes where cliNombre like '"+txtcliente.getText()+"%'");
+              while(rs.next())
+               {                        
+                    c++;
+               }
+               if (c>1|| c==0)
+               {
+                   JOptionPane.showMessageDialog(null, "Favor de ingresar mas datos");    
+               }
+               else
+               {
+                   rs=stmt.executeQuery("select * from tblclientes where  cliNombre  like '"+txtcliente.getText()+"%'");
+               while(rs.next())
+                {                        
+                    txtncliente.setText(rs.getString(1));
+                    txtcliente.setText(rs.getString(2));
+                    txtdomicilio.setText(rs.getString(3));
+                    txtcolonia.setText(rs.getString(4));
+                    String tippago = rs.getString(5);
+                    if("1".equals(tippago))
+                    {
+                        txttipopago.setText("Contado");
+                    }
+                    else
+                    {
+                        txttipopago.setText("Credito");
+                    }  
+                    txtdiascredito.setText(rs.getString(6));
+                    txttelefono.setText(rs.getString(7));
+                    calendario =Calendar.getInstance();
+                    int dia =calendario.get(calendario.DATE);
+                    String myDate = dia+"/"+mes+"/"+ano; 
+                    SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yy");
+                    Date date = formateador.parse(myDate); 
+                    txtfecha.setText(formateador.format(sumarRestarDiasFecha(date, 0)));
+                    int credito = Integer.parseInt(txtdiascredito.getText());
+                    txtfechapago.setText(formateador.format(sumarRestarDiasFecha(date, credito)));
                 }
-                else
-                {
-                    txttipopago.setText("Credito");
-                }  
-                txtdiascredito.setText(rs.getString(6));
-                txttelefono.setText(rs.getString(7));
-                calendario =Calendar.getInstance();
-                int dia =calendario.get(calendario.DATE);
-                String myDate = dia+"/"+mes+"/"+ano; 
-                SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yy");
-                Date date = formateador.parse(myDate); 
-                txtfecha.setText(formateador.format(sumarRestarDiasFecha(date, 0)));
-                int credito = Integer.parseInt(txtdiascredito.getText());
-                txtfechapago.setText(formateador.format(sumarRestarDiasFecha(date, credito)).toString());
-            }
-                txtcantidad.requestFocus();       
-           }
-            con.close();
-          }
-          catch(SQLException ex)
-          {
-              JOptionPane.showMessageDialog(null, ex);
-          } 
-          catch (ParseException ex) 
-          {
-                Logger.getLogger(frmmodificarnotas.class.getName()).log(Level.SEVERE, null, ex);
-           } 
+                    txtcantidad.requestFocus();       
+               }
+                con.close();
+              }
+              catch(SQLException ex)
+              {
+                  JOptionPane.showMessageDialog(null, ex);
+              } 
+              catch (ParseException ex) 
+              {
+                    Logger.getLogger(frmmodificarnotas.class.getName()).log(Level.SEVERE, null, ex);
+              } 
              try 
              {      
                  int ultimoid=0;
@@ -1025,11 +1025,11 @@ public class frmmodificarnotas extends javax.swing.JFrame {
                   }
                   txtnonota.setText(ultimoid+"");
              } 
-             catch (Exception e) 
+             catch (SQLException e) 
              {
-                 
+                 JOptionPane.showMessageDialog(null, e);
              }         
-    }       
+        }       
     }//GEN-LAST:event_txtclienteKeyPressed
 
     private void txtcoloniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcoloniaActionPerformed
@@ -1072,7 +1072,6 @@ public class frmmodificarnotas extends javax.swing.JFrame {
                 Double total2 = Double.parseDouble(txttotal.getText());
                 Double totalcompra= Double.parseDouble(txttotalcompra.getText());
                 Double utilidad = total2-totalcompra;
-
                 filas[0] = txtcantidad.getText();         
                 filas[1] = txtproducto.getText();
                 filas[2] = txtprecio.getText();
@@ -1092,40 +1091,8 @@ public class frmmodificarnotas extends javax.swing.JFrame {
                 lbltotalcompra.setText(df.format(totalcompraenviar)+"");
                 lblutilidad.setText(df.format(utilidadenviar)+"");
                 limpiar();
-            }
-            
+            }           
         }
-        
-        
-        
-        
-               
-          
-//         try {
-//            Document document = new Document();
-//            try {
-//                PdfWriter.getInstance(document, new FileOutputStream("C:\\Users\\coron\\Desktop\\prueba\\"
-//                        +txtcliente.getText()+""+"Nota N° "+""+txtnonota.getText()+".pdf"));
-//            } catch (FileNotFoundException fileNotFoundException) {
-//                System.out.println("No such file was found to generate the PDF "
-//                        + "(No se encontró el fichero para generar el pdf)" + fileNotFoundException);
-//            }
-//          
-//            document.close();
-//            System.out.println("Your PDF file has been generated!(¡Se ha generado tu hoja PDF!");
-//        } catch (DocumentException documentException) {
-//            System.out.println("The file not exists (Se ha producido un error al generar un documento): " + documentException);
-//        }
-//                
-                
-           
-            
-//       txtcantidad.setText("");
-//       txtproducto.setText("");
-//       txtprecio.setText("");
-//       cmbtipo.setSelectedIndex(0);
-//       txttotal.setText("");
-
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnimprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnimprimirActionPerformed

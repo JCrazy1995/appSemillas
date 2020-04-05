@@ -37,15 +37,6 @@ import java.io.FileOutputStream;
 import java.sql.ResultSet;
 import java.lang.Exception;
 
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
-import net.sf.jasperreports.engine.*;
-
 public class frmcancelarnotas extends javax.swing.JFrame {
     static java.sql.ResultSet rs=null;
     private Statement stmt=null;
@@ -83,30 +74,18 @@ public class frmcancelarnotas extends javax.swing.JFrame {
         
          void configModelo() 
         {
-        modeloTabla.addColumn("Cantidad");
-        modeloTabla.addColumn("Producto");
-        modeloTabla.addColumn("Precio");
-        modeloTabla.addColumn("Tipo");
-        modeloTabla.addColumn("Total");
-        tblnotas.setModel(modeloTabla);
+            modeloTabla.setColumnCount(0);
+            modeloTabla.setRowCount(0);
+            modeloTabla.addColumn("Cantidad");
+            modeloTabla.addColumn("Producto");
+            modeloTabla.addColumn("Precio");
+            modeloTabla.addColumn("Tipo");
+            modeloTabla.addColumn("Total");
+            tblnotas.setModel(modeloTabla);
 
         }
         
     
-        public static Date sumarRestarDiasFecha(Date fecha, int dias) 
-        {
-
-        Calendar calendar = Calendar.getInstance();
-
-
-	calendar.setTime(fecha); // Configuramos la fecha que se recibe
-
-        calendar.add(Calendar.DAY_OF_YEAR, dias);  // numero de días a añadir, o restar en caso de días<0
-
-        return calendar.getTime(); // Devuelve el objeto Date con los nuevos días añadidos
-
-    
-        }
         
          
         
@@ -129,10 +108,6 @@ public class frmcancelarnotas extends javax.swing.JFrame {
             txtnonota.setText("");
             txtdomicilio.setText("");
             txtfechapago.setText("");
-           
-            
-            
-            
           }
     
     /**
@@ -174,6 +149,7 @@ public class frmcancelarnotas extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblnotas = new javax.swing.JTable();
         btncancelar = new javax.swing.JButton();
+        btnregresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -181,6 +157,7 @@ public class frmcancelarnotas extends javax.swing.JFrame {
 
         jLabel6.setText("Cliente:");
 
+        txtcliente.setEditable(false);
         txtcliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtclienteActionPerformed(evt);
@@ -312,6 +289,7 @@ public class frmcancelarnotas extends javax.swing.JFrame {
 
         jLabel7.setText("N° Nota");
 
+        txtnonota.setEditable(false);
         txtnonota.setText("1");
 
         txtdomicilio.setEditable(false);
@@ -387,14 +365,17 @@ public class frmcancelarnotas extends javax.swing.JFrame {
             }
         });
 
+        btnregresar.setText("Regresar");
+        btnregresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnregresarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btncancelar)
-                .addGap(65, 65, 65))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -408,6 +389,12 @@ public class frmcancelarnotas extends javax.swing.JFrame {
                         .addGap(54, 54, 54)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(52, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnregresar)
+                    .addComponent(btncancelar))
+                .addGap(65, 65, 65))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -419,9 +406,14 @@ public class frmcancelarnotas extends javax.swing.JFrame {
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(btncancelar)
-                .addGap(9, 9, 9)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(207, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addComponent(btnregresar)))
+                .addContainerGap(99, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Registrar Notas", jPanel1);
@@ -447,95 +439,7 @@ public class frmcancelarnotas extends javax.swing.JFrame {
 
     private void txtclienteKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtclienteKeyPressed
         // TODO add your handling code here:
-        int c=0;
-        
-         if (evt.getKeyCode() == KeyEvent.VK_ENTER)
-         {
-          try
-          {
-          con=conexion.getConnection();
-          stmt=con.createStatement();
-          rs=stmt.executeQuery("select * from tblclientes where cliNombre like '"+txtcliente.getText()+"%'");
-           while(rs.next())
-            {                        
-                c++;
-            }
-           if (c>1|| c==0)
-           {
-               JOptionPane.showMessageDialog(null, "Favor de ingresar mas datos");
-              
-           }
-           else
-           {
-               rs=stmt.executeQuery("select * from tblclientes where  cliNombre  like '"+txtcliente.getText()+"%'");
-           while(rs.next())
-            {                        
-                txtncliente.setText(rs.getString(1));
-                txtcliente.setText(rs.getString(2));
-                txtdomicilio.setText(rs.getString(3));
-                txtcolonia.setText(rs.getString(4));
-                String tippago = rs.getString(5);
-                if("1".equals(tippago))
-                {
-                    txttipopago.setText("Contado");
-                }
-                else
-                {
-                    txttipopago.setText("Credito");
-                }
-                
-                txtdiascredito.setText(rs.getString(6));
-                txttelefono.setText(rs.getString(7));
-                 calendario =Calendar.getInstance();
-                int dia =calendario.get(calendario.DATE);
-                
-                String myDate = dia+"/"+mes+"/"+ano;
-                
-                 SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yy");
-                 Date date = formateador.parse(myDate); 
-                 txtfecha.setText(formateador.format(sumarRestarDiasFecha(date, 0)));
-                 int credito = Integer.parseInt(txtdiascredito.getText());
-                 txtfechapago.setText(formateador.format(sumarRestarDiasFecha(date, credito)).toString());
 
-            }
-              
-                
-           }
-            con.close();
-          }
-          catch(SQLException ex)
-          {
-              JOptionPane.showMessageDialog(null, ex);
-          } 
-          catch (ParseException ex) 
-          {
-                Logger.getLogger(frmcancelarnotas.class.getName()).log(Level.SEVERE, null, ex);
-           } 
-          
-             try 
-             {      
-                 int ultimoid=0;
-                 con = conexion.getConnection();
-                 stmt = con.createStatement();
-                 rs =stmt.executeQuery("select max(id_Nota) from tblNotas ");
-                  if(rs.next())
-                  {
-                       ultimoid=rs.getInt(1)+1;
-                      
-                  }
-                  txtnonota.setText(ultimoid+"");
-             } 
-             catch (Exception e) 
-             {
-                 
-             }
-                 
-           
-             
-          
-          
-             
-    }
         
     }//GEN-LAST:event_txtclienteKeyPressed
 
@@ -632,17 +536,24 @@ public class frmcancelarnotas extends javax.swing.JFrame {
                 {
                     JOptionPane.showMessageDialog(null, e);
                 }
-                
-                
-        
-
                 int filass = modeloTabla.getRowCount();  
                    btncancelar.setEnabled(false);
+                   
+                  frmbuscacancelarnotas nt= new frmbuscacancelarnotas();
+                  nt.setVisible(true);
+                  this.dispose();
                   
         }
        
         
     }//GEN-LAST:event_btncancelarActionPerformed
+
+    private void btnregresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnregresarActionPerformed
+        // TODO add your handling code here:
+        frmbuscacancelarnotas not = new frmbuscacancelarnotas(); 
+        not.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnregresarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -696,6 +607,7 @@ public class frmcancelarnotas extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btncancelar;
+    private javax.swing.JButton btnregresar;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;

@@ -26,7 +26,7 @@ import javax.swing.table.TableRowSorter;
  *
  * @author Francisco Rafael
  */
-public class frmbuscarproducto extends javax.swing.JFrame {
+public final class frmbuscarproducto extends javax.swing.JFrame {
      private static Connection con = null;
     static ResultSet rs = null;
     private Statement stmt = null;
@@ -67,9 +67,6 @@ public class frmbuscarproducto extends javax.swing.JFrame {
     }
     
     
-    
-    
-    
     void inicio() 
     {
         try 
@@ -106,13 +103,8 @@ public class frmbuscarproducto extends javax.swing.JFrame {
             @Override
             public void mousePressed(MouseEvent Mouse_evt) 
             {
-                JTable tabla = (JTable) Mouse_evt.getSource();
-                Point point = Mouse_evt.getPoint();
-                int row = tabla.rowAtPoint(point);
                 if (Mouse_evt.getClickCount() == 2)
                 {
-//                    frmclientes clientes = new frmclientes();
-//                    clientes.setVisible(true);
                    frmarticulos.lblarticulo.setText(tblbuscarproducto.getValueAt(tblbuscarproducto.getSelectedRow(), 0).toString());
                    frmarticulos.txtnombre.setText(tblbuscarproducto.getValueAt(tblbuscarproducto.getSelectedRow(), 1).toString());
                    frmarticulos.txtPrecio.setText(tblbuscarproducto.getValueAt(tblbuscarproducto.getSelectedRow(), 2).toString());                               
@@ -258,6 +250,7 @@ public class frmbuscarproducto extends javax.swing.JFrame {
 
         txtNombre.addKeyListener(new KeyAdapter() {
 
+            @Override
             public void keyReleased(KeyEvent ke){
                 trs.setRowFilter(RowFilter.regexFilter("(?i)"+txtNombre.getText(), 1));
             }
