@@ -20,7 +20,7 @@ public class PuntoVentaV2 {
     public static void main(String[] args) {
         frmPrincipal principal = new frmPrincipal();
         principal.setVisible(true);
-        principal.setExtendedState(frmPrincipal.MAXIMIZED_BOTH);
+       // principal.setExtendedState(frmPrincipal.MAXIMIZED_BOTH);
          
      
     }

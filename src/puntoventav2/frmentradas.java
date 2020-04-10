@@ -768,7 +768,7 @@ public class frmentradas extends javax.swing.JFrame {
                         rs = stmt.executeQuery("select * from tblarticulos where artNombre like '%" + txtproducto.getText() + "%'");
                         while (rs.next()) {
                             txtproducto.setText(rs.getString(2));
-                            txtprecio.setText(rs.getString(3));
+                            txtprecio.setText(rs.getString(5));
                         }
                         txtprecio.requestFocus();
                         precio = Float.parseFloat(txtprecio.getText());
@@ -1012,9 +1012,14 @@ public class frmentradas extends javax.swing.JFrame {
                     psInsert.setDouble(4, precio);
                     psInsert.setDouble(5, totalproducto);
                     psInsert.executeUpdate();
-
-                
-
+                    
+                   
+                   psInsert1 = con.prepareStatement("update tblarticulos set artPrecioCompra=? where id_Articulo=? ");
+                    psInsert1.setDouble(1, precio);
+                    psInsert1.setInt(2, idarticulo);
+                    psInsert1.execute();
+                    con.close();
+                    btnguardar.setEnabled(false);
                 }
 
             
@@ -1031,7 +1036,7 @@ public class frmentradas extends javax.swing.JFrame {
 
     private void btnnuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnnuevoActionPerformed
         // TODO add your handling code here:
-       
+       btnguardar.setEnabled(true);
         limpiar();
         eliminar();
        

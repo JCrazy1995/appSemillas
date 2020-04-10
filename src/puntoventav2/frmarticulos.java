@@ -97,7 +97,7 @@ public class frmarticulos extends javax.swing.JFrame {
         jLabel6.setText("Tipo:");
 
         cmbtipo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        cmbtipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Kgs", "Pte" }));
+        cmbtipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Kgs", "Pte", "Caja", "Bulto" }));
 
         jLabel7.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel7.setText("Precio Compra:");
@@ -315,6 +315,9 @@ public class frmarticulos extends javax.swing.JFrame {
             {
                 lasid=rs.getInt(1);
             }
+            
+            
+           
             
         } 
         catch (SQLException e) 
