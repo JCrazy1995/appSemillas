@@ -57,12 +57,21 @@ public class frmbuscarmodificarnotas extends javax.swing.JFrame {
 
     void configModelo() 
     {
-         modeloTabla.addColumn("Cantidad");
-         modeloTabla.addColumn("Producto");
-         modeloTabla.addColumn("Precio");
-         modeloTabla.addColumn("Tipo");
+         modeloTabla.addColumn("N° Nota");
+         modeloTabla.addColumn("Cliente");
+         modeloTabla.addColumn("Fecha");
          modeloTabla.addColumn("Total");
+         modeloTabla.addColumn("Pagada");
          tblbuscanotas.setModel(modeloTabla);
+         
+         TableColumnModel columnModel = tblbuscanotas.getColumnModel();
+
+         columnModel.getColumn(0).setPreferredWidth(70);
+         columnModel.getColumn(1).setPreferredWidth(150);
+         columnModel.getColumn(2).setPreferredWidth(70);
+         columnModel.getColumn(3).setPreferredWidth(70);
+         columnModel.getColumn(4).setPreferredWidth(80);
+    
     }
     
     
@@ -105,17 +114,17 @@ public class frmbuscarmodificarnotas extends javax.swing.JFrame {
         }
     
         void eliminar() 
-    {
-
-        DefaultTableModel tb = (DefaultTableModel) tblbuscanotas.getModel();
-        int a = tblbuscanotas.getRowCount() - 1;
-        for (int i = a; i >= 0; i--) 
         {
-            tb.removeRow(tb.getRowCount() - 1);
-        }
 
-        //cargaTicket();
-    }
+            DefaultTableModel tb = (DefaultTableModel) tblbuscanotas.getModel();
+            int a = tblbuscanotas.getRowCount() - 1;
+            for (int i = a; i >= 0; i--) 
+            {
+                tb.removeRow(tb.getRowCount() - 1);
+            }
+
+            //cargaTicket();
+        }
         void cerrar()
         {
             this.dispose();
@@ -140,18 +149,18 @@ public class frmbuscarmodificarnotas extends javax.swing.JFrame {
                 if(rs11.next())
                 {   
                     modificar.setVisible(true);
-                    rs = stmt.executeQuery("SELECT * from tblclientes where cliNombre='"+nombrecliente+"'");
+                    rs = stmt.executeQuery("SELECT * from tblclientes where clinombre='"+nombrecliente+"'");
           
                 while(rs.next())
-                {
-                    frmmodificarnotas.txtncliente.setText(rs.getString(1));
-                    frmmodificarnotas.lblnocliente.setText(rs.getString(1));
-                    frmmodificarnotas.txtcliente.setText(rs.getString(2));
-                    frmmodificarnotas.lblcliente.setText(rs.getString(2));
-                    frmmodificarnotas.txtdomicilio.setText(rs.getString(3));
-                    frmmodificarnotas.txtcolonia.setText(rs.getString(4));
-                    frmmodificarnotas.lbldireccion.setText(rs.getString(3)+" "+rs.getString(4));
-                   String tippago = rs.getString(5);
+                {  
+                   frmmodificarnotas.txtcliente.setText(rs.getString(2));
+                   frmmodificarnotas.txtncliente.setText(rs.getString(1));
+                   frmmodificarnotas.txtcolonia.setText(rs.getString(3));
+                   frmmodificarnotas.txtdomicilio.setText(rs.getString(4));
+                   frmmodificarnotas.txttelefono.setText(rs.getString(7));
+                   
+                   
+                   String tippago = rs.getString(3);
                 if("1".equals(tippago))
                 {    frmmodificarnotas.txttipopago.setText("Contado");
                      frmmodificarnotas.lbltipopago.setText("Contado");
@@ -240,10 +249,7 @@ public class frmbuscarmodificarnotas extends javax.swing.JFrame {
                     {  
                         if (Mouse_evt.getClickCount() == 2)
                         { 
-                       
                             enviardatos();
-                            
-
                         }
                     }
                 });

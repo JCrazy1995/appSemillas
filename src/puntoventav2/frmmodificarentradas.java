@@ -6,8 +6,6 @@
 package puntoventav2;
 
 import java.awt.event.KeyEvent;
-import java.lang.System.Logger;
-import java.lang.System.Logger.Level;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,12 +23,12 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Francisco Rafael
  */
-public class frmentradas extends javax.swing.JFrame {
+public final class frmmodificarentradas extends javax.swing.JFrame {
 
     static java.sql.ResultSet rs = null;
     private Statement stmt = null;
     conectar conexion = new conectar();
-    DefaultTableModel modeloTabla = new DefaultTableModel();  //modelo de tabla que llevara los datos
+    static DefaultTableModel modeloTabla= new DefaultTableModel();  //modelo de tabla que llevara los datos
     Object filas[] = new Object[5];
     Connection con = null;
     private int fila;
@@ -44,9 +42,11 @@ public class frmentradas extends javax.swing.JFrame {
     /**
      * Creates new form frmentradas
      */
-    public frmentradas() {
+    public frmmodificarentradas() 
+    {
         initComponents();
         configModelo();
+        this.setResizable(false);
         txtproveedor.requestFocus();
         ultiArtiiculo();
     }
@@ -63,7 +63,8 @@ public class frmentradas extends javax.swing.JFrame {
 
     }
 
-    void configModelo() {
+    void configModelo() 
+    {
         modeloTabla.setColumnCount(0);
         modeloTabla.addColumn("Cantidad");
         modeloTabla.addColumn("Producto");
@@ -171,6 +172,7 @@ public class frmentradas extends javax.swing.JFrame {
         jPanel7 = new javax.swing.JPanel();
         btnagregar = new javax.swing.JButton();
         btnnuevo = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         jLabel20 = new javax.swing.JLabel();
@@ -470,16 +472,25 @@ public class frmentradas extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Regresar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnagregar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnnuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1)
+                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(btnagregar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnnuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -488,7 +499,9 @@ public class frmentradas extends javax.swing.JFrame {
                 .addComponent(btnagregar)
                 .addGap(33, 33, 33)
                 .addComponent(btnnuevo)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -518,11 +531,14 @@ public class frmentradas extends javax.swing.JFrame {
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(103, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(95, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Ingresar Datos Entreda", jPanel1);
@@ -857,7 +873,7 @@ public class frmentradas extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, ex);
             } catch (ParseException ex) {
-                java.util.logging.Logger.getLogger(frmentradas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+                java.util.logging.Logger.getLogger(frmmodificarentradas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
             }
 
         }
@@ -919,7 +935,7 @@ public class frmentradas extends javax.swing.JFrame {
     private void btnguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardarActionPerformed
         // TODO add your handling code here:
         int filass = tblentradas.getRowCount();
-        int noentrada, noprovedor, c = 0;
+        int noentrada, noprovedor, c = 0,lasid=0;
         String fecha, fechapago, pagado, tipoentrada, dia, mes, anio, nombre, producto, tipo, provedor;
         Double totalproducto, totalentrada, abono, saldo, cantidad, precio;
         anio = txtfecha.getText().substring(6, 8);
@@ -942,108 +958,179 @@ public class frmentradas extends javax.swing.JFrame {
         provedor = lblproveedor.getText();
         double totalexistencia = 0;
         double totalinventario = 0;
-        int idarticulo = 0;
-        try {
+        int idarticulo = 0,identrada=Integer.parseInt(txtnoentrada.getText());
+        int confirmacion=JOptionPane.showConfirmDialog(null,"Todas la modificaciones son correctas", "Confirmación",JOptionPane.YES_NO_OPTION,1);
+      
+         if(confirmacion==0)
+            {
+                try 
+                {
+                    con = conexion.getConnection();
+                            stmt = con.createStatement();
+                            stmt = con.createStatement();
 
-                con = conexion.getConnection();
-                stmt = con.createStatement();
-                stmt = con.createStatement();
-                PreparedStatement psInsert = con.prepareStatement("INSERT INTO tblentradas"
-                        + "(id_Proveedor,entFechaEntrada,entFechaPago,entTotal,entAbono,entSaldo,entpago,entTipoEntrada,entStatus)"
-                        + " VALUES (?,?,?,?,?,?,?,?)");
-
-                psInsert.setInt(1, noprovedor);
-                psInsert.setString(2, fecha);
-                psInsert.setString(3, fechapago);
-                psInsert.setDouble(4, totalentrada);
-                psInsert.setDouble(5, abono);
-                psInsert.setDouble(6, saldo);
-                psInsert.setString(7, "no");
-                psInsert.setString(8, tipoentrada);
-                psInsert.setString(9,"Activa");
-                psInsert.executeUpdate();
-
-              
-
-            } 
-        catch (SQLException e)
-        {
-            JOptionPane.showMessageDialog(null, e);
-        }
-
-        
-        for (int i = 0; i < filass; i++) {
-            cantidad = Double.parseDouble(tblentradas.getValueAt(i, 0).toString());
-            producto = tblentradas.getValueAt(i, 1).toString();
-            precio = Double.parseDouble(tblentradas.getValueAt(i, 2).toString());
-            tipo = tblentradas.getValueAt(i, 3).toString();
-            totalproducto = Double.parseDouble(tblentradas.getValueAt(i, 4).toString());
-
-            try {
-                
-                
-                    stmt = con.createStatement();
-                    
-                    ResultSet rs = stmt.executeQuery("select tblarticulos.id_Articulo from tblArticulos where artNombre"
-                            + "='" + producto + "'");
-                    if (rs.next()) {
-                        idarticulo = rs.getInt(1);
-                    }
-                    
-                    ResultSet rss = stmt.executeQuery("select tblinventario.invExistencia    from"
-                            + " tblinventario where id_Articulo  ='" + idarticulo + "'");
-                    if (rss.next()) 
+                    ResultSet rsa = stmt.executeQuery("select max(id_Entradas) from tblentradas ");
+                    if (rsa.next())
                     {
-                        totalexistencia = rss.getInt(1);
+                        lasid = rsa.getInt(1) + 1;
                     }
-                    
-                    totalinventario = totalexistencia + cantidad;
-                    PreparedStatement psInsert1 = con.prepareStatement("update tblinventario set invExistencia=? where id_Articulo=? ");
-                    psInsert1.setDouble(1, totalinventario);
-                    psInsert1.setInt(2, idarticulo);
-                    psInsert1.execute();
-                    System.out.println(totalinventario);
+                            System.out.println(noentrada);
+                            PreparedStatement psInsert =con.prepareStatement("update tblentradas set "
+                                    + "entStatus='cancelada por actu' where id_entradas=?");
+                            psInsert.setInt(1, noentrada);
+                            psInsert.executeUpdate();
 
-                    PreparedStatement psInsert = con.prepareStatement("INSERT INTO tblentradasmovimientos"
-                            + "( id_Entradas,id_Articulo,entCantidad,entPrecioEntrada,entTotalMovimientos,enttipo)"
-                            + " VALUES (?,?,?,?,?,?)");
 
-                    psInsert.setInt(1, noentrada);
-                    psInsert.setInt(2, idarticulo);
-                    psInsert.setDouble(3, cantidad);
-                    psInsert.setDouble(4, precio);
-                    psInsert.setDouble(5, totalproducto);
-                     psInsert.setString(5, tipo);
-                    psInsert.executeUpdate();
-                    
-                   
-                   psInsert1 = con.prepareStatement("update tblarticulos set artPrecioCompra=? where id_Articulo=? ");
-                    psInsert1.setDouble(1, precio);
-                    psInsert1.setInt(2, idarticulo);
-                    psInsert1.execute();
-                    con.close();
-                    btnguardar.setEnabled(false);
+
+                } 
+                catch (SQLException e) 
+                {
+                    JOptionPane.showMessageDialog(null, e);
                 }
 
-            
-            catch (SQLException ex)
-            {   
-                JOptionPane.showMessageDialog(null, ex);
-                java.util.logging.Logger.getLogger(frmentradas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            //cancelar los movimientos en el inventario
+
+                  try 
+                    {   
+                        int articulo=0;
+                         double existencia=0,totalenviar=0,cantidadprodudcto=0;  
+                         ResultSet rs12= stmt.executeQuery("select tblentradasmovimientos.id_Articulo,tblentradasmovimientos.entcantidad"
+                                 + " from tblentradasmovimientos where id_entradas='"+identrada+"'");
+                        con=conexion.getConnection();
+                        stmt=con.createStatement();
+                         while(rs12.next())
+                        {       System.out.println("oli");
+
+                           cantidadprodudcto= rs12.getDouble(2);
+                            articulo=rs12.getInt(1);
+                            System.out.println(cantidadprodudcto);
+
+                            ResultSet rs13= stmt.executeQuery("select tblinventario.invexistencia from tblinventario where id_Articulo='"+articulo+"'");
+                             if(rs13.next())
+                             {
+                                 existencia=Double.parseDouble(rs13.getString(1));
+                             }
+
+                             totalenviar=existencia-cantidadprodudcto;
+                             PreparedStatement psInsert2= con.prepareStatement("update tblinventario set invExistencia=? where id_Articulo=? ");
+                             psInsert2.setDouble(1, totalenviar);
+                             psInsert2.setInt(2,articulo);
+                             psInsert2.executeUpdate();
+
+                         }
+                    } 
+                    catch (SQLException e) 
+                    {
+                        JOptionPane.showMessageDialog(null, e);
+                    }
+
+                try 
+                    {
+                            con = conexion.getConnection();
+                            stmt = con.createStatement();
+                            stmt = con.createStatement();
+                            PreparedStatement psInsert = con.prepareStatement("INSERT INTO tblentradas"
+                                    + "(id_Proveedor,entFechaEntrada,entFechaPago,entTotal,entAbono,entSaldo,entpago,entTipoEntrada,entStatus)"
+                                    + " VALUES (?,?,?,?,?,?,?,?,?)");
+                            psInsert.setInt(1, noprovedor);
+                            psInsert.setString(2, fecha);
+                            psInsert.setString(3, fechapago);
+                            psInsert.setDouble(4, totalentrada);
+                            psInsert.setDouble(5, abono);
+                            psInsert.setDouble(6, saldo);
+                            psInsert.setString(7, "no");
+                            psInsert.setString(8, tipoentrada);
+                            psInsert.setString(9,"Activa");
+                            psInsert.executeUpdate();
+                    } 
+                catch (SQLException e)
+                    {
+                        JOptionPane.showMessageDialog(null, e);
+                    }
+
+    //        
+                for (int i = 0; i < filass; i++) 
+                {
+                    cantidad = Double.parseDouble(tblentradas.getValueAt(i, 0).toString());
+                    producto = tblentradas.getValueAt(i, 1).toString();
+                    precio = Double.parseDouble(tblentradas.getValueAt(i, 2).toString());
+                    tipo = tblentradas.getValueAt(i, 3).toString();
+                    totalproducto = Double.parseDouble(tblentradas.getValueAt(i, 4).toString());
+
+                    try 
+                    {
+                        stmt = con.createStatement();
+                            ResultSet rs = stmt.executeQuery("select tblarticulos.id_Articulo from tblArticulos where artNombre"
+                                    + "='" + producto + "'");
+                            if (rs.next()) 
+                                {
+                                    idarticulo = rs.getInt(1);
+                                }
+
+                            ResultSet rss = stmt.executeQuery("select tblinventario.invExistencia    from"
+                                    + " tblinventario where id_Articulo  ='" + idarticulo + "'");
+                            if (rss.next()) 
+                                {
+                                    totalexistencia = rss.getInt(1);
+                                }
+
+                            totalinventario = totalexistencia + cantidad;
+                            PreparedStatement psInsert1 = con.prepareStatement("update tblinventario set invExistencia=? where id_Articulo=? ");
+                            psInsert1.setDouble(1, totalinventario);
+                            psInsert1.setInt(2, idarticulo);
+                            psInsert1.execute();
+                            System.out.println(totalinventario);
+
+                            PreparedStatement psInsert = con.prepareStatement("INSERT INTO tblentradasmovimientos"
+                                    + "( id_Entradas,id_Articulo,entCantidad,entPrecioEntrada,entTotalMovimientos,enttipo)"
+                                    + " VALUES (?,?,?,?,?,?)");
+
+                            psInsert.setInt(1, lasid);
+                            psInsert.setInt(2, idarticulo);
+                            psInsert.setDouble(3, cantidad);
+                            psInsert.setDouble(4, precio);
+                            psInsert.setDouble(5, totalproducto);
+                            psInsert.setString(6, tipo);
+                            psInsert.executeUpdate();
+
+                           psInsert1 = con.prepareStatement("update tblarticulos set artPrecioCompra=? where id_Articulo=? ");
+                           psInsert1.setDouble(1, precio);
+                           psInsert1.setInt(2, idarticulo);
+                           psInsert1.execute();
+                           con.close();
+                           btnguardar.setEnabled(false);
+                    }
+
+
+                        catch (SQLException ex)
+                        {   
+                            JOptionPane.showMessageDialog(null, ex);
+                            java.util.logging.Logger.getLogger(frmmodificarentradas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+                        }
+
+                }
+    //
             }
-
-        }
-
+    ///Cancelar la nota
+     
 
     }//GEN-LAST:event_btnguardarActionPerformed
 
     private void btnnuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnnuevoActionPerformed
         // TODO add your handling code here:
-       btnguardar.setEnabled(true);
+        btnguardar.setEnabled(true);
         limpiar();
         eliminar();
        
     }//GEN-LAST:event_btnnuevoActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        eliminar();
+        frmbuscaentradasmodificar buscar= new frmbuscaentradasmodificar();
+        buscar.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1062,20 +1149,21 @@ public class frmentradas extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmentradas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmmodificarentradas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmentradas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmmodificarentradas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmentradas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmmodificarentradas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmentradas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmmodificarentradas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmentradas().setVisible(true);
+                new frmmodificarentradas().setVisible(true);
             }
         });
     }
@@ -1085,8 +1173,9 @@ public class frmentradas extends javax.swing.JFrame {
     private javax.swing.JButton btneliminar;
     private javax.swing.JButton btnguardar;
     private javax.swing.JButton btnnuevo;
-    private javax.swing.JComboBox<String> cmbtipo;
-    private javax.swing.JComboBox<String> cmbtipoentrada;
+    public static javax.swing.JComboBox<String> cmbtipo;
+    public static javax.swing.JComboBox<String> cmbtipoentrada;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1119,25 +1208,25 @@ public class frmentradas extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JLabel lbldiascredito;
-    private javax.swing.JLabel lblfecha;
-    private javax.swing.JLabel lblfechapago;
-    private javax.swing.JLabel lblnoproveedor;
-    private javax.swing.JLabel lblproveedor;
-    private javax.swing.JLabel lbltipopago;
-    private javax.swing.JLabel lbltotal;
-    private javax.swing.JTable tblentradas;
-    private javax.swing.JTextField txtcantidad;
-    private javax.swing.JTextField txtdiascredito;
-    private javax.swing.JTextField txtfecha;
-    private javax.swing.JTextField txtfechapago;
-    private javax.swing.JTextField txtnoentrada;
-    private javax.swing.JTextField txtnoproveedor;
-    private javax.swing.JTextField txtprecio;
-    private javax.swing.JTextField txtproducto;
-    private javax.swing.JTextField txtproveedor;
-    private javax.swing.JTextField txttelefono;
-    private javax.swing.JTextField txttipopago;
-    private javax.swing.JTextField txttotal;
+    public static javax.swing.JLabel lbldiascredito;
+    public static javax.swing.JLabel lblfecha;
+    public static javax.swing.JLabel lblfechapago;
+    public static javax.swing.JLabel lblnoproveedor;
+    public static javax.swing.JLabel lblproveedor;
+    public static javax.swing.JLabel lbltipopago;
+    public static javax.swing.JLabel lbltotal;
+    public static javax.swing.JTable tblentradas;
+    protected static javax.swing.JTextField txtcantidad;
+    static javax.swing.JTextField txtdiascredito;
+    public static javax.swing.JTextField txtfecha;
+    public static javax.swing.JTextField txtfechapago;
+    public static javax.swing.JTextField txtnoentrada;
+    public static javax.swing.JTextField txtnoproveedor;
+    public static javax.swing.JTextField txtprecio;
+    public static javax.swing.JTextField txtproducto;
+    public static javax.swing.JTextField txtproveedor;
+    protected static javax.swing.JTextField txttelefono;
+    public static javax.swing.JTextField txttipopago;
+    public static javax.swing.JTextField txttotal;
     // End of variables declaration//GEN-END:variables
 }
