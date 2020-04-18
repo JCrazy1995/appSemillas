@@ -25,10 +25,10 @@ import java.util.logging.Logger;
  *
  * @author Francisco Rafael
  */
-public class frmabononotas extends javax.swing.JFrame {
+public class frmabonoentradas extends javax.swing.JFrame {
 
     /**
-     * Creates new form frmabononotas
+     * Creates new form frmabonoentradas
      */
     private static Connection con = null;
     static ResultSet rs = null;
@@ -38,7 +38,7 @@ public class frmabononotas extends javax.swing.JFrame {
     int dia =calendario.get(calendario.DATE);
     int mes = calendario.get(calendario.MONTH)+1;
     int ano = calendario.get(calendario.YEAR);
-    public frmabononotas() 
+    public frmabonoentradas() 
     {
         initComponents();
         this.setResizable(false);
@@ -74,7 +74,7 @@ public class frmabononotas extends javax.swing.JFrame {
         }
         catch (ParseException ex) 
         {
-            Logger.getLogger(frmabononotas.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(frmabonoentradas.class.getName()).log(Level.SEVERE, null, ex);
         }
      }
     /**
@@ -90,7 +90,7 @@ public class frmabononotas extends javax.swing.JFrame {
         btnGrabar = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        lblnonota = new javax.swing.JLabel();
+        lblnoentrada = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         lblcliente = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -108,6 +108,7 @@ public class frmabononotas extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Registro de Pago de Compra");
 
         btnGrabar.setText("Grabar");
         btnGrabar.addActionListener(new java.awt.event.ActionListener() {
@@ -116,15 +117,15 @@ public class frmabononotas extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("N° Nota");
+        jLabel1.setText("N° Entrada");
 
-        lblnonota.setText("1");
+        lblnoentrada.setText("1");
 
-        jLabel2.setText("Cliente");
+        jLabel2.setText("Proveedor:");
 
         lblcliente.setText("1");
 
-        jLabel3.setText("Total");
+        jLabel3.setText("Total:");
 
         lbltotal.setText("1");
 
@@ -136,7 +137,7 @@ public class frmabononotas extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblnonota, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblnoentrada, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -145,7 +146,7 @@ public class frmabononotas extends javax.swing.JFrame {
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbltotal, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -153,7 +154,7 @@ public class frmabononotas extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblnonota, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblnoentrada, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel2)
                         .addComponent(lblcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel3)
@@ -239,12 +240,9 @@ public class frmabononotas extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 41, Short.MAX_VALUE))
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 488, Short.MAX_VALUE))
-                        .addContainerGap())
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -277,13 +275,13 @@ public class frmabononotas extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -345,24 +343,24 @@ public class frmabononotas extends javax.swing.JFrame {
     private void btnGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrabarActionPerformed
         // TODO add your handling code here:
         
-    int nota= Integer.parseInt(lblnonota.getText());
+    int entrada= Integer.parseInt(lblnoentrada.getText());
     double abono=Double.parseDouble(lblabonado.getText()),saldo =Double.parseDouble(lblsaldo.getText());
     double abonoreal =Double.parseDouble(txtabono.getText());
     String pagado = lblpagado.getText();
     String fecha =ano+"-"+mes+"-"+dia;      
-     frmbuscapagonotas p = new frmbuscapagonotas();
+     frmbuscapagoentradas p = new frmbuscapagoentradas();
          try 
             {
             
              con = conexion.getConnection();
              stmt = con.createStatement();
-             PreparedStatement psInsert= con.prepareStatement("update tblnotas set noAbono=?,noSaldo=?,"
-                       + "noPagado=? where id_Nota=?");
+             PreparedStatement psInsert= con.prepareStatement("update tblentradas set entAbono=?,entSaldo=?,"
+                       + "entPago=? where id_entradas=?");
              
               psInsert.setDouble(1, abono);
               psInsert.setDouble(2, saldo);
               psInsert.setString(3, pagado);
-              psInsert.setInt(4, nota);
+              psInsert.setInt(4, entrada);
               psInsert.executeUpdate();
               psInsert.close();
               JOptionPane.showMessageDialog(null, "Se ingreso correctamente, gracias");
@@ -378,10 +376,10 @@ public class frmabononotas extends javax.swing.JFrame {
          {
             con=conectar.getConnection();
              stmt = con.createStatement();
-             PreparedStatement psInsert= con.prepareStatement("insert into tblpagosnotas  (id_Nota,PnotFecha,PnotCanditad)"
+             PreparedStatement psInsert= con.prepareStatement("insert into tblpagosentradas  (id_Entradas,PentFecha,PentCanditad)"
                      + "values(?,?,?)");
              
-              psInsert.setInt(1, nota);
+              psInsert.setInt(1, entrada);
               psInsert.setString(2, fecha);
               psInsert.setDouble(3, abonoreal);
               psInsert.execute();
@@ -423,20 +421,21 @@ public class frmabononotas extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmabononotas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmabonoentradas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmabononotas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmabonoentradas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmabononotas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmabonoentradas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmabononotas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmabonoentradas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmabononotas().setVisible(true);
+                new frmabonoentradas().setVisible(true);
             }
         });
     }
@@ -457,7 +456,7 @@ public class frmabononotas extends javax.swing.JFrame {
     public static javax.swing.JLabel lblabonado;
     public static javax.swing.JLabel lblcliente;
     public static javax.swing.JLabel lblfechanota;
-    public static javax.swing.JLabel lblnonota;
+    public static javax.swing.JLabel lblnoentrada;
     public static javax.swing.JLabel lblpagado;
     public static javax.swing.JLabel lblsaldo;
     public static javax.swing.JLabel lbltotal;

@@ -56,6 +56,7 @@ public class frmPrincipal extends javax.swing.JFrame {
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
         jMenuItem12 = new javax.swing.JMenuItem();
+        jMenuItem15 = new javax.swing.JMenuItem();
         jMenu9 = new javax.swing.JMenu();
         jMenuItem10 = new javax.swing.JMenuItem();
         jMenuItem11 = new javax.swing.JMenuItem();
@@ -202,6 +203,14 @@ public class frmPrincipal extends javax.swing.JFrame {
         });
         jMenu8.add(jMenuItem12);
 
+        jMenuItem15.setText("Reporte de Pagos de Notas");
+        jMenuItem15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem15ActionPerformed(evt);
+            }
+        });
+        jMenu8.add(jMenuItem15);
+
         jMenuBar1.add(jMenu8);
 
         jMenu9.setText("Inventario");
@@ -340,6 +349,12 @@ public class frmPrincipal extends javax.swing.JFrame {
         cancelar.setVisible(true);
     }//GEN-LAST:event_jMenuItem14ActionPerformed
 
+    private void jMenuItem15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem15ActionPerformed
+        // TODO add your handling code here:
+        frmReportepagosnotas pago = new frmReportepagosnotas();
+        pago.setVisible(true);
+    }//GEN-LAST:event_jMenuItem15ActionPerformed
+
     /**
  * @param args the command line arguments
      */
@@ -392,6 +407,7 @@ public class frmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem13;
     private javax.swing.JMenuItem jMenuItem14;
+    private javax.swing.JMenuItem jMenuItem15;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;

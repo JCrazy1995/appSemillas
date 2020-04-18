@@ -100,16 +100,10 @@ public class frmnotas extends javax.swing.JFrame {
         public static Date sumarRestarDiasFecha(Date fecha, int dias) 
         {
 
-        Calendar calendar = Calendar.getInstance();
-
-
-	calendar.setTime(fecha); // Configuramos la fecha que se recibe
-
-        calendar.add(Calendar.DAY_OF_YEAR, dias);  // numero de días a añadir, o restar en caso de días<0
-
-        return calendar.getTime(); // Devuelve el objeto Date con los nuevos días añadidos
-
-    
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(fecha); // Configuramos la fecha que se recibe
+            calendar.add(Calendar.DAY_OF_YEAR, dias);  // numero de días a añadir, o restar en caso de días<0
+            return calendar.getTime(); // Devuelve el objeto Date con los nuevos días añadidos
         }
         
           void limpiar()
@@ -374,6 +368,9 @@ public class frmnotas extends javax.swing.JFrame {
         txtcliente.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtclienteKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtclienteKeyReleased(evt);
             }
         });
 
@@ -1230,7 +1227,7 @@ public class frmnotas extends javax.swing.JFrame {
             JasperReport jr = JasperCompileManager.compileReport(jd);
             JasperPrint jp = JasperFillManager.fillReport(jr,param,con);
             OutputStream output = new FileOutputStream(new File("C:\\Users\\coron\\Desktop\\prueba\\"
-                        +txtcliente.getText()+""+"Nota N° "+""+txtnonota.getText()+"original.pdf")); 
+                        +txtcliente.getText()+" "+"Nota N° "+" "+txtnonota.getText()+"original.pdf")); 
             JasperExportManager.exportReportToPdfStream(jp, output); 
             output.flush();
             output.close();
@@ -1465,6 +1462,10 @@ public class frmnotas extends javax.swing.JFrame {
          char car = evt.getKeyChar();
         if((car<'0' || car>'9') && (car<=',' || car>'.')|| (car=='-'))  evt.consume();
     }//GEN-LAST:event_txtpreciocompraKeyTyped
+
+    private void txtclienteKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtclienteKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtclienteKeyReleased
 
     /**
      * @param args the command line arguments

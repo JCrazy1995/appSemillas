@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 
 
@@ -23,10 +24,10 @@ import javax.swing.table.TableRowSorter;
  *
  * @author Francisco Rafael
  */
-public final class frmbuscapagonotas extends javax.swing.JFrame {
+public final class frmbuscapagoentradas extends javax.swing.JFrame {
 
     /**
-     * Creates new form frmbuscapagonotas
+     * Creates new form frmbuscapagoentradas
      */
     private static Connection con = null;
     static ResultSet rs = null;
@@ -36,8 +37,8 @@ public final class frmbuscapagonotas extends javax.swing.JFrame {
     Object filas[] = new Object[6];
      DefaultTableModel modeloTabla2 = new DefaultTableModel();
     private int fila;
-    frmabononotas abono = new frmabononotas();
-    public frmbuscapagonotas() 
+    frmabonoentradas abono = new frmabonoentradas();
+    public frmbuscapagoentradas() 
     {
         initComponents();
         configModelo();
@@ -48,14 +49,24 @@ public final class frmbuscapagonotas extends javax.swing.JFrame {
 
     void configModelo() 
     {
-        modeloTabla.addColumn("Numero Nota");
+        modeloTabla.addColumn("Numero");
         modeloTabla.addColumn("Nombre");
         modeloTabla.addColumn("Fecha");
         modeloTabla.addColumn("Saldo");
         modeloTabla.addColumn("Total");
         modeloTabla.addColumn("Pagada");
-        tblbuscanotas.setModel(modeloTabla);
+        tblbuscaentradas.setModel(modeloTabla);
+        
+        
+        
+        TableColumnModel columnModel = tblbuscaentradas.getColumnModel();
 
+        columnModel.getColumn(0).setPreferredWidth(50);
+        columnModel.getColumn(1).setPreferredWidth(150);
+        columnModel.getColumn(2).setPreferredWidth(100);
+        columnModel.getColumn(3).setPreferredWidth(70);
+        columnModel.getColumn(4).setPreferredWidth(70);
+        columnModel.getColumn(5).setPreferredWidth(50);
     }
     
     
@@ -70,10 +81,10 @@ public final class frmbuscapagonotas extends javax.swing.JFrame {
         {
             con = conexion.getConnection();
             stmt = con.createStatement();
-            rs = stmt.executeQuery(" select * from tblnotas where   noStatus!='Cancelada' and noStatus !='Cancelada por Actu' and noPagado='no'");
+            rs = stmt.executeQuery(" select * from tblentradas where   entStatus!='Cancelada' and entStatus !='Cancelada por Actu' and entPago='no'");
             while (rs.next()) 
             {     stmt = con.createStatement();
-                  ResultSet rss= stmt.executeQuery("select tblclientes.cliNombre from tblclientes where id_Cliente='"+rs.getString(2)+"'");
+                  ResultSet rss= stmt.executeQuery("select tblproveedores.proNombre from tblproveedores where id_proveedor='"+rs.getString(2)+"'");
                   if(rss.next())
                   {
                       nombre = rss.getString(1);                      
@@ -89,7 +100,7 @@ public final class frmbuscapagonotas extends javax.swing.JFrame {
                 filas[4] = (rs.getString(5));
                 filas[5] = (rs.getString(8));
                 modeloTabla.addRow(filas);
-                tblbuscanotas.setModel(modeloTabla);
+                tblbuscaentradas.setModel(modeloTabla);
 
             }
             con.close();
@@ -104,8 +115,8 @@ public final class frmbuscapagonotas extends javax.swing.JFrame {
         void eliminar() 
     {
 
-        DefaultTableModel tb = (DefaultTableModel) tblbuscanotas.getModel();
-        int a = tblbuscanotas.getRowCount() - 1;
+        DefaultTableModel tb = (DefaultTableModel) tblbuscaentradas.getModel();
+        int a = tblbuscaentradas.getRowCount() - 1;
         for (int i = a; i >= 0; i--) 
         {
             tb.removeRow(tb.getRowCount() - 1);
@@ -127,18 +138,18 @@ public final class frmbuscapagonotas extends javax.swing.JFrame {
                 con = conexion.getConnection();
                 stmt = con.createStatement();
                 
-                String nombrecliente= tblbuscanotas.getValueAt(tblbuscanotas.getSelectedRow(),1).toString();
-                String idnota = tblbuscanotas.getValueAt(tblbuscanotas.getSelectedRow(), 0).toString();
-                ResultSet rs = stmt.executeQuery("SELECT * from tblnotas where id_nota='"+idnota+"'");              
+                String nombrecliente= tblbuscaentradas.getValueAt(tblbuscaentradas.getSelectedRow(),1).toString();
+                String idnota = tblbuscaentradas.getValueAt(tblbuscaentradas.getSelectedRow(), 0).toString();
+                ResultSet rs = stmt.executeQuery("SELECT * from tblentradas where id_entradas='"+idnota+"'");              
                 if(rs.next())
                 {
-                    frmabononotas.lblcliente.setText(nombrecliente);
-                    frmabononotas.lblnonota.setText(rs.getString(1));
-                    frmabononotas.lbltotal.setText(rs.getString(5));
-                    frmabononotas.txtabono.setText("");
-                    frmabononotas.lblsaldo.setText(rs.getString(7));
-                    frmabononotas.lblpagado.setText(rs.getString(8));
-                    frmabononotas.lblabonado.setText(rs.getString(6));
+                    frmabonoentradas.lblcliente.setText(nombrecliente);
+                    frmabonoentradas.lblnoentrada.setText(rs.getString(1));
+                    frmabonoentradas.lbltotal.setText(rs.getString(5));
+                    frmabonoentradas.txtabono.setText("");
+                    frmabonoentradas.lblsaldo.setText(rs.getString(7));
+                    frmabonoentradas.lblpagado.setText(rs.getString(8));
+                    frmabonoentradas.lblabonado.setText(rs.getString(6));
                 }
                 
                 cerrar();
@@ -154,7 +165,7 @@ public final class frmbuscapagonotas extends javax.swing.JFrame {
         
           void dobleclick() 
             {
-                tblbuscanotas.addMouseListener(new MouseAdapter() 
+                tblbuscaentradas.addMouseListener(new MouseAdapter() 
                 {
                     @Override
                     public void mousePressed(MouseEvent Mouse_evt) 
@@ -177,14 +188,14 @@ public final class frmbuscapagonotas extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblbuscanotas = new javax.swing.JTable();
+        tblbuscaentradas = new javax.swing.JTable();
         txtnombre = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Reimprimir Notas");
+        setTitle("Busca Compras ");
 
-        tblbuscanotas.setModel(new javax.swing.table.DefaultTableModel(
+        tblbuscaentradas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
                 {},
@@ -195,12 +206,12 @@ public final class frmbuscapagonotas extends javax.swing.JFrame {
 
             }
         ));
-        tblbuscanotas.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblbuscaentradas.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblbuscanotasMouseClicked(evt);
+                tblbuscaentradasMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tblbuscanotas);
+        jScrollPane1.setViewportView(tblbuscaentradas);
 
         txtnombre.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -229,13 +240,12 @@ public final class frmbuscapagonotas extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
+                .addContainerGap(41, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtnombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 482, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 482, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -248,17 +258,17 @@ public final class frmbuscapagonotas extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addGap(0, 27, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tblbuscanotasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblbuscanotasMouseClicked
+    private void tblbuscaentradasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblbuscaentradasMouseClicked
         // TODO add your handling code here:
-        fila=tblbuscanotas.rowAtPoint(evt.getPoint());
-    }//GEN-LAST:event_tblbuscanotasMouseClicked
+        fila=tblbuscaentradas.rowAtPoint(evt.getPoint());
+    }//GEN-LAST:event_tblbuscaentradasMouseClicked
  TableRowSorter trs; 
     private void txtnombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnombreKeyReleased
         // TODO add your handling code here:
@@ -270,8 +280,8 @@ public final class frmbuscapagonotas extends javax.swing.JFrame {
                 trs.setRowFilter(RowFilter.regexFilter("(?i)"+txtnombre.getText(), 1));
             }
         });
-        trs = new TableRowSorter(tblbuscanotas.getModel());
-        tblbuscanotas.setRowSorter(trs);
+        trs = new TableRowSorter(tblbuscaentradas.getModel());
+        tblbuscaentradas.setRowSorter(trs);
     }//GEN-LAST:event_txtnombreKeyReleased
 
     /**
@@ -291,14 +301,46 @@ public final class frmbuscapagonotas extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmbuscapagonotas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmbuscapagoentradas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmbuscapagonotas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmbuscapagoentradas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmbuscapagonotas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmbuscapagoentradas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmbuscapagonotas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmbuscapagoentradas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -335,7 +377,7 @@ public final class frmbuscapagonotas extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmbuscapagonotas().setVisible(true);
+                new frmbuscapagoentradas().setVisible(true);
             }
         });
     }
@@ -344,7 +386,7 @@ public final class frmbuscapagonotas extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblbuscanotas;
+    private javax.swing.JTable tblbuscaentradas;
     private javax.swing.JTextField txtnombre;
     // End of variables declaration//GEN-END:variables
 }
