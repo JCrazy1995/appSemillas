@@ -38,6 +38,9 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.JFrame;
 public class frmReportepagosnotas extends javax.swing.JFrame {
 
     /**
@@ -55,6 +58,8 @@ public class frmReportepagosnotas extends javax.swing.JFrame {
     {
         initComponents();
         this.setResizable(false);
+        salir();
+        
     }
     
     public static void fecha()
@@ -84,7 +89,34 @@ public class frmReportepagosnotas extends javax.swing.JFrame {
             calendar.add(Calendar.DAY_OF_YEAR, dias);  // numero de días a añadir, o restar en caso de días<0
             return calendar.getTime(); // Devuelve el objeto Date con los nuevos días añadidos
         }
-
+      
+      public void salir()
+      {
+          try 
+          {
+              this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+              addWindowListener(new WindowAdapter() 
+              {
+                  public void windowClosing(WindowEvent e)
+                  {
+                    frmPrincipal.habilitar();
+                      cerrar();
+                  }
+                  
+              } );
+              this.setVisible(true);
+          }
+          catch (Exception e) 
+          {
+              e.printStackTrace();
+          }
+      }
+      
+            void cerrar()
+            {
+                this.dispose();
+            }
+        
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -228,7 +260,7 @@ public class frmReportepagosnotas extends javax.swing.JFrame {
             SimpleDateFormat form = new SimpleDateFormat("MMMM d yyyy");
             Date fech = new Date();
             String fa = form.format(fech);
-            
+             String diapago,mespago,aniopago,fechapago;
             
             HashMap param = new HashMap();
             Connection con = conexion.getConnection();
@@ -238,6 +270,19 @@ public class frmReportepagosnotas extends javax.swing.JFrame {
             param.put("total",total+"");
             param.put("del", formateador1.format(sumarRestarDiasFecha(f1, 0)));
             param.put("al", formateador1.format(sumarRestarDiasFecha(f2, 0)));
+              con = conexion.getConnection();
+            stmt = con.createStatement();
+            rs=stmt.executeQuery(" SELECT  PnotFecha FROM  tblpagosnotas "
+                + "where    PnotFecha>= '"+fecha1+"' and    PnotFecha <='"+fecha2+"'");
+            while(rs.next())
+            {   
+               
+                diapago=rs.getString(1).substring(8,10);
+                mespago=rs.getString(1).substring(5,7);
+                aniopago=rs.getString(1).substring(0,4);
+                fechapago=diapago+"/"+mespago+"/"+aniopago;
+                param.put("fechapago",fechapago);
+            }
 //            param.put("Saldo", saldo+"");
             JasperReport jr = JasperCompileManager.compileReport(jd);
             JasperPrint jp = JasperFillManager.fillReport(jr,param,con);
@@ -257,6 +302,8 @@ public class frmReportepagosnotas extends javax.swing.JFrame {
         catch (ParseException ex)
         {
             Logger.getLogger(frmreporteventasgeneral.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(frmReportepagosnotas.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed

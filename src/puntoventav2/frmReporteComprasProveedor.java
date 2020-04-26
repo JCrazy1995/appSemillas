@@ -8,6 +8,8 @@ package puntoventav2;
 import java.awt.Desktop;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -23,6 +25,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import net.sf.jasperreports.engine.JRException;
@@ -56,6 +59,7 @@ public class frmReporteComprasProveedor extends javax.swing.JFrame {
     public frmReporteComprasProveedor() 
     {
         initComponents();
+        salir();
     }
     
     public static void fecha()
@@ -81,6 +85,33 @@ public class frmReporteComprasProveedor extends javax.swing.JFrame {
                 calendar.add(Calendar.DAY_OF_YEAR, dias);  // numero de días a añadir, o restar en caso de días<0
                 return calendar.getTime(); // Devuelve el objeto Date con los nuevos días añadidos
             }
+          
+          public void salir()
+      {
+          try 
+          {
+              this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+              addWindowListener(new WindowAdapter() 
+              {
+                  public void windowClosing(WindowEvent e)
+                  {
+                    frmPrincipal.habilitar();
+                      cerrar();
+                  }
+                  
+              } );
+              this.setVisible(true);
+          }
+          catch (Exception e) 
+          {
+              e.printStackTrace();
+          }
+      }
+      
+            void cerrar()
+            {
+                this.dispose();
+            }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -101,8 +132,13 @@ public class frmReporteComprasProveedor extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Reporte Compras Proveedor");
+
+        date1.setDateFormatString(" dd/MM/y");
 
         jLabel1.setText("De la Fecha ");
+
+        date2.setDateFormatString(" dd/MM/y");
 
         jLabel2.setText("a la Fecha");
 
@@ -173,17 +209,11 @@ public class frmReporteComprasProveedor extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(41, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(39, 39, 39)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(34, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -212,7 +242,11 @@ public class frmReporteComprasProveedor extends javax.swing.JFrame {
         String myDate = dia1+"/"+mes1+"/"+ano1;
         double utilidad=0,saldo=0;
         System.out.println(myDate);
-
+        if("".equals(txtnombre.getText()))
+        {
+            JOptionPane.showMessageDialog(null, "Favor de Escribir el Proveedor","Error",JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         try
         {
             con = conexion.getConnection();

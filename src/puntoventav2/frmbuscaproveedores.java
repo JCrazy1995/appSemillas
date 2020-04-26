@@ -10,11 +10,14 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
@@ -45,6 +48,7 @@ public final class frmbuscaproveedores extends javax.swing.JFrame {
         configModelo();
         inicio();
         dobleclick();
+        salir();
     }
      void configModelo() {
             modeloTabla.addColumn("Numero ");
@@ -140,6 +144,30 @@ public final class frmbuscaproveedores extends javax.swing.JFrame {
     {
         this.dispose();
     }
+     
+       public void salir()
+      {
+          try 
+          {
+              this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+              addWindowListener(new WindowAdapter() 
+              {
+                  public void windowClosing(WindowEvent e)
+                  {
+                    frmPrincipal.habilitar();
+                      cerrar();
+                  }
+                  
+              } );
+              this.setVisible(true);
+          }
+          catch (Exception e) 
+          {
+              e.printStackTrace();
+          }
+      }
+      
+                
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

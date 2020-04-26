@@ -11,6 +11,8 @@ package puntoventav2;
  */
 import java.awt.Desktop;
 import java.awt.HeadlessException;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -26,6 +28,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRDataSource;
@@ -56,6 +59,7 @@ public class frmReporteCompras extends javax.swing.JFrame {
     {
         initComponents();
         this.setResizable(false);
+        salir();
     }
     
     public static void fecha()
@@ -85,6 +89,34 @@ public class frmReporteCompras extends javax.swing.JFrame {
             calendar.add(Calendar.DAY_OF_YEAR, dias);  // numero de días a añadir, o restar en caso de días<0
             return calendar.getTime(); // Devuelve el objeto Date con los nuevos días añadidos
         }
+          
+          
+          public void salir()
+      {
+          try 
+          {
+              this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+              addWindowListener(new WindowAdapter() 
+              {
+                  public void windowClosing(WindowEvent e)
+                  {
+                    frmPrincipal.habilitar();
+                      cerrar();
+                  }
+                  
+              } );
+              this.setVisible(true);
+          }
+          catch (Exception e) 
+          {
+              e.printStackTrace();
+          }
+      }
+      
+            void cerrar()
+            {
+                this.dispose();
+            }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -102,8 +134,13 @@ public class frmReporteCompras extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Reporte de Compras ");
+
+        date1.setDateFormatString(" dd/MM/y");
 
         jLabel1.setText("De la Fecha ");
+
+        date2.setDateFormatString(" dd/MM/y");
 
         jLabel2.setText("a la Fecha");
 
@@ -127,11 +164,11 @@ public class frmReporteCompras extends javax.swing.JFrame {
                             .addComponent(date1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(date2, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addComponent(jLabel1))
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(66, 66, 66)))
                 .addGap(60, 60, 60)
                 .addComponent(jButton1))
@@ -223,6 +260,7 @@ public class frmReporteCompras extends javax.swing.JFrame {
             Connection con = conexion.getConnection();
             JasperDesign jd = JRXmlLoader.load(new File("C:\\Users\\coron\\JaspersoftWorkspace\\Prueba").getAbsolutePath()+"\\reportecompra.jrxml");
             param.put("fecha1", formateador.format(sumarRestarDiasFecha(f1, 0)));
+            System.out.println(formateador.format(sumarRestarDiasFecha(f1, 0))+"  "+formateador.format(sumarRestarDiasFecha(f2, 0)));
             param.put("fecha2", formateador.format(sumarRestarDiasFecha(f2, 0)));
             param.put("total",total+"");
             param.put("Fecha", formateador1.format(sumarRestarDiasFecha(date, 0)));

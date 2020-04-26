@@ -3,6 +3,8 @@ package puntoventav2;
 import java.awt.Desktop;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -10,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
@@ -42,6 +45,7 @@ public class frmreimprimirnotas extends javax.swing.JFrame {
         configModelo();
         iniciotabla();
         setResizable(false);
+        salir();
     }
 
     void configModelo() 
@@ -108,6 +112,33 @@ public class frmreimprimirnotas extends javax.swing.JFrame {
 
         //cargaTicket();
     }
+         public void salir()
+      {
+          try 
+          {
+              this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+              addWindowListener(new WindowAdapter() 
+              {
+                  @Override
+                  public void windowClosing(WindowEvent e)
+                  {
+                    frmPrincipal.habilitar();
+                      cerrar();
+                  }
+                  
+              } );
+              this.setVisible(true);
+          }
+          catch (Exception e) 
+          {
+              e.printStackTrace();
+          }
+      } 
+        void cerrar() 
+        {
+            this.dispose();
+        }
+        
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

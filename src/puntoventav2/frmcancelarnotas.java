@@ -14,6 +14,8 @@ import traducir.Traducir;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -36,6 +38,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.sql.ResultSet;
 import java.lang.Exception;
+import javax.swing.JFrame;
 
 public class frmcancelarnotas extends javax.swing.JFrame {
     static java.sql.ResultSet rs=null;
@@ -66,10 +69,7 @@ public class frmcancelarnotas extends javax.swing.JFrame {
         this.setSize(new Dimension(660,750));
         txtcliente.requestFocus();
         configModelo();
-        
-       
-       
-        
+        salir();
     }
         
          void configModelo() 
@@ -84,10 +84,6 @@ public class frmcancelarnotas extends javax.swing.JFrame {
             tblnotas.setModel(modeloTabla);
 
         }
-        
-    
-        
-         
         
           void eliminar()
           {              
@@ -109,6 +105,35 @@ public class frmcancelarnotas extends javax.swing.JFrame {
             txtdomicilio.setText("");
             txtfechapago.setText("");
           }
+          
+          
+          
+           public void salir()
+      {
+          try 
+          {
+              this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+              addWindowListener(new WindowAdapter() 
+              {
+                  @Override
+                  public void windowClosing(WindowEvent e)
+                  {
+                    frmPrincipal.habilitar();
+                      cerrar();
+                  }
+                  
+              } );
+              this.setVisible(true);
+          }
+          catch (Exception e) 
+          {
+              e.printStackTrace();
+          }
+      } 
+        void cerrar() 
+        {
+            this.dispose();
+        }
     
     /**
      * This method is called from within the constructor to initialize the form.

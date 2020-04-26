@@ -24,6 +24,54 @@ public class frmPrincipal extends javax.swing.JFrame {
          this.setResizable(false);
           this.setExtendedState(frmPrincipal.MAXIMIZED_BOTH);
     }
+    
+    public void deshabilitar()
+    {
+        mibclientes.setEnabled(false);
+        mibproveedores.setEnabled(false);
+        mibproductos.setEnabled(false);
+        mibrealizarnotas.setEnabled(false);
+        mibreeimprimirnotas.setEnabled(false);
+        mibmodificarnotas.setEnabled(false);
+        mibcancelarnotas.setEnabled(false);
+        mibabononotas.setEnabled(false);
+        mibregistrarentradas.setEnabled(false);
+        mibmodificarentradas.setEnabled(false);
+        mibcancelarentradas.setEnabled(false);
+        mibabonoentradas.setEnabled(false);
+        mibreporteventas.setEnabled(false);
+        mibreporteventascliente.setEnabled(false);
+        mibreportecompras.setEnabled(false);
+        mibreportecomprasproveedor.setEnabled(false);
+        mibreportepagonotas.setEnabled(false);
+        mibreportepagoentradas.setEnabled(false);
+        mibregistroinventario.setEnabled(false);
+        miblistaprecios.setEnabled(false);
+    }
+    
+    public static void habilitar()
+    {
+        mibclientes.setEnabled(true);
+        mibproveedores.setEnabled(true);
+        mibproductos.setEnabled(true);
+        mibrealizarnotas.setEnabled(true);
+        mibreeimprimirnotas.setEnabled(true);
+        mibmodificarnotas.setEnabled(true);
+        mibcancelarnotas.setEnabled(true);
+        mibabononotas.setEnabled(true);
+        mibregistrarentradas.setEnabled(true);
+        mibmodificarentradas.setEnabled(true);
+        mibcancelarentradas.setEnabled(true);
+        mibabonoentradas.setEnabled(true);
+        mibreporteventas.setEnabled(true);
+        mibreporteventascliente.setEnabled(true);
+        mibreportecompras.setEnabled(true);
+        mibreportecomprasproveedor.setEnabled(true);
+        mibreportepagonotas.setEnabled(true);
+        mibreportepagoentradas.setEnabled(true);
+        mibregistroinventario.setEnabled(true);
+        miblistaprecios.setEnabled(true);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -38,28 +86,32 @@ public class frmPrincipal extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu3 = new javax.swing.JMenu();
-        jMenu4 = new javax.swing.JMenu();
-        jMenu6 = new javax.swing.JMenu();
+        mnbprincipal = new javax.swing.JMenuBar();
+        mniclientes = new javax.swing.JMenu();
+        mibclientes = new javax.swing.JMenuItem();
+        mibproveedores = new javax.swing.JMenuItem();
+        mibproductos = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem6 = new javax.swing.JMenuItem();
-        jMenuItem9 = new javax.swing.JMenuItem();
+        mibrealizarnotas = new javax.swing.JMenuItem();
+        mibreeimprimirnotas = new javax.swing.JMenuItem();
+        mibmodificarnotas = new javax.swing.JMenuItem();
+        mibcancelarnotas = new javax.swing.JMenuItem();
+        mibabononotas = new javax.swing.JMenuItem();
         jMenu7 = new javax.swing.JMenu();
-        jMenuItem5 = new javax.swing.JMenuItem();
-        jMenuItem13 = new javax.swing.JMenuItem();
-        jMenuItem14 = new javax.swing.JMenuItem();
+        mibregistrarentradas = new javax.swing.JMenuItem();
+        mibmodificarentradas = new javax.swing.JMenuItem();
+        mibcancelarentradas = new javax.swing.JMenuItem();
+        mibabonoentradas = new javax.swing.JMenuItem();
         jMenu8 = new javax.swing.JMenu();
-        jMenuItem7 = new javax.swing.JMenuItem();
-        jMenuItem8 = new javax.swing.JMenuItem();
-        jMenuItem12 = new javax.swing.JMenuItem();
-        jMenuItem15 = new javax.swing.JMenuItem();
+        mibreporteventas = new javax.swing.JMenuItem();
+        mibreporteventascliente = new javax.swing.JMenuItem();
+        mibreportecompras = new javax.swing.JMenuItem();
+        mibreportecomprasproveedor = new javax.swing.JMenuItem();
+        mibreportepagonotas = new javax.swing.JMenuItem();
+        mibreportepagoentradas = new javax.swing.JMenuItem();
         jMenu9 = new javax.swing.JMenu();
-        jMenuItem10 = new javax.swing.JMenuItem();
-        jMenuItem11 = new javax.swing.JMenuItem();
+        mibregistroinventario = new javax.swing.JMenuItem();
+        miblistaprecios = new javax.swing.JMenuItem();
 
         jMenu1.setText("jMenu1");
 
@@ -81,159 +133,192 @@ public class frmPrincipal extends javax.swing.JFrame {
             .addGap(0, 397, Short.MAX_VALUE)
         );
 
-        jMenu3.setText("Clientes");
-        jMenu3.addMouseListener(new java.awt.event.MouseAdapter() {
+        mniclientes.setText("Utilerias");
+        mniclientes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jMenu3MouseClicked(evt);
+                mniclientesMouseClicked(evt);
             }
         });
-        jMenuBar1.add(jMenu3);
 
-        jMenu4.setText("Proveedores");
-        jMenu4.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jMenu4MouseClicked(evt);
+        mibclientes.setText("Clientes");
+        mibclientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mibclientesActionPerformed(evt);
             }
         });
-        jMenuBar1.add(jMenu4);
+        mniclientes.add(mibclientes);
 
-        jMenu6.setText("Productos");
-        jMenu6.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jMenu6MouseClicked(evt);
+        mibproveedores.setText("Proveedores");
+        mibproveedores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mibproveedoresActionPerformed(evt);
             }
         });
-        jMenuBar1.add(jMenu6);
+        mniclientes.add(mibproveedores);
+
+        mibproductos.setText("Productos");
+        mibproductos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mibproductosActionPerformed(evt);
+            }
+        });
+        mniclientes.add(mibproductos);
+
+        mnbprincipal.add(mniclientes);
 
         jMenu5.setText("Notas");
 
-        jMenuItem1.setText("Realizar");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        mibrealizarnotas.setText("Realizar");
+        mibrealizarnotas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                mibrealizarnotasActionPerformed(evt);
             }
         });
-        jMenu5.add(jMenuItem1);
+        jMenu5.add(mibrealizarnotas);
 
-        jMenuItem2.setText("Reimprimir");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        mibreeimprimirnotas.setText("Reimprimir");
+        mibreeimprimirnotas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                mibreeimprimirnotasActionPerformed(evt);
             }
         });
-        jMenu5.add(jMenuItem2);
+        jMenu5.add(mibreeimprimirnotas);
 
-        jMenuItem3.setText("Modificar");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        mibmodificarnotas.setText("Modificar");
+        mibmodificarnotas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                mibmodificarnotasActionPerformed(evt);
             }
         });
-        jMenu5.add(jMenuItem3);
+        jMenu5.add(mibmodificarnotas);
 
-        jMenuItem6.setText("Cancelar");
-        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+        mibcancelarnotas.setText("Cancelar");
+        mibcancelarnotas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem6ActionPerformed(evt);
+                mibcancelarnotasActionPerformed(evt);
             }
         });
-        jMenu5.add(jMenuItem6);
+        jMenu5.add(mibcancelarnotas);
 
-        jMenuItem9.setText("Abono");
-        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+        mibabononotas.setText("Abono");
+        mibabononotas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem9ActionPerformed(evt);
+                mibabononotasActionPerformed(evt);
             }
         });
-        jMenu5.add(jMenuItem9);
+        jMenu5.add(mibabononotas);
 
-        jMenuBar1.add(jMenu5);
+        mnbprincipal.add(jMenu5);
 
         jMenu7.setText("Entradas");
 
-        jMenuItem5.setText("Registrar");
-        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+        mibregistrarentradas.setText("Registrar");
+        mibregistrarentradas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem5ActionPerformed(evt);
+                mibregistrarentradasActionPerformed(evt);
             }
         });
-        jMenu7.add(jMenuItem5);
+        jMenu7.add(mibregistrarentradas);
 
-        jMenuItem13.setText("Modificar");
-        jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
+        mibmodificarentradas.setText("Modificar");
+        mibmodificarentradas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem13ActionPerformed(evt);
+                mibmodificarentradasActionPerformed(evt);
             }
         });
-        jMenu7.add(jMenuItem13);
+        jMenu7.add(mibmodificarentradas);
 
-        jMenuItem14.setText("Cancelar");
-        jMenuItem14.addActionListener(new java.awt.event.ActionListener() {
+        mibcancelarentradas.setText("Cancelar");
+        mibcancelarentradas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem14ActionPerformed(evt);
+                mibcancelarentradasActionPerformed(evt);
             }
         });
-        jMenu7.add(jMenuItem14);
+        jMenu7.add(mibcancelarentradas);
 
-        jMenuBar1.add(jMenu7);
+        mibabonoentradas.setText("Abono Entradas");
+        mibabonoentradas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mibabonoentradasActionPerformed(evt);
+            }
+        });
+        jMenu7.add(mibabonoentradas);
+
+        mnbprincipal.add(jMenu7);
 
         jMenu8.setText("Reportes ");
 
-        jMenuItem7.setText("Reporte de Ventas General");
-        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+        mibreporteventas.setText("Reporte de Ventas General");
+        mibreporteventas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem7ActionPerformed(evt);
+                mibreporteventasActionPerformed(evt);
             }
         });
-        jMenu8.add(jMenuItem7);
+        jMenu8.add(mibreporteventas);
 
-        jMenuItem8.setText("Reporte de Ventas Por Cliente");
-        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+        mibreporteventascliente.setText("Reporte de Ventas Por Cliente");
+        mibreporteventascliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem8ActionPerformed(evt);
+                mibreporteventasclienteActionPerformed(evt);
             }
         });
-        jMenu8.add(jMenuItem8);
+        jMenu8.add(mibreporteventascliente);
 
-        jMenuItem12.setText("Reporte de Compras General");
-        jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
+        mibreportecompras.setText("Reporte de Compras General");
+        mibreportecompras.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem12ActionPerformed(evt);
+                mibreportecomprasActionPerformed(evt);
             }
         });
-        jMenu8.add(jMenuItem12);
+        jMenu8.add(mibreportecompras);
 
-        jMenuItem15.setText("Reporte de Pagos de Notas");
-        jMenuItem15.addActionListener(new java.awt.event.ActionListener() {
+        mibreportecomprasproveedor.setText("Reporte de Compras Por Proveedor");
+        mibreportecomprasproveedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem15ActionPerformed(evt);
+                mibreportecomprasproveedorActionPerformed(evt);
             }
         });
-        jMenu8.add(jMenuItem15);
+        jMenu8.add(mibreportecomprasproveedor);
 
-        jMenuBar1.add(jMenu8);
+        mibreportepagonotas.setText("Reporte de Pagos de Notas");
+        mibreportepagonotas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mibreportepagonotasActionPerformed(evt);
+            }
+        });
+        jMenu8.add(mibreportepagonotas);
+
+        mibreportepagoentradas.setText("Reporte de Pagos de  Entradas");
+        mibreportepagoentradas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mibreportepagoentradasActionPerformed(evt);
+            }
+        });
+        jMenu8.add(mibreportepagoentradas);
+
+        mnbprincipal.add(jMenu8);
 
         jMenu9.setText("Inventario");
 
-        jMenuItem10.setText("Registro");
-        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+        mibregistroinventario.setText("Registro");
+        mibregistroinventario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem10ActionPerformed(evt);
+                mibregistroinventarioActionPerformed(evt);
             }
         });
-        jMenu9.add(jMenuItem10);
+        jMenu9.add(mibregistroinventario);
 
-        jMenuItem11.setText("Lista de Precios");
-        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+        miblistaprecios.setText("Lista de Precios");
+        miblistaprecios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem11ActionPerformed(evt);
+                miblistapreciosActionPerformed(evt);
             }
         });
-        jMenu9.add(jMenuItem11);
+        jMenu9.add(miblistaprecios);
 
-        jMenuBar1.add(jMenu9);
+        mnbprincipal.add(jMenu9);
 
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(mnbprincipal);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -249,111 +334,154 @@ public class frmPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void mibrealizarnotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mibrealizarnotasActionPerformed
         // TODO add your handling code here:
-        
+       deshabilitar();
        frmnotas notas = new frmnotas();
        notas.setVisible(true);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_mibrealizarnotasActionPerformed
 
-    private void jMenu3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu3MouseClicked
+    private void mniclientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mniclientesMouseClicked
         // TODO add your handling code here:
-           frmclientes clientes = new frmclientes();
-           clientes.setVisible(true);
-    }//GEN-LAST:event_jMenu3MouseClicked
+         
+    }//GEN-LAST:event_mniclientesMouseClicked
 
-    private void jMenu4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu4MouseClicked
+    private void mibreeimprimirnotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mibreeimprimirnotasActionPerformed
         // TODO add your handling code here:
-        frmproveedores proveedores = new frmproveedores();
-        proveedores.setVisible(true);
-    }//GEN-LAST:event_jMenu4MouseClicked
-
-    private void jMenu6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu6MouseClicked
-        // TODO add your handling code here:
-        frmarticulos productos = new frmarticulos();
-        productos.setVisible(true);
-    }//GEN-LAST:event_jMenu6MouseClicked
-
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        // TODO add your handling code here:
-    
+        deshabilitar();
         frmreimprimirnotas reeimprimir = new frmreimprimirnotas();
         reeimprimir.setVisible(true);
        
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_mibreeimprimirnotasActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+    private void mibmodificarnotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mibmodificarnotasActionPerformed
         // TODO add your handling code here:
+        deshabilitar();
         frmbuscarmodificarnotas modificar= new frmbuscarmodificarnotas();
         modificar.setVisible(true);
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    }//GEN-LAST:event_mibmodificarnotasActionPerformed
 
-    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+    private void mibcancelarnotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mibcancelarnotasActionPerformed
         // TODO add your handling code here:
+        deshabilitar();
         frmbuscacancelarnotas cancelar = new frmbuscacancelarnotas();
         cancelar.setVisible(true);
-    }//GEN-LAST:event_jMenuItem6ActionPerformed
+    }//GEN-LAST:event_mibcancelarnotasActionPerformed
 
-    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+    private void mibreporteventasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mibreporteventasActionPerformed
         // TODO add your handling code here:
+        deshabilitar();
         frmreporteventasgeneral reporte = new frmreporteventasgeneral();
         reporte.setVisible(true);
-    }//GEN-LAST:event_jMenuItem7ActionPerformed
+    }//GEN-LAST:event_mibreporteventasActionPerformed
 
-    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
+    private void mibabononotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mibabononotasActionPerformed
         // TODO add your handling code here:
+        deshabilitar();
         frmbuscapagonotas pg= new frmbuscapagonotas();
         pg.setVisible(true);
-    }//GEN-LAST:event_jMenuItem9ActionPerformed
+    }//GEN-LAST:event_mibabononotasActionPerformed
 
-    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+    private void mibregistrarentradasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mibregistrarentradasActionPerformed
         // TODO add your handling code here:
+        deshabilitar();
         frmentradas en = new frmentradas();
         en.setVisible(true);
-    }//GEN-LAST:event_jMenuItem5ActionPerformed
+    }//GEN-LAST:event_mibregistrarentradasActionPerformed
 
-    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+    private void mibreporteventasclienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mibreporteventasclienteActionPerformed
         // TODO add your handling code here:
+        deshabilitar();
         frmreporteventascliente repor = new frmreporteventascliente();
         repor.setVisible(true);
-    }//GEN-LAST:event_jMenuItem8ActionPerformed
+        
+    }//GEN-LAST:event_mibreporteventasclienteActionPerformed
 
-    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+    private void mibregistroinventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mibregistroinventarioActionPerformed
         // TODO add your handling code here:
+        deshabilitar();
         frminventario inventario = new frminventario();
         inventario.setVisible(true);
-    }//GEN-LAST:event_jMenuItem10ActionPerformed
+    }//GEN-LAST:event_mibregistroinventarioActionPerformed
 
-    private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
+    private void miblistapreciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miblistapreciosActionPerformed
         // TODO add your handling code here:
+        deshabilitar();
         frmlistaarticulos lista = new frmlistaarticulos();
         lista.setVisible(true);
-    }//GEN-LAST:event_jMenuItem11ActionPerformed
+    }//GEN-LAST:event_miblistapreciosActionPerformed
 
-    private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
+    private void mibreportecomprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mibreportecomprasActionPerformed
         // TODO add your handling code here:
+        deshabilitar();
         frmReporteCompras compras= new frmReporteCompras();
         compras.setVisible(true);
-    }//GEN-LAST:event_jMenuItem12ActionPerformed
+    }//GEN-LAST:event_mibreportecomprasActionPerformed
 
-    private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
+    private void mibmodificarentradasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mibmodificarentradasActionPerformed
         // TODO add your handling code here:
+        deshabilitar();
         frmbuscaentradasmodificar modificar = new frmbuscaentradasmodificar();
         modificar.setVisible(true);
         
-    }//GEN-LAST:event_jMenuItem13ActionPerformed
+    }//GEN-LAST:event_mibmodificarentradasActionPerformed
 
-    private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
+    private void mibcancelarentradasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mibcancelarentradasActionPerformed
         // TODO add your handling code here:
+        deshabilitar();
         frmbuscaentradascancelar cancelar = new frmbuscaentradascancelar();
         cancelar.setVisible(true);
-    }//GEN-LAST:event_jMenuItem14ActionPerformed
+    }//GEN-LAST:event_mibcancelarentradasActionPerformed
 
-    private void jMenuItem15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem15ActionPerformed
+    private void mibreportepagonotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mibreportepagonotasActionPerformed
         // TODO add your handling code here:
+        deshabilitar();
         frmReportepagosnotas pago = new frmReportepagosnotas();
         pago.setVisible(true);
-    }//GEN-LAST:event_jMenuItem15ActionPerformed
+    }//GEN-LAST:event_mibreportepagonotasActionPerformed
+
+    private void mibreportepagoentradasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mibreportepagoentradasActionPerformed
+        // TODO add your handling code here:|
+        deshabilitar();
+        frmReportepagosentradas pago = new frmReportepagosentradas();
+        pago.setVisible(true);
+        deshabilitar();
+    }//GEN-LAST:event_mibreportepagoentradasActionPerformed
+
+    private void mibabonoentradasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mibabonoentradasActionPerformed
+        // TODO add your handling code here:
+        deshabilitar();
+        frmbuscapagoentradas abono = new frmbuscapagoentradas();
+        abono.setVisible(true);
+    }//GEN-LAST:event_mibabonoentradasActionPerformed
+
+    private void mibreportecomprasproveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mibreportecomprasproveedorActionPerformed
+        // TODO add your handling code here:
+        deshabilitar();
+        frmReporteComprasProveedor reporte = new frmReporteComprasProveedor();
+        reporte.setVisible(true);
+    }//GEN-LAST:event_mibreportecomprasproveedorActionPerformed
+
+    private void mibclientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mibclientesActionPerformed
+        // TODO add your handling code here:
+        deshabilitar();
+        frmclientes clientes = new frmclientes();
+        clientes.setVisible(true);
+    }//GEN-LAST:event_mibclientesActionPerformed
+
+    private void mibproveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mibproveedoresActionPerformed
+        // TODO add your handling code here:
+        deshabilitar();
+        frmproveedores provedor = new frmproveedores();
+        provedor.setVisible(true);
+    }//GEN-LAST:event_mibproveedoresActionPerformed
+
+    private void mibproductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mibproductosActionPerformed
+        // TODO add your handling code here:
+        deshabilitar();
+        frmarticulos articulos = new frmarticulos();
+        articulos.setVisible(true);
+    }//GEN-LAST:event_mibproductosActionPerformed
 
     /**
  * @param args the command line arguments
@@ -393,29 +521,33 @@ public class frmPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
-    private javax.swing.JMenu jMenu6;
     private javax.swing.JMenu jMenu7;
     private javax.swing.JMenu jMenu8;
     private javax.swing.JMenu jMenu9;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem10;
-    private javax.swing.JMenuItem jMenuItem11;
-    private javax.swing.JMenuItem jMenuItem12;
-    private javax.swing.JMenuItem jMenuItem13;
-    private javax.swing.JMenuItem jMenuItem14;
-    private javax.swing.JMenuItem jMenuItem15;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JMenuItem jMenuItem7;
-    private javax.swing.JMenuItem jMenuItem8;
-    private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPanel jPanel1;
+    public static javax.swing.JMenuItem mibabonoentradas;
+    public static javax.swing.JMenuItem mibabononotas;
+    public static javax.swing.JMenuItem mibcancelarentradas;
+    public static javax.swing.JMenuItem mibcancelarnotas;
+    public static javax.swing.JMenuItem mibclientes;
+    public static javax.swing.JMenuItem miblistaprecios;
+    public static javax.swing.JMenuItem mibmodificarentradas;
+    public static javax.swing.JMenuItem mibmodificarnotas;
+    public static javax.swing.JMenuItem mibproductos;
+    public static javax.swing.JMenuItem mibproveedores;
+    public static javax.swing.JMenuItem mibrealizarnotas;
+    public static javax.swing.JMenuItem mibreeimprimirnotas;
+    public static javax.swing.JMenuItem mibregistrarentradas;
+    public static javax.swing.JMenuItem mibregistroinventario;
+    public static javax.swing.JMenuItem mibreportecompras;
+    public static javax.swing.JMenuItem mibreportecomprasproveedor;
+    public static javax.swing.JMenuItem mibreportepagoentradas;
+    public static javax.swing.JMenuItem mibreportepagonotas;
+    public static javax.swing.JMenuItem mibreporteventas;
+    public static javax.swing.JMenuItem mibreporteventascliente;
+    public static javax.swing.JMenuBar mnbprincipal;
+    private javax.swing.JMenu mniclientes;
     // End of variables declaration//GEN-END:variables
 }

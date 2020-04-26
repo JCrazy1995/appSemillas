@@ -11,6 +11,8 @@ package puntoventav2;
  */
 import java.awt.Desktop;
 import java.awt.HeadlessException;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -26,6 +28,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRDataSource;
@@ -54,6 +57,8 @@ public class frmReportepagosentradas extends javax.swing.JFrame {
     public frmReportepagosentradas() 
     {
         initComponents();
+        salir();
+      
     }
     
     public static void fecha()
@@ -81,6 +86,33 @@ public class frmReportepagosentradas extends javax.swing.JFrame {
             return calendar.getTime(); // Devuelve el objeto Date con los nuevos días añadidos
         }
     
+      
+      public void salir()
+      {
+          try 
+          {
+              this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+              addWindowListener(new WindowAdapter() 
+              {
+                  public void windowClosing(WindowEvent e)
+                  {
+                    frmPrincipal.habilitar();
+                      cerrar();
+                  }
+                  
+              } );
+              this.setVisible(true);
+          }
+          catch (Exception e) 
+          {
+              e.printStackTrace();
+          }
+      }
+      
+            void cerrar()
+            {
+                this.dispose();
+            }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -207,8 +239,8 @@ public class frmReportepagosentradas extends javax.swing.JFrame {
         {
             con = conexion.getConnection();
             stmt = con.createStatement();
-            rs=stmt.executeQuery(" SELECT SUM(PnotCanditad) as total FROM tblpagosnotas "
-                + "where  PnotFecha>= '"+fecha1+"' and  PnotFecha <='"+fecha2+"'");
+            rs=stmt.executeQuery(" SELECT SUM(PentCanditad) as total FROM  tblpagosentradas "
+                + "where   PentFecha>= '"+fecha1+"' and   PentFecha <='"+fecha2+"'");
             while(rs.next())
             {
                 total=rs.getDouble(1);
@@ -223,27 +255,48 @@ public class frmReportepagosentradas extends javax.swing.JFrame {
         try
         {
             SimpleDateFormat formateador1 = new SimpleDateFormat("dd/MM/yy");
-            Date date = formateador1.parse(myDate);
+            
             SimpleDateFormat formateador = new SimpleDateFormat("yyyy-mm-dd");
             Date f1 = formateador.parse(fecha1);
             Date f2 = formateador.parse(fecha2);
-
+            
+            SimpleDateFormat form = new SimpleDateFormat("MMMM d yyyy");
+            Date fech = new Date();
+            String fa = form.format(fech);
+            String diapago,mespago,aniopago,fechapago;
+            
+            
             HashMap param = new HashMap();
             Connection con = conexion.getConnection();
-            JasperDesign jd = JRXmlLoader.load(new File("C:\\Users\\coron\\JaspersoftWorkspace\\Prueba").getAbsolutePath()+"\\reportepagonotas.jrxml");
+            JasperDesign jd = JRXmlLoader.load(new File("C:\\Users\\coron\\JaspersoftWorkspace\\Prueba").getAbsolutePath()+"\\reportepagocompras.jrxml");
             param.put("fecha1", formateador.format(sumarRestarDiasFecha(f1, 0)));
             param.put("fecha2", formateador.format(sumarRestarDiasFecha(f2, 0)));
             param.put("total",total+"");
             param.put("del", formateador1.format(sumarRestarDiasFecha(f1, 0)));
             param.put("al", formateador1.format(sumarRestarDiasFecha(f2, 0)));
+             con = conexion.getConnection();
+            stmt = con.createStatement();
+            rs=stmt.executeQuery(" SELECT PentFecha FROM  tblpagosentradas "
+                + "where   PentFecha>= '"+fecha1+"' and   PentFecha <='"+fecha2+"'");
+            while(rs.next())
+            {   
+               
+                diapago=rs.getString(1).substring(8,10);
+                mespago=rs.getString(1).substring(5,7);
+                aniopago=rs.getString(1).substring(0,4);
+                fechapago=diapago+"/"+mespago+"/"+aniopago;
+                param.put("fechapago",fechapago);
+            }
             //            param.put("Saldo", saldo+"");
             JasperReport jr = JasperCompileManager.compileReport(jd);
             JasperPrint jp = JasperFillManager.fillReport(jr,param,con);
-            OutputStream output = new FileOutputStream(new File("C:\\Users\\coron\\Desktop\\prueba\\original.pdf"));
+            OutputStream output = new FileOutputStream(new File("C:\\Users\\coron\\Desktop\\prueba\\"
+                    + ""+"Reporte Pagos Compras"+" "+fa+""+".pdf"));
             JasperExportManager.exportReportToPdfStream(jp, output);
             output.flush();
             output.close();
-            File path = new  File("C:\\Users\\coron\\Desktop\\prueba\\original.pdf");
+            File path = new  File("C:\\Users\\coron\\Desktop\\prueba\\"
+                    + ""+"Reporte Pagos Compras"+" "+fa+""+".pdf");
             Desktop.getDesktop().open(path);
         }
         catch (JRException | IOException ex)
@@ -253,7 +306,9 @@ public class frmReportepagosentradas extends javax.swing.JFrame {
         catch (ParseException ex)
         {
             Logger.getLogger(frmreporteventasgeneral.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } catch (SQLException ex) {
+             Logger.getLogger(frmReportepagosentradas.class.getName()).log(Level.SEVERE, null, ex);
+         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

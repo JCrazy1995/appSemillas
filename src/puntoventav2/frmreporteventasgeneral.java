@@ -7,7 +7,10 @@ package puntoventav2;
 
 import java.awt.Desktop;
 import java.awt.HeadlessException;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -22,18 +25,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 
 /**
@@ -59,8 +60,11 @@ public class frmreporteventasgeneral extends javax.swing.JFrame {
     public frmreporteventasgeneral()
     {
         initComponents();
-        configModelo();
+        this.setResizable(false);
+        salir();
+        
     }
+    
     public static void fecha()
      {
  
@@ -88,27 +92,10 @@ public class frmreporteventasgeneral extends javax.swing.JFrame {
         }
       
      }
-        void configModelo() 
-        {
-            modeloTabla.addColumn("Numero Nota");
-            modeloTabla.addColumn("Nombre");
-            modeloTabla.addColumn("Fecha");
-            modeloTabla.addColumn("Total");
-            modeloTabla.addColumn("Pagada");
-            tblprueba.setModel(modeloTabla);
-
-         }   
-         void eliminar() 
-         {
-
-            DefaultTableModel tb = (DefaultTableModel) tblprueba.getModel();
-            int a = tblprueba.getRowCount() - 1;
-            for (int i = a; i >= 0; i--) 
-            {
-                tb.removeRow(tb.getRowCount() - 1);
-            }
-           //cargaTicket();
-        }  
+        
+    
+    
+    
       public static Date sumarRestarDiasFecha(Date fecha, int dias) 
         {
         Calendar calendar = Calendar.getInstance();
@@ -118,6 +105,34 @@ public class frmreporteventasgeneral extends javax.swing.JFrame {
         }
         
     
+       public void salir()
+      {
+          try 
+          {
+              this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+              addWindowListener(new WindowAdapter() 
+              {
+                  @Override
+                  public void windowClosing(WindowEvent e)
+                  {
+                    frmPrincipal.habilitar();
+                      cerrar();
+                  }
+                  
+              } );
+              this.setVisible(true);
+          }
+          catch (Exception e) 
+          {
+              e.printStackTrace();
+          }
+      } 
+        void cerrar() 
+        {
+            this.dispose();
+        }
+      
+      
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -127,19 +142,20 @@ public class frmreporteventasgeneral extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         date1 = new com.toedter.calendar.JDateChooser();
         jLabel1 = new javax.swing.JLabel();
         date2 = new com.toedter.calendar.JDateChooser();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblprueba = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        date1.setDateFormatString("dd/MM/y");
+
         jLabel1.setText("De la Fecha ");
+
+        date2.setDateFormatString("dd/MM/y");
 
         jLabel2.setText("a la Fecha");
 
@@ -154,22 +170,21 @@ public class frmreporteventasgeneral extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(date1, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
-                    .addComponent(date2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(62, 62, 62))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(131, 131, 131)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(119, 119, 119)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                .addGap(63, 63, 63)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addComponent(jLabel1)
+                        .addGap(129, 129, 129))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(date1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(date2, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(jButton1)
-                .addContainerGap())
+                .addGap(27, 27, 27))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -178,65 +193,24 @@ public class frmreporteventasgeneral extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(date1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel2)
-                        .addGap(8, 8, 8)
-                        .addComponent(date2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
-                        .addComponent(jButton1)
-                        .addGap(46, 46, 46))))
-        );
-
-        tblprueba.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {},
-                {},
-                {},
-                {}
-            },
-            new String [] {
-
-            }
-        ));
-        jScrollPane1.setViewportView(tblprueba);
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(30, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(62, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2)
+                    .addComponent(jButton1))
+                .addGap(8, 8, 8)
+                .addComponent(date2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -245,18 +219,19 @@ public class frmreporteventasgeneral extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        eliminar();
+   
         String f = date1.getDateFormatString();
-        System.out.println(f);
+       
         double total=0,abonos=0;
         fecha();
          Calendar calendario =Calendar.getInstance();
          int dia1 =calendario.get(calendario.DATE);
          int mes1 = calendario.get(calendario.MONTH)+1;
          int ano1 = calendario.get(calendario.YEAR);
-          String myDate = dia1+"/"+mes1+"/"+ano1;
-          double utilidad=0;
-              System.out.println(myDate);      
+         String myDate = dia1+"/"+mes1+"/"+ano1;
+         double utilidad=0;  
+        
+       
          try 
         {
             con = conexion.getConnection();
@@ -264,18 +239,7 @@ public class frmreporteventasgeneral extends javax.swing.JFrame {
             rs = stmt.executeQuery(" select * from tblnotas where no_fechaCreada>='"+fecha1+"' and no_fechacreada<='"+fecha2+"' and nostatus!='cancelada' and nostatus!='cancelada por actu';");
            while(rs.next())
            {
-                System.out.println();
-                filas[0] = (rs.getString(1));
-                filas[1] = 2;
-                String fecha = (rs.getString(3));
-                String dia= fecha.substring(8,10);
-                String mes = fecha.substring(5,7);
-                String ano = fecha.substring(0,4);
-                filas[2] = dia+"/"+mes+"/"+ano;
-                filas[3] = (rs.getString(5));
-                filas[4] = (rs.getString(8));
-                modeloTabla.addRow(filas);
-                tblprueba.setModel(modeloTabla);
+               
                 abonos=abonos+rs.getDouble(6);
                 total=total+rs.getDouble(5);
                 utilidad=utilidad+rs.getDouble(10);
@@ -288,39 +252,45 @@ public class frmreporteventasgeneral extends javax.swing.JFrame {
         }        
           try 
         {     
+             SimpleDateFormat formateador = new SimpleDateFormat("yyyy-mm-dd");
+            Date f1 = formateador.parse(fecha1);
+            Date f2 = formateador.parse(fecha2);
+            System.out.println(f1+" "+f2);
              SimpleDateFormat formateador1 = new SimpleDateFormat("dd/MM/yy");
              Date date = formateador1.parse(myDate);  
-             SimpleDateFormat formateador = new SimpleDateFormat("yyyy-mm-dd");
-             Date f1 = formateador.parse(fecha1);
-             Date f2 = formateador.parse(fecha2);
-           
+             
+             System.out.println(formateador.format(sumarRestarDiasFecha(f1, 0))+" "+formateador.format(sumarRestarDiasFecha(f2, 0)));
                 HashMap param = new HashMap();
-                Connection con = conexion.getConnection();
-                JasperDesign jd = JRXmlLoader.load(new File("C:\\Users\\coron\\JaspersoftWorkspace\\Prueba").getAbsolutePath()+"\\Reporteventas2.jrxml");
-                JRDataSource vacio = new JREmptyDataSource(1); 
-                param.put("fecha1", formateador.format(sumarRestarDiasFecha(f1, 0)));          
+                Connection con1 = conectar.getConnection();  
+             //   JasperDesign jd = JRXmlLoader.load(new File("C:\\Users\\coron\\JaspersoftWorkspace\\Prueba").getAbsolutePath()+"\\Reporteventas2.jrxml");
+                //JRDataSource vacio = new JREmptyDataSource(1); 
+                 param.put("fecha1", formateador.format(sumarRestarDiasFecha(f1, 0)));
                 param.put("fecha2", formateador.format(sumarRestarDiasFecha(f2, 0)));
                 param.put("total",total);
                 param.put("Fecha", formateador1.format(sumarRestarDiasFecha(date, 0)));
-                param.put("del", formateador1.format(sumarRestarDiasFecha(f1, 0)));          
+                param.put("del", formateador1.format(sumarRestarDiasFecha(f1, 0)));
                 param.put("al", formateador1.format(sumarRestarDiasFecha(f2, 0)));
                 param.put("abonos", abonos+"");
                 param.put("utilidad", utilidad+"");
-                JasperReport jr = JasperCompileManager.compileReport(jd);
-                JasperPrint jp = JasperFillManager.fillReport(jr,param,con);
+                JasperReport jr = JasperCompileManager.compileReport("C:\\Users\\coron\\JaspersoftWorkspace\\Prueba\\Reporteventas2.jrxml");
+                JasperPrint jp = JasperFillManager.fillReport(jr,param,con1);
                 OutputStream output = new FileOutputStream(new File("C:\\Users\\coron\\Desktop\\prueba\\original.pdf")); 
                 JasperExportManager.exportReportToPdfStream(jp, output); 
                 output.flush();
                 output.close();
         } 
-        catch (JRException | IOException ex) 
+        catch (JRException ex) 
         {
             Logger.getLogger(frmnotas.class.getName()).log(Level.SEVERE, null, ex);
         }
           catch (ParseException ex) 
           {
             Logger.getLogger(frmreporteventasgeneral.class.getName()).log(Level.SEVERE, null, ex);
-          } 
+          } catch (FileNotFoundException ex) { 
+            Logger.getLogger(frmreporteventasgeneral.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(frmreporteventasgeneral.class.getName()).log(Level.SEVERE, null, ex);
+        } 
           try 
               {
                  File path = new  File("C:\\Users\\coron\\Desktop\\prueba\\original.pdf");
@@ -376,8 +346,5 @@ public class frmreporteventasgeneral extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblprueba;
     // End of variables declaration//GEN-END:variables
 }

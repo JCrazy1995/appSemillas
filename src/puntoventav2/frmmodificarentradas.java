@@ -6,6 +6,8 @@
 package puntoventav2;
 
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,6 +18,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -49,6 +52,7 @@ public final class frmmodificarentradas extends javax.swing.JFrame {
         this.setResizable(false);
         txtproveedor.requestFocus();
         ultiArtiiculo();
+        salir();
     }
 
     public static Date sumarRestarDiasFecha(Date fecha, int dias) {
@@ -125,7 +129,32 @@ public final class frmmodificarentradas extends javax.swing.JFrame {
         lbltotal.setText("0.0");
         
     }
-        
+         public void salir()
+      {
+          try 
+          {
+              this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+              addWindowListener(new WindowAdapter() 
+              {
+                  @Override
+                  public void windowClosing(WindowEvent e)
+                  {
+                    frmPrincipal.habilitar();
+                      cerrar();
+                  }
+                  
+              } );
+              this.setVisible(true);
+          }
+          catch (Exception e) 
+          {
+              e.printStackTrace();
+          }
+      } 
+        void cerrar() 
+        {
+            this.dispose();
+        }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

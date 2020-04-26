@@ -16,6 +16,9 @@ import java.sql.ResultSet;
 import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.KeyAdapter;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.JFrame;
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
 
@@ -43,6 +46,7 @@ public final class frmbuscaclientes extends javax.swing.JFrame {
         inicio();
         txtNombre.requestFocus();
         this.setResizable(false);
+        salir();
 
     }
    
@@ -150,6 +154,31 @@ public final class frmbuscaclientes extends javax.swing.JFrame {
 
     }
         
+    
+      public void salir()
+      {
+          try 
+          {
+              this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+              addWindowListener(new WindowAdapter() 
+              {
+                  public void windowClosing(WindowEvent e)
+                  {
+                    frmPrincipal.habilitar();
+                      cerrar();
+                  }
+                  
+              } );
+              this.setVisible(true);
+          }
+          catch (Exception e) 
+          {
+              e.printStackTrace();
+          }
+      }
+      
+         
+     
     
     /**
      * This method is called from within the constructor to initialize the form.

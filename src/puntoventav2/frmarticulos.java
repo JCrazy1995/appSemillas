@@ -5,12 +5,15 @@
  */
 package puntoventav2;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
+import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel; 
 
 /**
@@ -29,11 +32,38 @@ public class frmarticulos extends javax.swing.JFrame {
     DefaultTableModel modeloTabla= new DefaultTableModel();  //modelo de tabla que llevara los datos
     DefaultTableModel modeloTabla2= new DefaultTableModel(); // modelo vacio para la tabla de clientes
     Object filas[]= new Object[7];                          
-    public frmarticulos() {
+    public frmarticulos() 
+    {
         initComponents();
         ultiArtiiculo();
+        salir();
     }
-
+     public void salir()
+      {
+          try 
+          {
+              this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+              addWindowListener(new WindowAdapter() 
+              {
+                  public void windowClosing(WindowEvent e)
+                  {
+                    frmPrincipal.habilitar();
+                      cerrar();
+                  }
+                  
+              } );
+              this.setVisible(true);
+          }
+          catch (Exception e) 
+          {
+              e.printStackTrace();
+          }
+      }
+      
+            void cerrar()
+            {
+                this.dispose();
+            }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

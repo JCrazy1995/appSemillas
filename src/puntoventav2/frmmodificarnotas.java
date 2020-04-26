@@ -14,6 +14,8 @@ import traducir.Traducir;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -36,6 +38,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.sql.ResultSet;
 import java.lang.Exception;
+import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import net.sf.jasperreports.engine.JRException;
@@ -78,7 +81,7 @@ public class frmmodificarnotas extends javax.swing.JFrame {
         txtcliente.requestFocus();
         tblnotas.setModel(modeloTabla2);
         configModelo();
-        
+        salir();
         
     }
         
@@ -174,6 +177,32 @@ public class frmmodificarnotas extends javax.swing.JFrame {
             limpiar();
             
           }
+           public void salir()
+      {
+          try 
+          {
+              this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+              addWindowListener(new WindowAdapter() 
+              {
+                  @Override
+                  public void windowClosing(WindowEvent e)
+                  {
+                    frmPrincipal.habilitar();
+                      cerrar();
+                  }
+                  
+              } );
+              this.setVisible(true);
+          }
+          catch (Exception e) 
+          {
+              e.printStackTrace();
+          }
+      } 
+        void cerrar() 
+        {
+            this.dispose();
+        }
     
     /**
      * This method is called from within the constructor to initialize the form.
