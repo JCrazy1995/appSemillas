@@ -983,53 +983,47 @@ public class frmnotas extends javax.swing.JFrame {
            else
            {
  
-          try
-          {
-              con=conexion.getConnection();
-              stmt=con.createStatement();
-              rs=stmt.executeQuery("select * from tblarticulos where artNombre like '%"+txtproducto.getText()+"%'");
-               while(rs.next())
-                {                        
-                    c++;
-                }
-               if (c>1)
-               {
-                   JOptionPane.showMessageDialog(null, "Favor de ingresar mas datos");
+              try
+              {
+                  con=conexion.getConnection();
+                  stmt=con.createStatement();
+                  rs=stmt.executeQuery("select * from tblarticulos where artNombre like '%"+txtproducto.getText()+"%'");
+                   while(rs.next())
+                    {                        
+                        c++;
+                    }
+                   if (c>1)
+                   {
+                       JOptionPane.showMessageDialog(null, "Favor de ingresar mas datos");
 
-               }
-               else
-               {
-                   rs=stmt.executeQuery("select * from tblarticulos where artNombre like '%"+txtproducto.getText()+"%'");
-               while(rs.next())
-                {                        
-                    txtproducto.setText(rs.getString(2));
-                    txtprecio.setText(rs.getString(3));
-                    txtpreciocompra.setText(rs.getString(5));
-                }
-                    txtprecio.requestFocus();
-                    precio =Float.parseFloat(txtprecio.getText());
-                    cantidad= Float.parseFloat(txtcantidad.getText());
-                    total = precio*cantidad;
-                    txttotal.setText(total+"");
-                    preciocompra= Float.parseFloat(txtpreciocompra.getText());
-                    totalcompra=preciocompra*cantidad;
-                    txttotalcompra.setText(totalcompra+"");
+                   }
+                   else
+                   {
+                       rs=stmt.executeQuery("select * from tblarticulos where artNombre like '%"+txtproducto.getText()+"%'");
+                   while(rs.next())
+                    {                        
+                        txtproducto.setText(rs.getString(2));
+                        txtprecio.setText(rs.getString(3));
+                        txtpreciocompra.setText(rs.getString(5));
+                    }
+                        txtprecio.requestFocus();
+                        precio =Float.parseFloat(txtprecio.getText());
+                        cantidad= Float.parseFloat(txtcantidad.getText());
+                        total = precio*cantidad;
+                        txttotal.setText(total+"");
+                        preciocompra= Float.parseFloat(txtpreciocompra.getText());
+                        totalcompra=preciocompra*cantidad;
+                        txttotalcompra.setText(totalcompra+"");
 
-               }
-                con.close();
-          }
-          catch(SQLException ex)
-          {
-              JOptionPane.showMessageDialog(null, ex);
-          }      
-           
-                 
+                   }
+                    con.close();
+              }
+              catch(SQLException ex)
+              {
+                  JOptionPane.showMessageDialog(null, ex);
+              }      
            }
-             
-          
-          
-             
-    }
+        }
     }//GEN-LAST:event_txtproductoKeyPressed
 
     private void txtcantidadKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtcantidadKeyPressed
@@ -1420,7 +1414,7 @@ public class frmnotas extends javax.swing.JFrame {
                                  + " tblinventario where id_Articulo  ='"+idarticulo+"'");
                         if(rss.next())
                          {
-                             totalexistencia=rss.getInt(1);
+                             totalexistencia=rss.getDouble(1);
                          }
                             totalinventario=totalexistencia-cantidad;
                             PreparedStatement psInsert1= con.prepareStatement("update tblinventario set invExistencia=? where id_Articulo=? ");

@@ -19,10 +19,8 @@ public class frmPrincipal extends javax.swing.JFrame {
     public frmPrincipal()
     {
         initComponents();
-        
-         
-         this.setResizable(false);
-          this.setExtendedState(frmPrincipal.MAXIMIZED_BOTH);
+        this.setResizable(false);
+        this.setExtendedState(frmPrincipal.MAXIMIZED_BOTH);
     }
     
     public void deshabilitar()
@@ -47,6 +45,8 @@ public class frmPrincipal extends javax.swing.JFrame {
         mibreportepagoentradas.setEnabled(false);
         mibregistroinventario.setEnabled(false);
         miblistaprecios.setEnabled(false);
+        mibregistrarsalidas.setEnabled(false);
+        mibcancelarsalidas.setEnabled(false);
     }
     
     public static void habilitar()
@@ -71,6 +71,8 @@ public class frmPrincipal extends javax.swing.JFrame {
         mibreportepagoentradas.setEnabled(true);
         mibregistroinventario.setEnabled(true);
         miblistaprecios.setEnabled(true);
+        mibregistrarsalidas.setEnabled(true);
+        mibcancelarsalidas.setEnabled(true);
     }
 
     /**
@@ -112,6 +114,9 @@ public class frmPrincipal extends javax.swing.JFrame {
         jMenu9 = new javax.swing.JMenu();
         mibregistroinventario = new javax.swing.JMenuItem();
         miblistaprecios = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        mibregistrarsalidas = new javax.swing.JMenuItem();
+        mibcancelarsalidas = new javax.swing.JMenuItem();
 
         jMenu1.setText("jMenu1");
 
@@ -133,7 +138,7 @@ public class frmPrincipal extends javax.swing.JFrame {
             .addGap(0, 397, Short.MAX_VALUE)
         );
 
-        mniclientes.setText("Utilerias");
+        mniclientes.setText("Registros");
         mniclientes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 mniclientesMouseClicked(evt);
@@ -318,6 +323,26 @@ public class frmPrincipal extends javax.swing.JFrame {
 
         mnbprincipal.add(jMenu9);
 
+        jMenu3.setText("Salidas");
+
+        mibregistrarsalidas.setText("Registrar");
+        mibregistrarsalidas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mibregistrarsalidasActionPerformed(evt);
+            }
+        });
+        jMenu3.add(mibregistrarsalidas);
+
+        mibcancelarsalidas.setText("Cancelar");
+        mibcancelarsalidas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mibcancelarsalidasActionPerformed(evt);
+            }
+        });
+        jMenu3.add(mibcancelarsalidas);
+
+        mnbprincipal.add(jMenu3);
+
         setJMenuBar(mnbprincipal);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -483,6 +508,20 @@ public class frmPrincipal extends javax.swing.JFrame {
         articulos.setVisible(true);
     }//GEN-LAST:event_mibproductosActionPerformed
 
+    private void mibcancelarsalidasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mibcancelarsalidasActionPerformed
+        // TODO add your handling code here:
+        frmbuscasalidascancelar cancelar = new frmbuscasalidascancelar();
+        cancelar.setVisible(true);
+        deshabilitar();
+    }//GEN-LAST:event_mibcancelarsalidasActionPerformed
+
+    private void mibregistrarsalidasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mibregistrarsalidasActionPerformed
+        // TODO add your handling code here:
+        frmrsalidas salida = new frmrsalidas();
+        salida.setVisible(true);
+        deshabilitar();
+    }//GEN-LAST:event_mibregistrarsalidasActionPerformed
+
     /**
  * @param args the command line arguments
      */
@@ -521,6 +560,7 @@ public class frmPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu7;
     private javax.swing.JMenu jMenu8;
@@ -531,6 +571,7 @@ public class frmPrincipal extends javax.swing.JFrame {
     public static javax.swing.JMenuItem mibabononotas;
     public static javax.swing.JMenuItem mibcancelarentradas;
     public static javax.swing.JMenuItem mibcancelarnotas;
+    public static javax.swing.JMenuItem mibcancelarsalidas;
     public static javax.swing.JMenuItem mibclientes;
     public static javax.swing.JMenuItem miblistaprecios;
     public static javax.swing.JMenuItem mibmodificarentradas;
@@ -540,6 +581,7 @@ public class frmPrincipal extends javax.swing.JFrame {
     public static javax.swing.JMenuItem mibrealizarnotas;
     public static javax.swing.JMenuItem mibreeimprimirnotas;
     public static javax.swing.JMenuItem mibregistrarentradas;
+    public static javax.swing.JMenuItem mibregistrarsalidas;
     public static javax.swing.JMenuItem mibregistroinventario;
     public static javax.swing.JMenuItem mibreportecompras;
     public static javax.swing.JMenuItem mibreportecomprasproveedor;

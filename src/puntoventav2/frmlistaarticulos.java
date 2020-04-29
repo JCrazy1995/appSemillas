@@ -62,14 +62,14 @@ public final class frmlistaarticulos extends javax.swing.JFrame {
     
     
     void configModelo() 
-        {
+    {
         modeloTabla.addColumn("Numero de Producto");
         modeloTabla.addColumn("Nombre");
         modeloTabla.addColumn("Precio");
         
         tbllista.setModel(modeloTabla);
 
-        }
+    }
     
     
     void iniciotabla()

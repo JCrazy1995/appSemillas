@@ -70,28 +70,28 @@ public class frmreporteventascliente extends javax.swing.JFrame {
      public static void fecha()
       {
  
-    try {
-        //jDateChooser el nombre la variable  del componente jdatecgooser
-        Date  fecha=date1.getDate();
-        Date fechados=date2.getDate();
-        
-      
-        DateFormat f=new SimpleDateFormat("yyyy-MM-dd");
-         fecha1=f.format(fecha);
-         fecha2=f.format(fechados);
-        if(fechados.before(fecha))
-        {
-           JOptionPane.showMessageDialog(null, "Las Fechas no coinciden", "ERROR", JOptionPane.ERROR_MESSAGE);
-        }
-        
-        
-        //textFecha nombre de la variable del componenten jtextfiel
-     
-        } 
-        catch (HeadlessException e)
-        {
-           JOptionPane.showMessageDialog(null, e);
-        }
+        try {
+            //jDateChooser el nombre la variable  del componente jdatecgooser
+            Date  fecha=date1.getDate();
+            Date fechados=date2.getDate();
+
+
+            DateFormat f=new SimpleDateFormat("yyyy-MM-dd");
+             fecha1=f.format(fecha);
+             fecha2=f.format(fechados);
+            if(fechados.before(fecha))
+            {
+               JOptionPane.showMessageDialog(null, "Las Fechas no coinciden", "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+
+
+            //textFecha nombre de la variable del componenten jtextfiel
+
+            } 
+            catch (HeadlessException e)
+            {
+               JOptionPane.showMessageDialog(null, e);
+            }
       
      }
        
