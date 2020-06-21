@@ -5,7 +5,6 @@
  */
 package puntoventav2;
 
-import com.itextpdf.text.log.Logger;
 import java.awt.Desktop;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
@@ -15,7 +14,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.System.Logger.Level;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -300,7 +298,7 @@ public class frmreporteventascliente extends javax.swing.JFrame {
 
                 HashMap param = new HashMap();
                 Connection con = conexion.getConnection();
-                JasperDesign jd = JRXmlLoader.load(new File("C:\\Users\\coron\\JaspersoftWorkspace\\Prueba").getAbsolutePath()+"\\Reporventascliente2.jrxml");
+                JasperDesign jd = JRXmlLoader.load(new File("D:\\Prueba").getAbsolutePath()+"\\Reporventascliente2.jrxml");
                 JRDataSource vacio = new JREmptyDataSource(1);
                 param.put("fecha1", formateador.format(sumarRestarDiasFecha(f1, 0)));
                 param.put("fecha2", formateador.format(sumarRestarDiasFecha(f2, 0)));
@@ -313,7 +311,7 @@ public class frmreporteventascliente extends javax.swing.JFrame {
                 param.put("utilidad", utilidad+"");
                 JasperReport jr = JasperCompileManager.compileReport(jd);
                 JasperPrint jp = JasperFillManager.fillReport(jr,param,con);
-                OutputStream output = new FileOutputStream(new File("C:\\Users\\coron\\Desktop\\prueba\\original1.pdf"));
+                OutputStream output = new FileOutputStream(new File("C:\\Users\\usuario\\Desktop\\prueba\\original1.pdf"));
                 JasperExportManager.exportReportToPdfStream(jp, output);
                 output.flush();
                 output.close();
@@ -324,7 +322,7 @@ public class frmreporteventascliente extends javax.swing.JFrame {
             }
             try
             {
-                File path = new  File("C:\\Users\\coron\\Desktop\\prueba\\original1.pdf");
+                File path = new  File("C:\\Users\\usuario\\Desktop\\prueba\\original1.pdf");
                 Desktop.getDesktop().open(path);
             }
             catch (IOException ex)

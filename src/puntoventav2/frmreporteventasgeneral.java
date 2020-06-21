@@ -272,9 +272,9 @@ public class frmreporteventasgeneral extends javax.swing.JFrame {
                 param.put("al", formateador1.format(sumarRestarDiasFecha(f2, 0)));
                 param.put("abonos", abonos+"");
                 param.put("utilidad", utilidad+"");
-                JasperReport jr = JasperCompileManager.compileReport("C:\\Users\\coron\\JaspersoftWorkspace\\Prueba\\Reporteventas2.jrxml");
+                JasperReport jr = JasperCompileManager.compileReport("D:\\Prueba\\Reporteventas2.jrxml");
                 JasperPrint jp = JasperFillManager.fillReport(jr,param,con1);
-                OutputStream output = new FileOutputStream(new File("C:\\Users\\coron\\Desktop\\prueba\\original.pdf")); 
+                OutputStream output = new FileOutputStream(new File("C:\\Users\\usuario\\Desktop\\prueba\\original.pdf")); 
                 JasperExportManager.exportReportToPdfStream(jp, output); 
                 output.flush();
                 output.close();
@@ -293,7 +293,7 @@ public class frmreporteventasgeneral extends javax.swing.JFrame {
         } 
           try 
               {
-                 File path = new  File("C:\\Users\\coron\\Desktop\\prueba\\original.pdf");
+                 File path = new  File("C:\\Users\\usuario\\Desktop\\prueba\\original.pdf");
                  Desktop.getDesktop().open(path);
               }
               catch (IOException ex)

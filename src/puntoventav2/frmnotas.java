@@ -997,7 +997,7 @@ public class frmnotas extends javax.swing.JFrame {
                        JOptionPane.showMessageDialog(null, "Favor de ingresar mas datos");
 
                    }
-                   else
+                   else if(c==1)
                    {
                        rs=stmt.executeQuery("select * from tblarticulos where artNombre like '%"+txtproducto.getText()+"%'");
                    while(rs.next())
@@ -1015,6 +1015,13 @@ public class frmnotas extends javax.swing.JFrame {
                         totalcompra=preciocompra*cantidad;
                         txttotalcompra.setText(totalcompra+"");
 
+                   }
+                   
+                   
+                   else
+                   {
+                       JOptionPane.showMessageDialog(null, "Este producto no esta registrado");
+                       txtproducto.setText("");
                    }
                     con.close();
               }
@@ -1237,7 +1244,7 @@ public class frmnotas extends javax.swing.JFrame {
         try 
         {   HashMap param = new HashMap();
             Connection con = conexion.getConnection();
-            JasperDesign jd = JRXmlLoader.load(new File("C:\\Users\\coron\\JaspersoftWorkspace\\Prueba").getAbsolutePath()+"\\pruebaimpresion.jrxml"); 
+            JasperDesign jd = JRXmlLoader.load(new File("D:\\Prueba").getAbsolutePath()+"\\pruebaimpresion.jrxml"); 
             param.put("nonota", txtnonota.getText());
             param.put("total",lbltotal.getText());
             param.put("codigocliente", lblnocliente.getText());
@@ -1249,7 +1256,7 @@ public class frmnotas extends javax.swing.JFrame {
             param.put("letras", tra.traducirNumeros(lbltotal.getText(), rootPaneCheckingEnabled) );
             JasperReport jr = JasperCompileManager.compileReport(jd);
             JasperPrint jp = JasperFillManager.fillReport(jr,param,con);
-            OutputStream output = new FileOutputStream(new File("C:\\Users\\coron\\Desktop\\prueba\\"
+            OutputStream output = new FileOutputStream(new File("C:\\Users\\usuario\\Desktop\\prueba\\"
                         +txtcliente.getText()+" "+"Nota N° "+" "+txtnonota.getText()+"original.pdf")); 
             JasperExportManager.exportReportToPdfStream(jp, output); 
             output.flush();
@@ -1266,7 +1273,7 @@ public class frmnotas extends javax.swing.JFrame {
         try 
         {   HashMap param = new HashMap();
             Connection con = conexion.getConnection();
-            JasperDesign jd = JRXmlLoader.load(new File("C:\\Users\\coron\\JaspersoftWorkspace\\Prueba").getAbsolutePath()+"\\pruebaimpresioncopia.jrxml");
+            JasperDesign jd = JRXmlLoader.load(new File("D:\\Prueba").getAbsolutePath()+"\\pruebaimpresioncopia.jrxml");
             param.put("nonota", txtnonota.getText());
             param.put("total",lbltotal.getText());
             param.put("codigocliente", lblnocliente.getText());
@@ -1278,7 +1285,7 @@ public class frmnotas extends javax.swing.JFrame {
             param.put("letras", tra.traducirNumeros(lbltotal.getText(), rootPaneCheckingEnabled) );
             JasperReport jr = JasperCompileManager.compileReport(jd);
             JasperPrint jp = JasperFillManager.fillReport(jr,param,con);
-            OutputStream output = new FileOutputStream(new File("C:\\Users\\coron\\Desktop\\prueba\\"
+            OutputStream output = new FileOutputStream(new File("C:\\Users\\usuario\\Desktop\\prueba\\"
                         +txtcliente.getText()+""+"Nota N° "+""+txtnonota.getText()+"copia.pdf")); 
             JasperExportManager.exportReportToPdfStream(jp, output); 
             output.flush();
@@ -1290,9 +1297,9 @@ public class frmnotas extends javax.swing.JFrame {
             Logger.getLogger(frmnotas.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        File fileToPrint = new  File("C:\\Users\\coron\\Desktop\\prueba\\"
+        File fileToPrint = new  File("C:\\Users\\usuario\\Desktop\\prueba\\"
                 +txtcliente.getText()+""+"Nota N° "+""+txtnonota.getText()+"original.pdf");
-        File fileToPrint2 = new  File("C:\\Users\\coron\\Desktop\\prueba\\"
+        File fileToPrint2 = new  File("C:\\Users\\usuario\\Desktop\\prueba\\"
                 +txtcliente.getText()+""+"Nota N° "+""+txtnonota.getText()+"copia.pdf");
         try 
         {

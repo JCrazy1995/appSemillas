@@ -273,7 +273,7 @@ public class frmReporteComprasProveedor extends javax.swing.JFrame {
 
             HashMap param = new HashMap();
             Connection con = conexion.getConnection();
-            JasperDesign jd = JRXmlLoader.load(new File("C:\\Users\\coron\\JaspersoftWorkspace\\Prueba").getAbsolutePath()+"\\ReporteComprasProveedor.jrxml");
+            JasperDesign jd = JRXmlLoader.load(new File("D:\\Prueba").getAbsolutePath()+"\\ReporteComprasProveedor.jrxml");
             param.put("fecha1", formateador.format(sumarRestarDiasFecha(f1, 0)));
             param.put("fecha2", formateador.format(sumarRestarDiasFecha(f2, 0)));
             param.put("total",total+"");
@@ -284,7 +284,7 @@ public class frmReporteComprasProveedor extends javax.swing.JFrame {
             param.put("nombre", txtnombre.getText());
             JasperReport jr = JasperCompileManager.compileReport(jd);
             JasperPrint jp = JasperFillManager.fillReport(jr,param,con);
-            OutputStream output = new FileOutputStream(new File("C:\\Users\\coron\\Desktop\\prueba\\original.pdf"));
+            OutputStream output = new FileOutputStream(new File("C:\\Users\\usuario\\Desktop\\prueba\\original.pdf"));
             JasperExportManager.exportReportToPdfStream(jp, output);
             output.flush();
             output.close();
@@ -299,7 +299,7 @@ public class frmReporteComprasProveedor extends javax.swing.JFrame {
         }
         try
         {
-            File path = new  File("C:\\Users\\coron\\Desktop\\prueba\\original.pdf");
+            File path = new  File("C:\\Users\\usuario\\Desktop\\prueba\\original.pdf");
             Desktop.getDesktop().open(path);
         }
         catch (IOException ex)

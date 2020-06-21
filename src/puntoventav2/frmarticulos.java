@@ -5,6 +5,7 @@
  */
 package puntoventav2;
 
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.PreparedStatement;
@@ -109,6 +110,9 @@ public class frmarticulos extends javax.swing.JFrame {
         jLabel4.setText("Nombre:");
 
         txtPrecio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtPrecioKeyPressed(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtPrecioKeyTyped(evt);
             }
@@ -120,6 +124,11 @@ public class frmarticulos extends javax.swing.JFrame {
         txtnombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtnombreActionPerformed(evt);
+            }
+        });
+        txtnombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtnombreKeyPressed(evt);
             }
         });
 
@@ -448,6 +457,22 @@ public class frmarticulos extends javax.swing.JFrame {
     private void txtpreciocompraKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtpreciocompraKeyTyped
         // TODO add your handling code here:
     }//GEN-LAST:event_txtpreciocompraKeyTyped
+
+    private void txtnombreKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnombreKeyPressed
+        // TODO add your handling code here:
+          if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+         {
+             txtPrecio.requestFocus();
+         }
+    }//GEN-LAST:event_txtnombreKeyPressed
+
+    private void txtPrecioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioKeyPressed
+        // TODO add your handling code here:
+          if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+         {
+             txtpreciocompra.requestFocus();
+         }
+    }//GEN-LAST:event_txtPrecioKeyPressed
 
     /**
      * @param args the command line arguments

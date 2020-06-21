@@ -290,14 +290,14 @@ public final class frmlistaarticulos extends javax.swing.JFrame {
 
             HashMap param = new HashMap();
             Connection con = conexion.getConnection();
-            JasperDesign jd = JRXmlLoader.load(new File("C:\\Users\\coron\\JaspersoftWorkspace\\Prueba").getAbsolutePath()+"\\articulos.jrxml");
+            JasperDesign jd = JRXmlLoader.load(new File("D:\\Prueba").getAbsolutePath()+"\\articulos.jrxml");
             JasperReport jr = JasperCompileManager.compileReport(jd);
             JasperPrint jp = JasperFillManager.fillReport(jr,param,con);
-            OutputStream output = new FileOutputStream(new File("C:\\Users\\coron\\Desktop\\prueba\\listaprecios.pdf"));
+            OutputStream output = new FileOutputStream(new File("C:\\Users\\usuario\\Desktop\\prueba\\listaprecios.pdf"));
             JasperExportManager.exportReportToPdfStream(jp, output);
             output.flush();
             output.close();
-              File path = new  File("C:\\Users\\coron\\Desktop\\prueba\\listaprecios.pdf");
+              File path = new  File("C:\\Users\\usuario\\Desktop\\prueba\\listaprecios.pdf");
             Desktop.getDesktop().open(path);
         }
         catch (JRException | IOException ex)

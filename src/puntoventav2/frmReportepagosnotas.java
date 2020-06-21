@@ -264,7 +264,7 @@ public class frmReportepagosnotas extends javax.swing.JFrame {
             
             HashMap param = new HashMap();
             Connection con = conexion.getConnection();
-            JasperDesign jd = JRXmlLoader.load(new File("C:\\Users\\coron\\JaspersoftWorkspace\\Prueba").getAbsolutePath()+"\\reportepagonotas.jrxml");
+            JasperDesign jd = JRXmlLoader.load(new File("D:\\Prueba").getAbsolutePath()+"\\reportepagonotas.jrxml");
             param.put("fecha1", formateador.format(sumarRestarDiasFecha(f1, 0)));
             param.put("fecha2", formateador.format(sumarRestarDiasFecha(f2, 0)));
             param.put("total",total+"");
@@ -286,12 +286,12 @@ public class frmReportepagosnotas extends javax.swing.JFrame {
 //            param.put("Saldo", saldo+"");
             JasperReport jr = JasperCompileManager.compileReport(jd);
             JasperPrint jp = JasperFillManager.fillReport(jr,param,con);
-            OutputStream output = new FileOutputStream(new  File("C:\\Users\\coron\\Desktop\\prueba\\"
+            OutputStream output = new FileOutputStream(new  File("C:\\Users\\usuario\\Desktop\\prueba\\"
                     + ""+"Reporte Pagos Notas"+" "+fa+""+".pdf"));
             JasperExportManager.exportReportToPdfStream(jp, output);
             output.flush();
             output.close();
-            File path = new  File("C:\\Users\\coron\\Desktop\\prueba\\"
+            File path = new  File("C:\\Users\\usuario\\Desktop\\prueba\\"
                     + ""+"Reporte Pagos Notas"+" "+fa+""+".pdf");
             Desktop.getDesktop().open(path);
         }

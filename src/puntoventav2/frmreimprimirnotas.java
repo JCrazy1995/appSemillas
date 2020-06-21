@@ -271,12 +271,12 @@ public class frmreimprimirnotas extends javax.swing.JFrame {
             numero = tblbuscanotas.getValueAt(filavalor, 0).toString();
                 if(chbCopia.isSelected()){
                     
-                    File path = new  File("C:\\Users\\coron\\Desktop\\prueba\\"
+                    File path = new  File("C:\\Users\\usuario\\Desktop\\prueba\\"
                             +cliente+""+"Nota N° "+""+numero+"copia.pdf");
                      Desktop.getDesktop().open(path);
                 }
                 else{
-                    File path = new  File("C:\\Users\\coron\\Desktop\\prueba\\"
+                    File path = new  File("C:\\Users\\usuario\\Desktop\\prueba\\"
                         +cliente+""+"Nota N° "+""+numero+"original.pdf");
                     Desktop.getDesktop().open(path);
                 }
@@ -295,11 +295,11 @@ public class frmreimprimirnotas extends javax.swing.JFrame {
             cliente = tblbuscanotas.getValueAt(filavalor, 1).toString();
             numero = tblbuscanotas.getValueAt(filavalor, 0).toString();
              if (chbCopia.isSelected()) {
-                 File fileToPrint = new File("C:\\Users\\coron\\Desktop\\prueba\\"
+                 File fileToPrint = new File("C:\\Users\\usuario\\Desktop\\prueba\\"
                     +cliente+""+"Nota N° "+""+numero+"copia.pdf");
             Desktop.getDesktop().print(fileToPrint);
              } else {
-                    File fileToPrint = new File("C:\\Users\\coron\\Desktop\\prueba\\"
+                    File fileToPrint = new File("C:\\Users\\usuario\\Desktop\\prueba\\"
                         +cliente+""+"Nota N° "+""+numero+"original.pdf");
                     Desktop.getDesktop().print(fileToPrint);
              }
